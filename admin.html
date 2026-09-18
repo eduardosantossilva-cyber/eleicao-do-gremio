@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Administrativo - Grêmio</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin">
+<header class="admin-head">
+  <div>
+    <div class="eyebrow">GRÊMIO ESTUDANTIL</div>
+    <h1>Painel Administrativo</h1>
+  </div>
+  <button id="refresh" class="secondary">↻ Atualizar</button>
+</header>
+
+<main class="admin-main">
+  <section id="loginBox" class="login">
+    <div class="login-icon">🔐</div>
+    <h2>Comissão Eleitoral</h2>
+    <p>Digite a senha administrativa.</p>
+    <input id="senha" type="password" placeholder="Senha">
+    <button id="entrar" class="primary">Entrar</button>
+    <div id="loginMsg" class="msg"></div>
+  </section>
+
+  <section id="dash" class="hidden">
+    <div class="dash-top">
+      <div>
+        <div class="eyebrow">ACOMPANHAMENTO</div>
+        <h2 id="eleicaoTitle">Eleição do Grêmio</h2>
+        <p id="eleicaoStatus"></p>
+      </div>
+      <div>
+        <button id="abrir" class="primary">Abrir votação</button>
+        <button id="fechar" class="danger">Encerrar votação</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div><small>ELEITORES</small><b id="mEleitores">0</b></div>
+      <div><small>JÁ VOTARAM</small><b id="mVotaram">0</b></div>
+      <div><small>RESTANTES</small><b id="mRestantes">0</b></div>
+      <div><small>PARTICIPAÇÃO</small><b id="mPart">0%</b></div>
+    </div>
+
+    <div class="two-cols">
+      <section class="panel">
+        <div class="panel-title">
+          <div><div class="eyebrow">APURAÇÃO</div><h3>Resultado</h3></div>
+          <span>ATUALIZAÇÃO AUTOMÁTICA</span>
+        </div>
+        <div id="resultados"></div>
+      </section>
+
+      <section class="panel">
+        <div class="eyebrow">URNAS</div>
+        <h3>Computadores</h3>
+        <div id="urnas"></div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <div class="panel-title">
+        <h3>Chapas</h3>
+        <button id="novaChapa" class="secondary">+ Nova chapa</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Nº</th><th>Chapa</th><th>Presidente</th><th>Vice</th><th>Ativa</th><th></th></tr>
+          </thead>
+          <tbody id="chapaTable"></tbody>
+        </table>
+      </div>
+    </section>
+  </section>
+</main>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-card">
+    <div class="panel-title">
+      <h3 id="modalTitle">Nova chapa</h3>
+      <button id="closeModal" class="x">×</button>
+    </div>
+
+    <div class="form-grid">
+      <label>Número<input id="cNum"></label>
+      <label>Nome<input id="cNome"></label>
+      <label>Presidente<input id="cPres"></label>
+      <label>Vice<input id="cVice"></label>
+      <label class="full">Slogan<input id="cSlogan"></label>
+      <label class="full">URL da foto<input id="cFoto" placeholder="https://..."></label>
+      <label class="full check"><input id="cAtiva" type="checkbox" checked> Chapa ativa</label>
+    </div>
+
+    <div id="cMsg" class="msg"></div>
+    <div class="modal-actions">
+      <button id="cancel" class="secondary">Cancelar</button>
+      <button id="salvar" class="primary">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
