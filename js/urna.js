@@ -741,30 +741,25 @@
   }
 
 
-  // ==========================================================
-  // REGISTRAR VOTO
-  // ==========================================================
+// ==========================================================
+// REGISTRAR VOTO
+// ==========================================================
 
-  async function registerVote(
-    numero
-  ) {
+async function registerVote(numero) {
 
-    state.busy =
-      true;
+  if (state.busy) {
+    return;
+  }
 
+  state.busy = true;
 
-    disableKeys(
-      true
-    );
+  disableKeys(true);
 
+  setStatus("REGISTRANDO...");
 
-    setStatus(
-      "REGISTRANDO..."
-    );
+  try {
 
-
-    try {
-
+    const resposta =
       await GremioAPI.call({
 
         action:
@@ -785,40 +780,87 @@
       });
 
 
-      showStep(
-        "stepFim"
-      );
+    // ------------------------------------------------------
+    // CONFIRMA QUE A API REGISTROU
+    // ------------------------------------------------------
 
+    if (
+      !resposta ||
+      resposta.ok !== true
+    ) {
 
-      setStatus(
-        "VOTO REGISTRADO"
-      );
-
-
-    } catch (error) {
-
-      $("voteMsg")
-        .textContent =
-        error.message;
-
-
-      setStatus(
-        "NÃO REGISTRADO"
-      );
-
-    } finally {
-
-      state.busy =
-        false;
-
-
-      disableKeys(
-        false
+      throw new Error(
+        resposta &&
+        resposta.message
+          ? resposta.message
+          : "Não foi possível confirmar o registro do voto."
       );
 
     }
 
+
+    // ------------------------------------------------------
+    // MOSTRA A TELA FINAL
+    // ------------------------------------------------------
+
+    const telaFim =
+      $("stepFim");
+
+
+    if (!telaFim) {
+
+      throw new Error(
+        'A tela "stepFim" não foi encontrada no urna.html.'
+      );
+
+    }
+
+
+    showStep(
+      "stepFim"
+    );
+
+
+    setStatus(
+      "VOTO REGISTRADO"
+    );
+
+
+    // ------------------------------------------------------
+    // AGUARDA E REINICIA A URNA
+    // ------------------------------------------------------
+
+    setTimeout(() => {
+
+      reset();
+
+      checkElection();
+
+      heartbeat();
+
+    }, 5000);
+
+
+  } catch (error) {
+
+    $("voteMsg").textContent =
+      error.message;
+
+
+    setStatus(
+      "NÃO REGISTRADO"
+    );
+
+    disableKeys(
+      false
+    );
+
+    state.busy =
+      false;
+
   }
+
+}
 
 
   // ==========================================================
