@@ -72,10 +72,17 @@
       });
 
 
-    $(id)
-      .classList.add(
-        "active"
-      );
+    const tela =
+      $(id);
+
+    if (!tela) {
+      return;
+    }
+
+
+    tela.classList.add(
+      "active"
+    );
 
 
     state.step = id;
@@ -193,6 +200,11 @@
       "AGUARDANDO"
     );
 
+
+    disableKeys(
+      false
+    );
+
   }
 
 
@@ -201,6 +213,18 @@
   // ==========================================================
 
   async function checkElection() {
+
+    // Enquanto a tela FIM estiver aberta,
+    // o monitoramento não altera a tela.
+    if (
+      state.step ===
+      "stepFim"
+    ) {
+
+      return;
+
+    }
+
 
     try {
 
@@ -227,19 +251,36 @@
 
         }
 
-        setStatus(
-          "AGUARDANDO"
-        );
+
+        // Não altera o status durante um voto
+        if (
+          state.step !==
+          "stepFim"
+        ) {
+
+          setStatus(
+            "AGUARDANDO"
+          );
+
+        }
 
       } else {
 
-        showStep(
-          "stepClosed"
-        );
+        // Não interrompe a tela FIM
+        if (
+          state.step !==
+          "stepFim"
+        ) {
 
-        setStatus(
-          "ENCERRADA"
-        );
+          showStep(
+            "stepClosed"
+          );
+
+          setStatus(
+            "ENCERRADA"
+          );
+
+        }
 
       }
 
@@ -253,9 +294,17 @@
 
     } catch (error) {
 
-      setStatus(
-        "SEM CONEXÃO"
-      );
+      // Também não altera a tela FIM
+      if (
+        state.step !==
+        "stepFim"
+      ) {
+
+        setStatus(
+          "SEM CONEXÃO"
+        );
+
+      }
 
 
       $("sync").textContent =
@@ -269,11 +318,6 @@
   // ==========================================================
   // HEARTBEAT
   // ==========================================================
-  //
-  // É isso que estava faltando.
-  // A cada 20 segundos a urna avisa
-  // ao administrativo que está online.
-  //
 
   async function heartbeat() {
 
@@ -289,9 +333,6 @@
 
       });
 
-      // Só mostra online se a eleição
-      // estiver aberta e a urna estiver
-      // funcionando.
 
       if (
         state.step !==
@@ -336,14 +377,19 @@
     }
 
 
+    // --------------------------------------------------------
+    // RA
+    // --------------------------------------------------------
+
     if (
       state.step ===
       "stepRA"
     ) {
 
+      // RA possui 9 dígitos
       if (
         state.ra.length >=
-        12
+        9
       ) {
 
         return;
@@ -364,6 +410,10 @@
 
     }
 
+
+    // --------------------------------------------------------
+    // CHAPA
+    // --------------------------------------------------------
 
     if (
       state.step ===
@@ -389,6 +439,8 @@
         state.numero;
 
 
+      // Consulta automaticamente
+      // quando chega a 2 dígitos
       if (
         state.numero.length >=
         2
@@ -561,7 +613,7 @@
 
 
     // --------------------------------------------------------
-    // RA
+    // CONFIRMAR RA
     // --------------------------------------------------------
 
     if (
@@ -570,12 +622,13 @@
     ) {
 
       if (
-        !state.ra
+        state.ra.length !==
+        9
       ) {
 
         $("raMsg")
           .textContent =
-          "Digite o RA.";
+          "Digite o RA completo com 9 números.";
 
         return;
 
@@ -685,7 +738,6 @@
       state.numero =
         "";
 
-
       state.chapa =
         null;
 
@@ -693,6 +745,12 @@
       $("chapaNumero")
         .textContent =
         "—";
+
+
+      $("chapaCard")
+        .classList.remove(
+          "visible"
+        );
 
 
       showStep(
@@ -711,7 +769,7 @@
 
 
     // --------------------------------------------------------
-    // VOTO
+    // CONFIRMAR VOTO
     // --------------------------------------------------------
 
     if (
@@ -741,126 +799,158 @@
   }
 
 
-// ==========================================================
-// REGISTRAR VOTO
-// ==========================================================
+  // ==========================================================
+  // REGISTRAR VOTO
+  // ==========================================================
 
-async function registerVote(numero) {
-
-  if (state.busy) {
-    return;
-  }
-
-  state.busy = true;
-
-  disableKeys(true);
-
-  setStatus("REGISTRANDO...");
-
-  try {
-
-    const resposta =
-      await GremioAPI.call({
-
-        action:
-          "registrarVoto",
-
-        ra:
-          state.ra,
-
-        dataNascimento:
-          state.aluno.dataNascimento,
-
-        numero:
-          numero,
-
-        urna:
-          urna
-
-      });
-
-
-    // ------------------------------------------------------
-    // CONFIRMA QUE A API REGISTROU
-    // ------------------------------------------------------
+  async function registerVote(numero) {
 
     if (
-      !resposta ||
-      resposta.ok !== true
+      state.busy
     ) {
 
-      throw new Error(
-        resposta &&
-        resposta.message
-          ? resposta.message
-          : "Não foi possível confirmar o registro do voto."
-      );
+      return;
 
     }
 
-
-    // ------------------------------------------------------
-    // MOSTRA A TELA FINAL
-    // ------------------------------------------------------
-
-    const telaFim =
-      $("stepFim");
-
-
-    if (!telaFim) {
-
-      throw new Error(
-        'A tela "stepFim" não foi encontrada no urna.html.'
-      );
-
-    }
-
-
-    showStep(
-      "stepFim"
-    );
-
-
-    setStatus(
-      "VOTO REGISTRADO"
-    );
-
-
-    // ------------------------------------------------------
-    // AGUARDA E REINICIA A URNA
-    // ------------------------------------------------------
-
-    setTimeout(() => {
-
-      reset();
-
-      checkElection();
-
-      heartbeat();
-
-    }, 5000);
-
-
-  } catch (error) {
-
-    $("voteMsg").textContent =
-      error.message;
-
-
-    setStatus(
-      "NÃO REGISTRADO"
-    );
-
-    disableKeys(
-      false
-    );
 
     state.busy =
-      false;
+      true;
+
+
+    disableKeys(
+      true
+    );
+
+
+    setStatus(
+      "REGISTRANDO..."
+    );
+
+
+    try {
+
+      const resposta =
+        await GremioAPI.call({
+
+          action:
+            "registrarVoto",
+
+          ra:
+            state.ra,
+
+          dataNascimento:
+            state.aluno.dataNascimento,
+
+          numero:
+            numero,
+
+          urna:
+            urna
+
+        });
+
+
+      // ------------------------------------------------------
+      // CONFIRMA RESPOSTA DA API
+      // ------------------------------------------------------
+
+      if (
+        !resposta ||
+        resposta.ok !== true
+      ) {
+
+        throw new Error(
+          resposta &&
+          resposta.message
+            ? resposta.message
+            : "Não foi possível confirmar o registro do voto."
+        );
+
+      }
+
+
+      // ------------------------------------------------------
+      // LOCALIZA A TELA FIM
+      // ------------------------------------------------------
+
+      const fim =
+        $("stepFim");
+
+
+      if (!fim) {
+
+        throw new Error(
+          "A tela final da urna não foi encontrada."
+        );
+
+      }
+
+
+      // ------------------------------------------------------
+      // MOSTRA A TELA FIM
+      // ------------------------------------------------------
+
+      showStep(
+        "stepFim"
+      );
+
+
+      setStatus(
+        "VOTO REGISTRADO"
+      );
+
+
+      // Garante que a tela esteja ativa
+      fim.classList.add(
+        "active"
+      );
+
+
+      // Mantém o teclado bloqueado
+      disableKeys(
+        true
+      );
+
+
+      // ------------------------------------------------------
+      // VOLTA AO INÍCIO APÓS 5 SEGUNDOS
+      // ------------------------------------------------------
+
+      setTimeout(() => {
+
+        reset();
+
+        checkElection();
+
+        heartbeat();
+
+      }, 5000);
+
+
+    } catch (error) {
+
+      $("voteMsg")
+        .textContent =
+        error.message;
+
+
+      setStatus(
+        "NÃO REGISTRADO"
+      );
+
+
+      disableKeys(
+        false
+      );
+
+
+      state.busy =
+        false;
+
+    }
 
   }
-
-}
 
 
   // ==========================================================
@@ -1097,21 +1187,14 @@ async function registerVote(numero) {
   heartbeat();
 
 
-  /*
-   * Atualiza o status da eleição.
-   */
-
+  // Atualiza o status da eleição
   setInterval(
     checkElection,
     10000
   );
 
 
-  /*
-   * Avisa a API que esta urna
-   * continua conectada.
-   */
-
+  // Mantém a urna online
   setInterval(
     heartbeat,
     20000
