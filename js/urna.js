@@ -803,30 +803,37 @@
   // REGISTRAR VOTO
   // ==========================================================
 
-  async function registerVote(numero) {
 
-    if (
-      state.busy
-    ) {
+async function registerVote(numero) {
 
-      return;
-
-    }
+  if (state.busy) {
+    return;
+  }
 
 
-    state.busy =
-      true;
+  state.busy =
+    true;
 
 
-    disableKeys(
-      true
-    );
+  disableKeys(
+    true
+  );
 
 
-    setStatus(
-      "REGISTRANDO..."
-    );
+  setStatus(
+    "REGISTRANDO..."
+  );
 
+
+  try {
+
+    let registroConfirmado =
+      false;
+
+
+    // ------------------------------------------------------
+    // 1. ENVIA O VOTO
+    // ------------------------------------------------------
 
     try {
 
@@ -851,49 +858,120 @@
         });
 
 
-      // ------------------------------------------------------
-      // CONFIRMA RESPOSTA DA API
-      // ------------------------------------------------------
-
       if (
-        !resposta ||
-        resposta.ok !== true
+        resposta &&
+        resposta.ok === true
       ) {
 
-        throw new Error(
-          resposta &&
-          resposta.message
-            ? resposta.message
-            : "Não foi possível confirmar o registro do voto."
-        );
+        registroConfirmado =
+          true;
 
       }
 
+    } catch (erroApi) {
 
-      // ------------------------------------------------------
-      // LOCALIZA A TELA FIM
-      // ------------------------------------------------------
+      // ----------------------------------------------------
+      // A API pode ter registrado o voto, mas a resposta
+      // pode não ter chegado corretamente ao navegador.
+      // Por isso fazemos uma segunda verificação.
+      // ----------------------------------------------------
+
+      registroConfirmado =
+        false;
+
+    }
+
+
+    // ------------------------------------------------------
+    // 2. SE A RESPOSTA NÃO CHEGOU, CONFERE O RA NOVAMENTE
+    // ------------------------------------------------------
+
+    if (
+      !registroConfirmado
+    ) {
+
+      try {
+
+        const verificacao =
+          await GremioAPI.call({
+
+            action:
+              "buscarAluno",
+
+            ra:
+              state.ra
+
+          });
+
+
+        if (
+          verificacao &&
+          verificacao.aluno &&
+          verificacao.aluno.jaVotou === true
+        ) {
+
+          registroConfirmado =
+            true;
+
+        }
+
+      } catch (erroVerificacao) {
+
+        registroConfirmado =
+          false;
+
+      }
+
+    }
+
+
+    // ------------------------------------------------------
+    // 3. SE O VOTO FOI CONFIRMADO, MOSTRA FIM
+    // ------------------------------------------------------
+
+    if (
+      registroConfirmado
+    ) {
 
       const fim =
         $("stepFim");
 
 
-      if (!fim) {
+      if (
+        !fim
+      ) {
 
         throw new Error(
-          "A tela final da urna não foi encontrada."
+          "A tela final não foi encontrada."
         );
 
       }
 
 
-      // ------------------------------------------------------
-      // MOSTRA A TELA FIM
-      // ------------------------------------------------------
+      // Remove qualquer tela ativa
+      document
+        .querySelectorAll(
+          ".step"
+        )
+        .forEach(
+          element => {
 
-      showStep(
-        "stepFim"
+            element.classList.remove(
+              "active"
+            );
+
+          }
+        );
+
+
+      // Ativa diretamente a tela FIM
+      fim.classList.add(
+        "active"
       );
+
+
+      state.step =
+        "stepFim";
 
 
       setStatus(
@@ -901,56 +979,87 @@
       );
 
 
-      // Garante que a tela esteja ativa
-      fim.classList.add(
-        "active"
-      );
-
-
-      // Mantém o teclado bloqueado
+      // Desabilita todos os botões
       disableKeys(
         true
       );
 
 
-      // ------------------------------------------------------
-      // VOLTA AO INÍCIO APÓS 5 SEGUNDOS
-      // ------------------------------------------------------
-
-      setTimeout(() => {
-
-        reset();
-
-        checkElection();
-
-        heartbeat();
-
-      }, 5000);
+      $("sync").textContent =
+        "Voto registrado • Urna " +
+        urna;
 
 
-    } catch (error) {
+      // ----------------------------------------------------
+      // 4. APÓS 5 SEGUNDOS, VOLTA PARA O INÍCIO
+      // ----------------------------------------------------
 
-      $("voteMsg")
-        .textContent =
-        error.message;
+      setTimeout(
+        () => {
 
+          reset();
 
-      setStatus(
-        "NÃO REGISTRADO"
+          checkElection();
+
+          heartbeat();
+
+        },
+        5000
       );
+
+
+      return;
+
+    }
+
+
+    // ------------------------------------------------------
+    // 5. REALMENTE NÃO FOI POSSÍVEL CONFIRMAR
+    // ------------------------------------------------------
+
+    throw new Error(
+      "Não foi possível confirmar o registro do voto."
+    );
+
+
+  } catch (error) {
+
+    $("voteMsg")
+      .textContent =
+      error.message;
+
+
+    setStatus(
+      "NÃO REGISTRADO"
+    );
+
+
+    disableKeys(
+      false
+    );
+
+
+  } finally {
+
+    // Não libera o teclado se estiver na tela FIM
+    if (
+      state.step !==
+      "stepFim"
+    ) {
+
+      state.busy =
+        false;
 
 
       disableKeys(
         false
       );
 
-
-      state.busy =
-        false;
-
     }
 
   }
+
+}
 
 
   // ==========================================================
