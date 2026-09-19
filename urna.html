@@ -43,6 +43,23 @@
 <style>
 
   /* ==========================================================
+     AJUSTE GERAL
+  ========================================================== */
+
+  /* Reduz a altura da área branca no computador */
+  .screen {
+    min-height: 500px;
+    height: 500px;
+  }
+
+  /* Evita espaço vazio desnecessário abaixo do teclado */
+  .keypad-area {
+    justify-content: flex-start;
+    align-self: start;
+  }
+
+
+  /* ==========================================================
      AJUSTE PARA TABLETS
   ========================================================== */
 
@@ -125,15 +142,19 @@
     }
 
 
-   .screen {
+    /* ======================================================
+       TELA DO TABLET
+    ====================================================== */
 
-  min-height: 400px;
+    .screen {
 
-  height: 400px;
+      min-height: 380px;
 
-  padding: 18px 20px;
+      height: 380px;
 
-}
+      padding: 18px 20px;
+
+    }
 
 
     .step {
@@ -336,6 +357,10 @@
 
       padding: 11px;
 
+      justify-content: flex-start;
+
+      align-self: start;
+
     }
 
 
@@ -411,7 +436,7 @@
 
   /* ==========================================================
      TABLET MENOR
-     Aproximadamente 600-700px de largura
+     Aproximadamente 600-700px
   ========================================================== */
 
   @media (max-width: 700px) {
@@ -431,9 +456,9 @@
 
     .screen {
 
-      height: 380px;
+      height: 370px;
 
-      min-height: 380px;
+      min-height: 370px;
 
       padding: 15px;
 
@@ -464,6 +489,10 @@
     .keypad-area {
 
       padding: 9px;
+
+      justify-content: flex-start;
+
+      align-self: start;
 
     }
 
@@ -545,9 +574,9 @@
 
     .screen {
 
-      height: 380px;
+      height: 360px;
 
-      min-height: 380px;
+      min-height: 360px;
 
     }
 
@@ -556,75 +585,16 @@
 
       padding: 10px;
 
-    }
+      justify-content: flex-start;
 
-  }
+      align-self: start;
 
-
-  /* ==========================================================
-     ALTURA PADRÃO — COMPUTADOR
-  ========================================================== */
-
-  .screen {
-    min-height: 500px;
-    height: 500px;
-  }
-
-  .step {
-    min-height: 440px;
-  }
-
-  /* O teclado acompanha apenas o tamanho dos próprios botões,
-     evitando o grande espaço vazio embaixo. */
-  .keypad-area {
-    align-self: start;
-    justify-content: flex-start;
-  }
-
-
-  /* ==========================================================
-     AJUSTES FINAIS — TABLET
-  ========================================================== */
-
-  @media (max-width: 900px) {
-
-    .screen {
-      min-height: 390px;
-      height: 390px;
-    }
-
-    .step {
-      min-height: 350px;
-    }
-
-  }
-
-
-  @media (max-width: 700px) {
-
-    .screen {
-      min-height: 380px;
-      height: 380px;
-    }
-
-    .step {
-      min-height: 340px;
-    }
-
-  }
-
-
-  @media (max-width: 560px) {
-
-    .screen {
-      min-height: 380px;
-      height: 380px;
     }
 
   }
 
 </style>
-  
+
 </head>
 
 
@@ -636,14 +606,17 @@
   ======================================================= -->
 
   <header>
-  <div class="school-name">
-    E. E. PROFESSOR ANTÔNIO ROSAS DA SILVA GALVÃO
-  </div>
 
-  <div class="election-name">
-    ELEIÇÃO DO GRÊMIO ESTUDANTIL
-  </div>
-</header>
+    <div class="school-name">
+      E. E. PROFESSOR ANTÔNIO ROSAS DA SILVA GALVÃO
+    </div>
+
+
+    <div class="election-name">
+      ELEIÇÃO DO GRÊMIO ESTUDANTIL
+    </div>
+
+  </header>
 
 
   <!-- ======================================================
@@ -1147,7 +1120,7 @@
 
   <script src="js/api.js?v=2"></script>
 
-  <script src="js/urna.js?v=12"></script>
+  <script src="js/urna.js?v=11"></script>
 
 
 </body>
