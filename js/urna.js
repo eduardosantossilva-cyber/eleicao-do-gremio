@@ -36,145 +36,62 @@
   }
 
 
-  // ==========================================================
-  // ÁUDIO
-  // ==========================================================
+// ==========================================================
+// ÁUDIO DA URNA
+// ==========================================================
 
-  let audioContext = null;
+const somFim =
+  new Audio("audio/som-urna-fim.mp3");
 
+somFim.preload = "auto";
 
-  function prepararAudio() {
+function prepararAudio() {
 
-    try {
-
-      const AudioContextClass =
-        window.AudioContext ||
-        window.webkitAudioContext;
-
-      if (!AudioContextClass) {
-        return;
-      }
-
-      if (!audioContext) {
-        audioContext = new AudioContextClass();
-      }
-
-      if (audioContext.state === "suspended") {
-        audioContext.resume();
-      }
-
-    } catch (error) {
-
-      console.log(
-        "Áudio não disponível:",
-        error
-      );
-
-    }
-
+  // Apenas garante que o áudio esteja carregado.
+  try {
+    somFim.load();
+  } catch (error) {
+    console.log(
+      "Não foi possível carregar o áudio:",
+      error
+    );
   }
 
-
-  function somFimUrna() {
-
-    try {
-
-      prepararAudio();
-
-      if (!audioContext) {
-        return;
-      }
-
-      const agora =
-        audioContext.currentTime;
-
-      const notas = [
-        {
-          frequencia: 660,
-          inicio: 0,
-          duracao: 0.15
-        },
-        {
-          frequencia: 660,
-          inicio: 0.20,
-          duracao: 0.15
-        },
-        {
-          frequencia: 880,
-          inicio: 0.40,
-          duracao: 0.20
-        },
-        {
-          frequencia: 1046,
-          inicio: 0.64,
-          duracao: 0.55
-        }
-      ];
+}
 
 
-      notas.forEach(function(nota) {
+function somFimUrna() {
 
-        const oscilador =
-          audioContext.createOscillator();
+  try {
 
-        const ganho =
-          audioContext.createGain();
+    somFim.currentTime = 0;
 
+    const reproducao =
+      somFim.play();
 
-        oscilador.type = "sine";
+    if (reproducao) {
 
+      reproducao.catch(function(error) {
 
-        oscilador.frequency.setValueAtTime(
-          nota.frequencia,
-          agora + nota.inicio
-        );
-
-
-        ganho.gain.setValueAtTime(
-          0,
-          agora + nota.inicio
-        );
-
-
-        ganho.gain.linearRampToValueAtTime(
-          0.18,
-          agora + nota.inicio + 0.02
-        );
-
-
-        ganho.gain.linearRampToValueAtTime(
-          0,
-          agora + nota.inicio + nota.duracao
-        );
-
-
-        oscilador.connect(ganho);
-        ganho.connect(audioContext.destination);
-
-
-        oscilador.start(
-          agora + nota.inicio
-        );
-
-
-        oscilador.stop(
-          agora +
-          nota.inicio +
-          nota.duracao
+        console.log(
+          "Não foi possível reproduzir o som:",
+          error
         );
 
       });
 
-    } catch (error) {
-
-      console.log(
-        "Não foi possível reproduzir o som:",
-        error
-      );
-
     }
 
+  } catch (error) {
+
+    console.log(
+      "Erro ao reproduzir o som:",
+      error
+    );
+
   }
+
+}
 
 
   // ==========================================================
