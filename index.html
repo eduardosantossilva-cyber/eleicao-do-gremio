@@ -1,139 +1,111 @@
 <!doctype html>
 <html lang="pt-BR">
-
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <meta charset="utf-8">
+<title>Eleição do Grêmio Estudantil</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1"
-  >
+<link rel="stylesheet" href="css/style.css">
 
-  <title>Eleição do Grêmio Estudantil</title>
+<style>
+/* ================================
+   ORGANIZAÇÃO DOS BOTÕES
+================================ */
 
-  <link
-    rel="stylesheet"
-    href="css/style.css"
-  >
+.home-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 38px;
+}
+
+/* APURAÇÃO ocupa a segunda linha e fica centralizada */
+.home-actions .gold {
+  grid-column: 1 / -1;
+  width: calc(50% - 12px);
+  justify-self: center;
+}
+
+/* ================================
+   MESMO MODELO VISUAL DOS OUTROS
+================================ */
+
+.home-btn.gold {
+  border-left: 8px solid #d9a400;
+}
+
+/* Mantém o mesmo comportamento visual */
+.home-btn.gold:hover {
+  transform: translateY(-2px);
+}
+
+/* ================================
+   CELULAR / TABLET
+================================ */
+
+@media (max-width: 800px) {
+  .home-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .home-actions .gold {
+    grid-column: auto;
+    width: 100%;
+    justify-self: stretch;
+  }
+}
+</style>
 
 </head>
 
-
 <body class="home">
 
+<main class="home-card">
 
-  <main class="home-card">
+  <div class="eyebrow">GRÊMIO ESTUDANTIL</div>
 
+  <h1>Eleição do Grêmio</h1>
 
-    <div class="eyebrow">
-      GRÊMIO ESTUDANTIL
-    </div>
+  <p>Portal de votação estudantil</p>
 
+  <div class="home-actions">
 
-    <h1>
-      Eleição do Grêmio
-    </h1>
+    <!-- URNA -->
+    <a href="urna.html" class="home-btn blue">
+      <span class="icon">🗳️</span>
 
-
-    <p>
-      Portal de votação estudantil
-    </p>
-
-
-    <div class="home-actions">
-
-
-      <!-- ==================================================
-           URNA
-      =================================================== -->
-
-      <a
-        href="urna.html"
-        class="home-btn blue"
-      >
-
-        <span class="icon">
-          🗳️
-        </span>
-
-        <span>
-
-          <b>
-            URNA ELETRÔNICA
-          </b>
-
-          <small>
-            Entrar para votar
-          </small>
-
-        </span>
-
-      </a>
+      <span>
+        <b>URNA ELETRÔNICA</b>
+        <small>Entrar para votar</small>
+      </span>
+    </a>
 
 
-      <!-- ==================================================
-           ADMINISTRATIVO
-      =================================================== -->
+    <!-- ADMINISTRATIVO -->
+    <a href="admin.html" class="home-btn green">
+      <span class="icon">⚙️</span>
 
-      <a
-        href="admin.html"
-        class="home-btn green"
-      >
-
-        <span class="icon">
-          ⚙️
-        </span>
-
-        <span>
-
-          <b>
-            ADMINISTRATIVO
-          </b>
-
-          <small>
-            Comissão eleitoral
-          </small>
-
-        </span>
-
-      </a>
+      <span>
+        <b>ADMINISTRATIVO</b>
+        <small>Comissão eleitoral</small>
+      </span>
+    </a>
 
 
-      <!-- ==================================================
-           APURAÇÃO
-      =================================================== -->
+    <!-- APURAÇÃO -->
+    <a href="apuracao.html" class="home-btn gold">
+      <span class="icon">🏆</span>
 
-      <a
-        href="apuracao.html"
-        class="home-btn gold"
-      >
+      <span>
+        <b>APURAÇÃO</b>
+        <small>Resultado da eleição</small>
+      </span>
+    </a>
 
-        <span class="icon">
-          🏆
-        </span>
+  </div>
 
-        <span>
-
-          <b>
-            APURAÇÃO
-          </b>
-
-          <small>
-            Resultado da eleição
-          </small>
-
-        </span>
-
-      </a>
-
-
-    </div>
-
-
-  </main>
-
+</main>
 
 </body>
-
 </html>
