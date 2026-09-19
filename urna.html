@@ -17,583 +17,427 @@
     href="css/style.css"
   >
 
-<style>
-  body.urn > header {
-    height: auto;
-    min-height: 72px;
-    flex-direction: column;
-    gap: 4px;
-    padding: 10px 15px;
-    line-height: 1.2;
-  }
+  <style>
 
-  body.urn > header .school-name {
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: .6px;
-  }
-
-  body.urn > header .election-name {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: .5px;
-  }
-</style>
-
-<style>
-
-  /* ==========================================================
-     AJUSTE GERAL
-  ========================================================== */
-
-  /* Reduz a altura da área branca no computador */
-  .screen {
-    min-height: 500px;
-    height: 500px;
-  }
-
-  /* Evita espaço vazio desnecessário abaixo do teclado */
-  .keypad-area {
-    justify-content: flex-start;
-    align-self: start;
-  }
-
-
-  /* ==========================================================
-     AJUSTE PARA TABLETS
-  ========================================================== */
-
-  @media (max-width: 900px) {
-
-    body.urn {
-      min-height: 100vh;
-      overflow: hidden;
-    }
-
+    /* ==========================================================
+       CABEÇALHO
+    ========================================================== */
 
     body.urn > header {
-      min-height: 68px;
-      padding: 8px 12px;
-      gap: 3px;
+      height: auto;
+      min-height: 72px;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 15px;
+      line-height: 1.2;
     }
-
 
     body.urn > header .school-name {
-      font-size: 13px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: .6px;
+      text-align: center;
     }
-
 
     body.urn > header .election-name {
-      font-size: 17px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-align: center;
     }
 
 
-    .machine {
-
-      width: calc(100% - 18px);
-
-      margin: 9px auto;
-
-      border-width: 5px;
-
-      border-radius: 16px;
-
-    }
-
-
-    .machine-top {
-
-      padding: 9px 12px;
-
-    }
-
-
-    .machine-top b {
-
-      font-size: 19px;
-
-    }
-
-
-    .machine-top strong {
-
-      padding: 5px 8px;
-
-      font-size: 10px;
-
-    }
-
+    /* ==========================================================
+       AJUSTE GERAL DA ALTURA
+    ========================================================== */
 
     .machine-body {
-
-      /*
-       * Mantém tela e teclado lado a lado
-       * no tablet.
-       */
-
-      grid-template-columns:
-        minmax(0, 1.25fr)
-        minmax(250px, .75fr);
-
-      gap: 14px;
-
-      padding: 14px;
-
+      align-items: start !important;
     }
 
-
-    /* ======================================================
-       TELA DO TABLET
-    ====================================================== */
+    .screen-wrap {
+      height: auto !important;
+      min-height: 0 !important;
+      align-self: start !important;
+    }
 
     .screen {
-
-      min-height: 380px;
-
-      height: 380px;
-
-      padding: 18px 20px;
-
+      height: 470px !important;
+      min-height: 470px !important;
+      max-height: 470px !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
     }
-
 
     .step {
-
-      min-height: 350px;
-
+      min-height: 0 !important;
+      height: auto !important;
     }
-
-
-    .screen h2 {
-
-      font-size: 22px;
-
-      margin-bottom: 8px;
-
-    }
-
-
-    .screen p {
-
-      font-size: 14px;
-
-      margin-top: 8px;
-
-    }
-
-
-    .eyebrow {
-
-      font-size: 10px;
-
-      letter-spacing: 1.2px;
-
-    }
-
-
-    .display {
-
-      min-height: 56px;
-
-      height: 56px;
-
-      margin: 15px 0 12px;
-
-      font-size: 30px;
-
-      padding: 6px 12px;
-
-    }
-
-
-    .msg {
-
-      font-size: 12px;
-
-      padding: 9px 10px;
-
-    }
-
-
-    .student-box {
-
-      margin: 13px 0;
-
-      padding: 12px;
-
-      gap: 4px;
-
-    }
-
-
-    .student-box small {
-
-      font-size: 9px;
-
-      margin-top: 4px;
-
-    }
-
-
-    .student-box b {
-
-      font-size: 15px;
-
-      margin-bottom: 3px;
-
-    }
-
-
-    .hint {
-
-      font-size: 11px;
-
-      padding-top: 12px;
-
-    }
-
-
-    /* ======================================================
-       CHAPA
-    ====================================================== */
-
-    .candidate {
-
-      margin-top: 12px;
-
-      padding: 11px;
-
-      grid-template-columns: 75px 1fr;
-
-      gap: 11px;
-
-    }
-
-
-    .photo {
-
-      width: 75px;
-
-      height: 92px;
-
-      font-size: 34px;
-
-    }
-
-
-    .candidate b {
-
-      font-size: 15px;
-
-    }
-
-
-    .candidate em {
-
-      margin-top: 5px;
-
-      font-size: 11px;
-
-    }
-
-
-    .candidate #presidente,
-    .candidate #vice {
-
-      font-size: 11px;
-
-      margin-top: 4px;
-
-    }
-
-
-    /* ======================================================
-       TELA FIM
-    ====================================================== */
-
-    .fim {
-
-      width: 65px;
-
-      height: 65px;
-
-      font-size: 40px;
-
-      margin-bottom: 12px;
-
-    }
-
-
-    .fim-title {
-
-      font-size: 34px !important;
-
-    }
-
-
-    .center {
-
-      font-size: 15px !important;
-
-    }
-
-
-    .restart {
-
-      margin-top: 15px;
-
-      padding: 9px 16px;
-
-      font-size: 12px;
-
-    }
-
-
-    /* ======================================================
-       TECLADO
-    ====================================================== */
 
     .keypad-area {
+      height: auto !important;
+      min-height: 0 !important;
+      align-self: start !important;
+      justify-content: flex-start !important;
+    }
 
-      padding: 11px;
 
-      justify-content: flex-start;
+    /* ==========================================================
+       TABLET
+    ========================================================== */
 
-      align-self: start;
+    @media (max-width: 900px) {
+
+      body.urn {
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      body.urn > header {
+        min-height: 68px;
+        padding: 8px 12px;
+        gap: 3px;
+      }
+
+      body.urn > header .school-name {
+        font-size: 13px;
+      }
+
+      body.urn > header .election-name {
+        font-size: 17px;
+      }
+
+
+      .machine {
+        width: calc(100% - 18px);
+        margin: 9px auto;
+        border-width: 5px;
+        border-radius: 16px;
+      }
+
+
+      .machine-top {
+        padding: 9px 12px;
+      }
+
+      .machine-top b {
+        font-size: 19px;
+      }
+
+      .machine-top strong {
+        padding: 5px 8px;
+        font-size: 10px;
+      }
+
+
+      .machine-body {
+        grid-template-columns:
+          minmax(0, 1.25fr)
+          minmax(250px, .75fr);
+
+        gap: 14px;
+        padding: 14px;
+
+        align-items: start !important;
+      }
+
+
+      /* TELA */
+
+      .screen {
+        height: 370px !important;
+        min-height: 370px !important;
+        max-height: 370px !important;
+        padding: 18px 20px;
+      }
+
+      .step {
+        min-height: 0 !important;
+        height: auto !important;
+      }
+
+
+      .screen h2 {
+        font-size: 22px;
+        margin-bottom: 8px;
+      }
+
+      .screen p {
+        font-size: 14px;
+        margin-top: 8px;
+      }
+
+      .eyebrow {
+        font-size: 10px;
+        letter-spacing: 1.2px;
+      }
+
+
+      /* DISPLAY */
+
+      .display {
+        min-height: 56px;
+        height: 56px;
+        margin: 15px 0 12px;
+        font-size: 30px;
+        padding: 6px 12px;
+      }
+
+
+      /* MENSAGENS */
+
+      .msg {
+        font-size: 12px;
+        padding: 9px 10px;
+      }
+
+
+      /* ALUNO */
+
+      .student-box {
+        margin: 13px 0;
+        padding: 12px;
+        gap: 4px;
+      }
+
+      .student-box small {
+        font-size: 9px;
+        margin-top: 4px;
+      }
+
+      .student-box b {
+        font-size: 15px;
+        margin-bottom: 3px;
+      }
+
+      .hint {
+        font-size: 11px;
+        padding-top: 12px;
+      }
+
+
+      /* CHAPA */
+
+      .candidate {
+        margin-top: 12px;
+        padding: 11px;
+        grid-template-columns: 75px 1fr;
+        gap: 11px;
+      }
+
+      .photo {
+        width: 75px;
+        height: 92px;
+        font-size: 34px;
+      }
+
+      .candidate b {
+        font-size: 15px;
+      }
+
+      .candidate em {
+        margin-top: 5px;
+        font-size: 11px;
+      }
+
+      .candidate #presidente,
+      .candidate #vice {
+        font-size: 11px;
+        margin-top: 4px;
+      }
+
+
+      /* FIM */
+
+      .fim {
+        width: 65px;
+        height: 65px;
+        font-size: 40px;
+        margin-bottom: 12px;
+      }
+
+      .fim-title {
+        font-size: 34px !important;
+      }
+
+      .center {
+        font-size: 15px !important;
+      }
+
+      .restart {
+        margin-top: 15px;
+        padding: 9px 16px;
+        font-size: 12px;
+      }
+
+
+      /* TECLADO */
+
+      .keypad-area {
+        padding: 11px;
+        height: auto !important;
+        min-height: 0 !important;
+        align-self: start !important;
+        justify-content: flex-start !important;
+      }
+
+      .keypad-title {
+        font-size: 10px;
+        margin-bottom: 8px;
+        letter-spacing: 1px;
+      }
+
+      .keypad {
+        gap: 6px;
+      }
+
+      .key.num {
+        min-height: 51px;
+        height: 51px;
+        font-size: 22px;
+        border-width: 2px;
+        box-shadow: 0 3px 0 #111;
+      }
+
+      .key {
+        min-height: 46px;
+        height: 46px;
+        font-size: 10px;
+        box-shadow: 0 3px 0 #111;
+      }
+
+      .keypad-area::after {
+        font-size: 8px;
+        margin-top: 8px;
+      }
+
+
+      /* RODAPÉ */
+
+      .machine footer {
+        padding: 7px 12px;
+        font-size: 10px;
+      }
 
     }
 
 
-    .keypad-title {
+    /* ==========================================================
+       TABLET MENOR
+    ========================================================== */
 
-      font-size: 10px;
+    @media (max-width: 700px) {
 
-      margin-bottom: 8px;
+      .machine-body {
+        grid-template-columns:
+          minmax(0, 1.18fr)
+          minmax(220px, .82fr);
 
-      letter-spacing: 1px;
-
-    }
-
-
-    .keypad {
-
-      gap: 6px;
-
-    }
+        gap: 10px;
+        padding: 10px;
+      }
 
 
-    .key.num {
-
-      min-height: 51px;
-
-      height: 51px;
-
-      font-size: 22px;
-
-      border-width: 2px;
-
-      box-shadow: 0 3px 0 #111;
-
-    }
+      .screen {
+        height: 350px !important;
+        min-height: 350px !important;
+        max-height: 350px !important;
+        padding: 15px;
+      }
 
 
-    .key {
-
-      min-height: 46px;
-
-      height: 46px;
-
-      font-size: 10px;
-
-      box-shadow: 0 3px 0 #111;
-
-    }
+      .step {
+        min-height: 0 !important;
+        height: auto !important;
+      }
 
 
-    .keypad-area::after {
+      .machine-top b {
+        font-size: 16px;
+      }
 
-      font-size: 8px;
-
-      margin-top: 8px;
-
-    }
-
-
-    /* ======================================================
-       RODAPÉ
-    ====================================================== */
-
-    .machine footer {
-
-      padding: 7px 12px;
-
-      font-size: 10px;
-
-    }
-
-  }
+      .machine-top strong {
+        font-size: 9px;
+      }
 
 
-  /* ==========================================================
-     TABLET MENOR
-     Aproximadamente 600-700px
-  ========================================================== */
+      .keypad-area {
+        padding: 9px;
+        height: auto !important;
+        min-height: 0 !important;
+        align-self: start !important;
+        justify-content: flex-start !important;
+      }
 
-  @media (max-width: 700px) {
 
-    .machine-body {
+      .key.num {
+        min-height: 46px;
+        height: 46px;
+        font-size: 20px;
+      }
 
-      grid-template-columns:
-        minmax(0, 1.18fr)
-        minmax(220px, .82fr);
+      .key {
+        min-height: 42px;
+        height: 42px;
+        font-size: 9px;
+      }
 
-      gap: 10px;
 
-      padding: 10px;
+      .candidate {
+        grid-template-columns: 65px 1fr;
+        gap: 8px;
+      }
+
+
+      .photo {
+        width: 65px;
+        height: 80px;
+      }
+
+
+      .candidate b {
+        font-size: 13px;
+      }
+
+
+      .candidate #presidente,
+      .candidate #vice {
+        font-size: 10px;
+      }
 
     }
 
 
-    .screen {
+    /* ==========================================================
+       TELA MUITO ESTREITA
+    ========================================================== */
 
-      height: 370px;
+    @media (max-width: 560px) {
 
-      min-height: 370px;
-
-      padding: 15px;
-
-    }
-
-
-    .step {
-
-      min-height: 340px;
-
-    }
+      body.urn {
+        overflow: auto;
+      }
 
 
-    .machine-top b {
-
-      font-size: 16px;
-
-    }
+      .machine-body {
+        grid-template-columns: 1fr;
+      }
 
 
-    .machine-top strong {
+      .screen {
+        height: 340px !important;
+        min-height: 340px !important;
+        max-height: 340px !important;
+      }
 
-      font-size: 9px;
+
+      .keypad-area {
+        padding: 10px;
+      }
 
     }
 
-
-    .keypad-area {
-
-      padding: 9px;
-
-      justify-content: flex-start;
-
-      align-self: start;
-
-    }
-
-
-    .key.num {
-
-      min-height: 46px;
-
-      height: 46px;
-
-      font-size: 20px;
-
-    }
-
-
-    .key {
-
-      min-height: 42px;
-
-      height: 42px;
-
-      font-size: 9px;
-
-    }
-
-
-    .candidate {
-
-      grid-template-columns: 65px 1fr;
-
-      gap: 8px;
-
-    }
-
-
-    .photo {
-
-      width: 65px;
-
-      height: 80px;
-
-    }
-
-
-    .candidate b {
-
-      font-size: 13px;
-
-    }
-
-
-    .candidate #presidente,
-    .candidate #vice {
-
-      font-size: 10px;
-
-    }
-
-  }
-
-
-  /* ==========================================================
-     TABLET EM PÉ / TELA MAIS ESTREITA
-  ========================================================== */
-
-  @media (max-width: 560px) {
-
-    body.urn {
-      overflow: auto;
-    }
-
-
-    .machine-body {
-
-      grid-template-columns: 1fr;
-
-    }
-
-
-    .screen {
-
-      height: 360px;
-
-      min-height: 360px;
-
-    }
-
-
-    .keypad-area {
-
-      padding: 10px;
-
-      justify-content: flex-start;
-
-      align-self: start;
-
-    }
-
-  }
-
-</style>
+  </style>
 
 </head>
 
@@ -610,7 +454,6 @@
     <div class="school-name">
       E. E. PROFESSOR ANTÔNIO ROSAS DA SILVA GALVÃO
     </div>
-
 
     <div class="election-name">
       ELEIÇÃO DO GRÊMIO ESTUDANTIL
@@ -797,15 +640,11 @@
             </div>
 
 
-            <!-- CARD DA CHAPA -->
-
             <div
               id="chapaCard"
               class="candidate"
             >
 
-
-              <!-- FOTO -->
 
               <div
                 id="photoBox"
@@ -819,8 +658,6 @@
 
               </div>
 
-
-              <!-- DADOS -->
 
               <div>
 
@@ -949,8 +786,6 @@
         <div class="keypad">
 
 
-          <!-- NÚMEROS -->
-
           <button
             class="key num"
             data-n="1"
@@ -1041,8 +876,6 @@
           </button>
 
 
-          <!-- BRANCO -->
-
           <button
             class="key white"
             id="branco"
@@ -1052,8 +885,6 @@
           </button>
 
 
-          <!-- CORRIGE -->
-
           <button
             class="key correct"
             id="corrige"
@@ -1062,8 +893,6 @@
             CORRIGE
           </button>
 
-
-          <!-- CONFIRMA -->
 
           <button
             class="key confirm"
