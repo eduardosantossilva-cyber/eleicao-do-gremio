@@ -495,7 +495,7 @@
     <!-- CABEÇALHO -->
     <header class="apuracao-header">
       <div class="eyebrow">GRÊMIO ESTUDANTIL</div>
-      <h1>Apuração da Eleição</h1>
+      <h1>APURAÇÃO DA ELEIÇÃO</h1>
       <p id="escola">E. E. PROFESSOR ANTÔNIO ROSAS DA SILVA GALVÃO</p>
     </header>
 
@@ -718,8 +718,9 @@
           clearInterval(intervalo);
 
           // Dá tempo para o último toque terminar.
+          // O som de fogos/palmas será iniciado somente
+          // depois que o resultado estiver visível na tela.
           setTimeout(async () => {
-            tocarFogos();
             await carregarResultado();
           }, 500);
         }
@@ -744,6 +745,12 @@
         }
 
         preencherResultado(dados);
+
+        // Inicia o som somente depois que o resultado final
+        // já foi colocado na tela.
+        setTimeout(() => {
+          tocarFogos();
+        }, 50);
 
       } catch (error) {
         contagemIniciada = false;
