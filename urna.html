@@ -2,10 +2,12 @@
 <html lang="pt-BR">
 
 <head>
+
   <meta charset="utf-8">
+
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1"
+    content="width=device-width,initial-scale=1"
   >
 
   <title>Urna Eletrônica - Grêmio</title>
@@ -14,9 +16,12 @@
     rel="stylesheet"
     href="css/style.css"
   >
+
 </head>
 
+
 <body class="urn">
+
 
   <!-- ======================================================
        CABEÇALHO
@@ -28,17 +33,26 @@
 
 
   <!-- ======================================================
-       MÁQUINA
+       URNA
   ======================================================= -->
 
   <main class="machine">
 
-    <!-- TOPO DA URNA -->
+
+    <!-- ====================================================
+         TOPO
+    ===================================================== -->
+
     <div class="machine-top">
 
       <div>
-        <b>URNA ELETRÔNICA</b>
+
+        <b id="urnLabel">
+          URNA ELETRÔNICA
+        </b>
+
       </div>
+
 
       <strong id="status">
         AGUARDANDO
@@ -47,7 +61,10 @@
     </div>
 
 
-    <!-- CORPO DA URNA -->
+    <!-- ====================================================
+         CORPO
+    ===================================================== -->
+
     <div class="machine-body">
 
 
@@ -61,7 +78,7 @@
 
 
           <!-- ==============================================
-               ETAPA 1 — RA
+               TELA RA
           =============================================== -->
 
           <section
@@ -73,13 +90,16 @@
               ELEIÇÃO DO GRÊMIO
             </div>
 
+
             <h2>
               IDENTIFICAÇÃO
             </h2>
 
+
             <p>
               Digite seu <b>RA</b> no teclado ao lado.
             </p>
+
 
             <div
               id="raView"
@@ -87,6 +107,7 @@
             >
               —
             </div>
+
 
             <div
               id="raMsg"
@@ -99,7 +120,7 @@
 
 
           <!-- ==============================================
-               ETAPA 2 — DADOS DO ALUNO
+               TELA ALUNO
           =============================================== -->
 
           <section
@@ -111,33 +132,42 @@
               CONFIRMAÇÃO DO ELEITOR
             </div>
 
+
             <h2>
               CONFIRA SEUS DADOS
             </h2>
 
+
             <div class="student-box">
+
 
               <small>
                 NOME
               </small>
 
+
               <b id="nomeAluno">
                 —
               </b>
+
 
               <small>
                 DATA DE NASCIMENTO
               </small>
 
+
               <b id="dataAluno">
                 —
               </b>
 
+
             </div>
+
 
             <p>
               Os dados estão corretos?
             </p>
+
 
             <div class="hint">
               CORRIGE = voltar
@@ -149,7 +179,7 @@
 
 
           <!-- ==============================================
-               ETAPA 3 — CHAPA
+               TELA CHAPA
           =============================================== -->
 
           <section
@@ -161,13 +191,16 @@
               SEU VOTO PARA
             </div>
 
+
             <h2>
               GRÊMIO ESTUDANTIL
             </h2>
 
+
             <p>
               Digite o número da chapa.
             </p>
+
 
             <div
               id="chapaNumero"
@@ -184,6 +217,9 @@
               class="candidate"
             >
 
+
+              <!-- FOTO -->
+
               <div
                 id="photoBox"
                 class="photo"
@@ -197,23 +233,35 @@
               </div>
 
 
+              <!-- DADOS -->
+
               <div>
+
 
                 <small>
                   CHAPA
                 </small>
 
+
                 <b id="chapaNome">
                   —
                 </b>
 
-                <em id="slogan"></em>
 
-                <div id="presidente"></div>
+                <div id="presidente">
+                </div>
 
-                <div id="vice"></div>
+
+                <div id="vice">
+                </div>
+
+
+                <em id="slogan">
+                </em>
+
 
               </div>
+
 
             </div>
 
@@ -225,11 +273,12 @@
               Digite o número da chapa.
             </div>
 
+
           </section>
 
 
           <!-- ==============================================
-               ETAPA 4 — FIM
+               TELA FIM
           =============================================== -->
 
           <section
@@ -237,30 +286,36 @@
             class="step"
           >
 
+
             <div class="fim">
               ✓
             </div>
+
 
             <h2 class="fim-title">
               FIM
             </h2>
 
+
             <p class="center">
               SEU VOTO FOI REGISTRADO.
             </p>
 
+
             <button
               id="restart"
               class="restart"
+              type="button"
             >
               VOLTAR AO INÍCIO
             </button>
+
 
           </section>
 
 
           <!-- ==============================================
-               ETAPA 5 — VOTAÇÃO ENCERRADA
+               TELA VOTAÇÃO ENCERRADA
           =============================================== -->
 
           <section
@@ -268,22 +323,27 @@
             class="step"
           >
 
+
             <div class="fim red">
               !
             </div>
+
 
             <h2 class="fim-title">
               VOTAÇÃO ENCERRADA
             </h2>
 
+
             <p class="center">
               A comissão eleitoral encerrou a votação.
             </p>
+
 
           </section>
 
 
         </div>
+
       </div>
 
 
@@ -292,6 +352,7 @@
       =================================================== -->
 
       <aside class="keypad-area">
+
 
         <div class="keypad-title">
           TECLADO DE VOTAÇÃO
@@ -306,69 +367,88 @@
           <button
             class="key num"
             data-n="1"
+            type="button"
           >
             1
           </button>
 
+
           <button
             class="key num"
             data-n="2"
+            type="button"
           >
             2
           </button>
 
+
           <button
             class="key num"
             data-n="3"
+            type="button"
           >
             3
           </button>
 
+
           <button
             class="key num"
             data-n="4"
+            type="button"
           >
             4
           </button>
 
+
           <button
             class="key num"
             data-n="5"
+            type="button"
           >
             5
           </button>
 
+
           <button
             class="key num"
             data-n="6"
+            type="button"
           >
             6
           </button>
 
+
           <button
             class="key num"
             data-n="7"
+            type="button"
           >
             7
           </button>
 
+
           <button
             class="key num"
             data-n="8"
+            type="button"
           >
             8
           </button>
 
+
           <button
             class="key num"
             data-n="9"
+            type="button"
           >
             9
           </button>
 
+
           <button
             class="key num zero"
             data-n="0"
+            type="button"
           >
             0
           </button>
@@ -379,6 +459,7 @@
           <button
             class="key white"
             id="branco"
+            type="button"
           >
             BRANCO
           </button>
@@ -389,6 +470,7 @@
           <button
             class="key correct"
             id="corrige"
+            type="button"
           >
             CORRIGE
           </button>
@@ -399,13 +481,17 @@
           <button
             class="key confirm"
             id="confirma"
+            type="button"
           >
             CONFIRMA
           </button>
 
 
         </div>
+
+
       </aside>
+
 
     </div>
 
@@ -416,18 +502,25 @@
 
     <footer>
 
+
       <span>
+
         Urna
+
         <b id="urnFooter">
           01
         </b>
+
       </span>
+
 
       <span id="sync">
         Conexão: aguardando
       </span>
 
+
     </footer>
+
 
   </main>
 
@@ -440,7 +533,8 @@
 
   <script src="js/api.js?v=2"></script>
 
-  <script src="js/urna.js?v=10"></script>
+  <script src="js/urna.js?v=11"></script>
+
 
 </body>
 
