@@ -16,7 +16,7 @@
  */
 
 const SPREADSHEET_ID =
-  'COLOQUE_AQUI_O_ID_DA_SUA_PLANILHA';
+  '1mbYyyklNBtlU0by2J_1TGmE3za2HqJ3gZfnruyWTg-0';
 
 const ADMIN_PASSWORD =
   'gremio2026';
@@ -470,6 +470,295 @@ function urnas_() {
     );
 }
 
+// ============================================================
+// APURAÇÃO PÚBLICA
+// ============================================================
+
+function apuracaoPublica_(params) {
+
+  const config = config_();
+
+  // ----------------------------------------------------------
+  // NÃO PERMITE VER RESULTADO COM A ELEIÇÃO ABERTA
+  // ----------------------------------------------------------
+
+  if (config.eleicaoAberta) {
+
+    return output_({
+
+      ok: false,
+
+      bloqueado: true,
+
+      message:
+        'A apuração pública só estará disponível após o encerramento da eleição.'
+
+    }, params.callback);
+
+  }
+
+
+  // ----------------------------------------------------------
+  // ELEITORES
+  // ----------------------------------------------------------
+
+  const alunos =
+    sh_('Alunos')
+      .getDataRange()
+      .getDisplayValues();
+
+  const eleitores =
+    Math.max(
+      0,
+      alunos.length - 1
+    );
+
+  let votaram = 0;
+
+  if (alunos.length > 1) {
+
+    const headers =
+      alunos[0].map(
+        header_
+      );
+
+    const indiceVotou =
+      headers.indexOf(
+        'javotou'
+      );
+
+    if (indiceVotou >= 0) {
+
+      for (
+        let i = 1;
+        i < alunos.length;
+        i++
+      ) {
+
+        if (
+          norm_(
+            alunos[i][indiceVotou]
+          ) === 'sim'
+        ) {
+
+          votaram++;
+
+        }
+
+      }
+
+    }
+
+  }
+
+
+  // ----------------------------------------------------------
+  // VOTOS
+  // ----------------------------------------------------------
+
+  const votos =
+    sh_('Votos')
+      .getDataRange()
+      .getDisplayValues();
+
+  const contagem = {};
+
+  let total = 0;
+  let brancos = 0;
+  let nulos = 0;
+
+  for (
+    let i = 1;
+    i < votos.length;
+    i++
+  ) {
+
+    const numero =
+      norm_(
+        votos[i][2]
+      );
+
+    if (!numero) {
+      continue;
+    }
+
+    total++;
+
+    if (numero === 'branco') {
+
+      brancos++;
+
+    }
+
+    else if (numero === 'nulo') {
+
+      nulos++;
+
+    }
+
+    else {
+
+      contagem[numero] =
+        (
+          contagem[numero] ||
+          0
+        ) + 1;
+
+    }
+
+  }
+
+
+  // ----------------------------------------------------------
+  // CHAPAS
+  // ----------------------------------------------------------
+
+  const chapas =
+    chapas_();
+
+  const resultados =
+    chapas.map(
+      function(chapa) {
+
+        const numero =
+          norm_(
+            chapa.numero
+          );
+
+        return {
+
+          numero:
+            chapa.numero,
+
+          nome:
+            chapa.nome,
+
+          presidente:
+            chapa.presidente,
+
+          vice:
+            chapa.vice,
+
+          slogan:
+            chapa.slogan,
+
+          fotoUrl:
+            chapa.fotoUrl,
+
+          votos:
+            contagem[numero] || 0
+
+        };
+
+      }
+    );
+
+
+  // ----------------------------------------------------------
+  // CALCULA VENCEDORA
+  // ----------------------------------------------------------
+
+  let vencedoras = [];
+
+  if (resultados.length > 0) {
+
+    let maiorNumero =
+      resultados[0].votos;
+
+    resultados.forEach(
+      function(item) {
+
+        if (
+          item.votos >
+          maiorNumero
+        ) {
+
+          maiorNumero =
+            item.votos;
+
+        }
+
+      }
+    );
+
+    vencedoras =
+      resultados.filter(
+        function(item) {
+
+          return (
+            item.votos ===
+            maiorNumero
+          );
+
+        }
+      );
+
+  }
+
+
+  // ----------------------------------------------------------
+  // RETORNO
+  // ----------------------------------------------------------
+
+  return output_({
+
+    ok: true,
+
+    config: {
+
+      escola:
+        config.escola,
+
+      eleicao:
+        config.eleicao,
+
+      eleicaoAberta:
+        config.eleicaoAberta
+
+    },
+
+    metrics: {
+
+      eleitores:
+        eleitores,
+
+      votaram:
+        votaram
+
+    },
+
+    apuracao: {
+
+      total:
+        total,
+
+      validos:
+        Math.max(
+          0,
+          total - brancos - nulos
+        ),
+
+      brancos:
+        brancos,
+
+      nulos:
+        nulos,
+
+      resultados:
+        resultados,
+
+      vencedoras:
+        vencedoras,
+
+      empate:
+        vencedoras.length > 1
+
+    }
+
+  }, params.callback);
+
+}
+
 
 function doGet(e) {
 
@@ -816,6 +1105,17 @@ function doGet(e) {
       return output_({
         ok: true
       }, callback);
+    }
+
+
+    // ---------------- APURAÇÃO PÚBLICA ----------------
+
+    if (
+      action ===
+      'apuracaoPublica'
+    ) {
+
+      return apuracaoPublica_(params);
     }
 
 
