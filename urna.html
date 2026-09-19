@@ -1,110 +1,447 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Urna Eletrônica - Grêmio</title>
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Urna Eletrônica - Grêmio</title>
+
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  >
 </head>
+
 <body class="urn">
-<header>ELEIÇÃO DO GRÊMIO ESTUDANTIL</header>
 
-<main class="machine">
-  <div class="machine-top">
-    <div>
-      <b>URNA ELETRÔNICA</b>
-    </div>
-    <strong id="status">AGUARDANDO</strong>
-  </div>
+  <!-- ======================================================
+       CABEÇALHO
+  ======================================================= -->
 
-  <div class="machine-body">
-    <div class="screen-wrap">
-      <div class="screen">
+  <header>
+    ELEIÇÃO DO GRÊMIO ESTUDANTIL
+  </header>
 
-        <section id="stepRA" class="step active">
-          <div class="eyebrow">ELEIÇÃO DO GRÊMIO</div>
-          <h2>IDENTIFICAÇÃO</h2>
-          <p>Digite seu <b>RA</b> no teclado ao lado.</p>
-          <div id="raView" class="display">—</div>
-          <div id="raMsg" class="msg">Pressione CONFIRMA depois de digitar.</div>
-        </section>
 
-        <section id="stepAluno" class="step">
-          <div class="eyebrow">CONFIRMAÇÃO DO ELEITOR</div>
-          <h2>CONFIRA SEUS DADOS</h2>
-          <div class="student-box">
-            <small>NOME</small>
-            <b id="nomeAluno">—</b>
-            <small>DATA DE NASCIMENTO</small>
-            <b id="dataAluno">—</b>
-          </div>
-          <p>Os dados estão corretos?</p>
-          <div class="hint">CORRIGE = voltar &nbsp; | &nbsp; CONFIRMA = continuar</div>
-        </section>
+  <!-- ======================================================
+       MÁQUINA
+  ======================================================= -->
 
-        <section id="stepChapa" class="step">
-          <div class="eyebrow">SEU VOTO PARA</div>
-          <h2>GRÊMIO ESTUDANTIL</h2>
-          <p>Digite o número da chapa.</p>
-          <div id="chapaNumero" class="display">—</div>
+  <main class="machine">
 
-          <div id="chapaCard" class="candidate">
-            <div id="photoBox" class="photo">
-              <img id="foto" alt="Foto da chapa">
-            </div>
-            <div>
-              <small>CHAPA</small>
-              <b id="chapaNome">—</b>
-              <em id="slogan"></em>
-            </div>
-          </div>
+    <!-- TOPO DA URNA -->
+    <div class="machine-top">
 
-          <div id="voteMsg" class="msg">Digite o número da chapa.</div>
-        </section>
-
-        <section id="stepFim" class="step">
-          <div class="fim">✓</div>
-          <h2 class="fim-title">FIM</h2>
-          <p class="center">SEU VOTO FOI REGISTRADO.</p>
-          <button id="restart" class="restart">VOLTAR AO INÍCIO</button>
-        </section>
-
-        <section id="stepClosed" class="step">
-          <div class="fim red">!</div>
-          <h2 class="fim-title">VOTAÇÃO ENCERRADA</h2>
-          <p class="center">A comissão eleitoral encerrou a votação.</p>
-        </section>
+      <div>
+        <b>URNA ELETRÔNICA</b>
       </div>
+
+      <strong id="status">
+        AGUARDANDO
+      </strong>
+
     </div>
 
-    <aside class="keypad-area">
-      <div class="keypad-title">TECLADO DE VOTAÇÃO</div>
-      <div class="keypad">
-        <button class="key num" data-n="1">1</button>
-        <button class="key num" data-n="2">2</button>
-        <button class="key num" data-n="3">3</button>
-        <button class="key num" data-n="4">4</button>
-        <button class="key num" data-n="5">5</button>
-        <button class="key num" data-n="6">6</button>
-        <button class="key num" data-n="7">7</button>
-        <button class="key num" data-n="8">8</button>
-        <button class="key num" data-n="9">9</button>
-        <button class="key num zero" data-n="0">0</button>
-        <button class="key white" id="branco">BRANCO</button>
-        <button class="key correct" id="corrige">CORRIGE</button>
-        <button class="key confirm" id="confirma">CONFIRMA</button>
+
+    <!-- CORPO DA URNA -->
+    <div class="machine-body">
+
+
+      <!-- ==================================================
+           TELA
+      =================================================== -->
+
+      <div class="screen-wrap">
+
+        <div class="screen">
+
+
+          <!-- ==============================================
+               ETAPA 1 — RA
+          =============================================== -->
+
+          <section
+            id="stepRA"
+            class="step active"
+          >
+
+            <div class="eyebrow">
+              ELEIÇÃO DO GRÊMIO
+            </div>
+
+            <h2>
+              IDENTIFICAÇÃO
+            </h2>
+
+            <p>
+              Digite seu <b>RA</b> no teclado ao lado.
+            </p>
+
+            <div
+              id="raView"
+              class="display"
+            >
+              —
+            </div>
+
+            <div
+              id="raMsg"
+              class="msg"
+            >
+              Pressione CONFIRMA depois de digitar.
+            </div>
+
+          </section>
+
+
+          <!-- ==============================================
+               ETAPA 2 — DADOS DO ALUNO
+          =============================================== -->
+
+          <section
+            id="stepAluno"
+            class="step"
+          >
+
+            <div class="eyebrow">
+              CONFIRMAÇÃO DO ELEITOR
+            </div>
+
+            <h2>
+              CONFIRA SEUS DADOS
+            </h2>
+
+            <div class="student-box">
+
+              <small>
+                NOME
+              </small>
+
+              <b id="nomeAluno">
+                —
+              </b>
+
+              <small>
+                DATA DE NASCIMENTO
+              </small>
+
+              <b id="dataAluno">
+                —
+              </b>
+
+            </div>
+
+            <p>
+              Os dados estão corretos?
+            </p>
+
+            <div class="hint">
+              CORRIGE = voltar
+              &nbsp; | &nbsp;
+              CONFIRMA = continuar
+            </div>
+
+          </section>
+
+
+          <!-- ==============================================
+               ETAPA 3 — CHAPA
+          =============================================== -->
+
+          <section
+            id="stepChapa"
+            class="step"
+          >
+
+            <div class="eyebrow">
+              SEU VOTO PARA
+            </div>
+
+            <h2>
+              GRÊMIO ESTUDANTIL
+            </h2>
+
+            <p>
+              Digite o número da chapa.
+            </p>
+
+            <div
+              id="chapaNumero"
+              class="display"
+            >
+              —
+            </div>
+
+
+            <!-- CARD DA CHAPA -->
+
+            <div
+              id="chapaCard"
+              class="candidate"
+            >
+
+              <div
+                id="photoBox"
+                class="photo"
+              >
+
+                <img
+                  id="foto"
+                  alt="Foto da chapa"
+                >
+
+              </div>
+
+
+              <div>
+
+                <small>
+                  CHAPA
+                </small>
+
+                <b id="chapaNome">
+                  —
+                </b>
+
+                <em id="slogan"></em>
+
+                <div id="presidente"></div>
+
+                <div id="vice"></div>
+
+              </div>
+
+            </div>
+
+
+            <div
+              id="voteMsg"
+              class="msg"
+            >
+              Digite o número da chapa.
+            </div>
+
+          </section>
+
+
+          <!-- ==============================================
+               ETAPA 4 — FIM
+          =============================================== -->
+
+          <section
+            id="stepFim"
+            class="step"
+          >
+
+            <div class="fim">
+              ✓
+            </div>
+
+            <h2 class="fim-title">
+              FIM
+            </h2>
+
+            <p class="center">
+              SEU VOTO FOI REGISTRADO.
+            </p>
+
+            <button
+              id="restart"
+              class="restart"
+            >
+              VOLTAR AO INÍCIO
+            </button>
+
+          </section>
+
+
+          <!-- ==============================================
+               ETAPA 5 — VOTAÇÃO ENCERRADA
+          =============================================== -->
+
+          <section
+            id="stepClosed"
+            class="step"
+          >
+
+            <div class="fim red">
+              !
+            </div>
+
+            <h2 class="fim-title">
+              VOTAÇÃO ENCERRADA
+            </h2>
+
+            <p class="center">
+              A comissão eleitoral encerrou a votação.
+            </p>
+
+          </section>
+
+
+        </div>
       </div>
-    </aside>
-  </div>
 
-  <footer>
-    <span>Urna <b id="urnFooter">01</b></span>
-    <span id="sync">Conexão: aguardando</span>
-  </footer>
-</main>
 
-<script src="js/config.js?v=2"></script>
-<script src="js/api.js?v=2"></script>
-<script src="js/urna.js?v=10"></script>
+      <!-- ==================================================
+           TECLADO
+      =================================================== -->
+
+      <aside class="keypad-area">
+
+        <div class="keypad-title">
+          TECLADO DE VOTAÇÃO
+        </div>
+
+
+        <div class="keypad">
+
+
+          <!-- NÚMEROS -->
+
+          <button
+            class="key num"
+            data-n="1"
+          >
+            1
+          </button>
+
+          <button
+            class="key num"
+            data-n="2"
+          >
+            2
+          </button>
+
+          <button
+            class="key num"
+            data-n="3"
+          >
+            3
+          </button>
+
+          <button
+            class="key num"
+            data-n="4"
+          >
+            4
+          </button>
+
+          <button
+            class="key num"
+            data-n="5"
+          >
+            5
+          </button>
+
+          <button
+            class="key num"
+            data-n="6"
+          >
+            6
+          </button>
+
+          <button
+            class="key num"
+            data-n="7"
+          >
+            7
+          </button>
+
+          <button
+            class="key num"
+            data-n="8"
+          >
+            8
+          </button>
+
+          <button
+            class="key num"
+            data-n="9"
+          >
+            9
+          </button>
+
+          <button
+            class="key num zero"
+            data-n="0"
+          >
+            0
+          </button>
+
+
+          <!-- BRANCO -->
+
+          <button
+            class="key white"
+            id="branco"
+          >
+            BRANCO
+          </button>
+
+
+          <!-- CORRIGE -->
+
+          <button
+            class="key correct"
+            id="corrige"
+          >
+            CORRIGE
+          </button>
+
+
+          <!-- CONFIRMA -->
+
+          <button
+            class="key confirm"
+            id="confirma"
+          >
+            CONFIRMA
+          </button>
+
+
+        </div>
+      </aside>
+
+    </div>
+
+
+    <!-- ======================================================
+         RODAPÉ
+    ======================================================= -->
+
+    <footer>
+
+      <span>
+        Urna
+        <b id="urnFooter">
+          01
+        </b>
+      </span>
+
+      <span id="sync">
+        Conexão: aguardando
+      </span>
+
+    </footer>
+
+  </main>
+
+
+  <!-- ======================================================
+       JAVASCRIPT
+  ======================================================= -->
+
+  <script src="js/config.js?v=2"></script>
+
+  <script src="js/api.js?v=2"></script>
+
+  <script src="js/urna.js?v=10"></script>
+
 </body>
+
 </html>
