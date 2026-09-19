@@ -1,1864 +1,955 @@
 <!doctype html>
 <html lang="pt-BR">
-
 <head>
-
   <meta charset="utf-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Apuração - Eleição do Grêmio</title>
-
-  <link
-    rel="stylesheet"
-    href="css/style.css"
-  >
+  <link rel="stylesheet" href="css/style.css">
 
   <style>
-
     /* =====================================================
        PÁGINA
     ===================================================== */
-
     body.apuracao-page {
-
       margin: 0;
-
       min-height: 100vh;
-
-      background:
-        linear-gradient(
-          135deg,
-          #174d78 0%,
-          #1c6394 48%,
-          #9ebbd2 100%
-        );
-
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
+      background: linear-gradient(135deg, #174d78 0%, #1c6394 48%, #9ebbd2 100%);
+      font-family: Arial, Helvetica, sans-serif;
       color: #20252b;
-
       padding: 30px 20px;
-
       box-sizing: border-box;
-
     }
-
-
-    /* =====================================================
-       CONTAINER
-    ===================================================== */
 
     .apuracao-container {
-
-      width: min(
-        1100px,
-        100%
-      );
-
+      width: min(1100px, 100%);
       margin: 0 auto;
-
       background: #ffffff;
-
       border-radius: 28px;
-
       padding: 38px;
-
       box-sizing: border-box;
-
-      box-shadow:
-        0 25px 60px
-        rgba(0,0,0,.18);
-
+      box-shadow: 0 25px 60px rgba(0,0,0,.18);
     }
-
 
     /* =====================================================
        CABEÇALHO
     ===================================================== */
-
     .apuracao-header {
-
       text-align: center;
-
       margin-bottom: 30px;
-
     }
-
 
     .apuracao-header .eyebrow {
-
       font-size: 14px;
-
       font-weight: 800;
-
       letter-spacing: 2px;
-
       color: #17609a;
-
       margin-bottom: 10px;
-
     }
-
 
     .apuracao-header h1 {
-
       margin: 0;
-
       font-size: 42px;
-
       line-height: 1.1;
-
     }
-
 
     .apuracao-header p {
-
       margin: 12px 0 0;
-
       font-size: 18px;
-
       color: #68737d;
-
     }
-
 
     /* =====================================================
-       MENSAGENS DE STATUS
+       STATUS
     ===================================================== */
-
     .status-box {
-
       text-align: center;
-
       background: #f4f7fa;
-
       border-radius: 20px;
-
       padding: 34px 25px;
-
       margin-bottom: 25px;
-
     }
-
 
     .status-box h2 {
-
-      margin:
-        0 0 10px;
-
+      margin: 0 0 10px;
       font-size: 27px;
-
     }
-
 
     .status-box p {
-
       margin: 0;
-
       color: #68737d;
-
       font-size: 17px;
-
       line-height: 1.5;
-
     }
-
-
-    /* =====================================================
-       VOTAÇÃO ABERTA
-    ===================================================== */
 
     #aberta {
-
       display: none;
-
     }
-
 
     .status-indicator {
-
       width: 16px;
-
       height: 16px;
-
       border-radius: 50%;
-
       background: #d9a400;
-
       display: inline-block;
-
       margin-right: 8px;
-
       vertical-align: middle;
-
     }
-
 
     /* =====================================================
-       CONTAGEM REGRESSIVA
+       BOTÃO INICIAR
     ===================================================== */
-
-    #countdown {
-
+    #iniciarArea {
       display: none;
-
       text-align: center;
-
-      padding: 20px 20px 35px;
-
+      padding: 10px 20px 35px;
     }
 
+    .botao-iniciar {
+      border: 0;
+      border-radius: 15px;
+      background: #17609a;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+      padding: 17px 30px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(23,96,154,.24);
+    }
+
+    .botao-iniciar:hover {
+      filter: brightness(.96);
+      transform: translateY(-1px);
+    }
+
+    .botao-iniciar:active {
+      transform: translateY(0);
+    }
+
+    .iniciar-legenda {
+      margin-top: 10px;
+      color: #68737d;
+      font-size: 14px;
+    }
+
+    /* =====================================================
+       CONTAGEM
+    ===================================================== */
+    #countdown {
+      display: none;
+      text-align: center;
+      padding: 20px 20px 35px;
+    }
 
     .countdown-number {
-
       font-size: 100px;
-
       font-weight: 900;
-
       line-height: 1;
-
       color: #d9a400;
-
     }
-
 
     .countdown-text {
-
       margin-top: 18px;
-
       font-size: 21px;
-
       font-weight: 800;
-
       letter-spacing: .5px;
-
     }
-
 
     .countdown-sub {
-
       margin-top: 8px;
-
       color: #707b84;
-
       font-size: 15px;
-
     }
-
 
     /* =====================================================
        ERRO
     ===================================================== */
-
     #erro {
-
       display: none;
-
       background: #fff0f0;
-
       color: #a02c2c;
-
       border: 1px solid #efb4b4;
-
       border-radius: 16px;
-
       padding: 18px;
-
       text-align: center;
-
       margin-bottom: 24px;
-
     }
-
 
     /* =====================================================
        RESULTADO
     ===================================================== */
-
     #resultadoArea {
-
       display: none;
-
     }
-
 
     .resultado-titulo {
-
       text-align: center;
-
-      margin:
-        0 0 25px;
-
+      margin: 0 0 25px;
     }
-
 
     .resultado-titulo .eyebrow {
-
       font-size: 13px;
-
       font-weight: 800;
-
       letter-spacing: 1.8px;
-
       color: #17609a;
-
       margin-bottom: 7px;
-
     }
-
 
     .resultado-titulo h2 {
-
       margin: 0;
-
       font-size: 34px;
-
     }
-
-
-    /* =====================================================
-       DESTAQUE DO RESULTADO
-    ===================================================== */
 
     .resultado-final {
-
       border-radius: 22px;
-
       padding: 28px;
-
       margin-bottom: 28px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #fff7d6,
-          #fffdf1
-        );
-
+      background: linear-gradient(135deg, #fff7d6, #fffdf1);
       border: 2px solid #e1bc36;
-
       text-align: center;
-
     }
-
 
     .resultado-final .titulo {
-
       font-size: 14px;
-
       font-weight: 800;
-
       letter-spacing: 1.6px;
-
       color: #8a6700;
-
       margin-bottom: 9px;
-
     }
-
 
     .resultado-final h2 {
-
       margin: 0;
-
       font-size: 36px;
-
       line-height: 1.2;
-
     }
-
 
     .resultado-final p {
-
-      margin:
-        10px 0 0;
-
+      margin: 10px 0 0;
       color: #6a5c30;
-
       font-size: 17px;
-
     }
-
 
     /* =====================================================
        MÉTRICAS
     ===================================================== */
-
     .metrics {
-
       display: grid;
-
-      grid-template-columns:
-        repeat(4, 1fr);
-
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
-
       margin-bottom: 32px;
-
     }
-
 
     .metric {
-
       background: #f5f7f9;
-
       border-radius: 17px;
-
       padding: 19px 14px;
-
       text-align: center;
-
     }
-
 
     .metric b {
-
       display: block;
-
       font-size: 31px;
-
       line-height: 1;
-
       margin-bottom: 7px;
-
     }
-
 
     .metric span {
-
       color: #697580;
-
       font-size: 13px;
-
       font-weight: 700;
-
     }
-
-
-    /* =====================================================
-       TÍTULO DAS CHAPAS
-    ===================================================== */
 
     .section-title {
-
-      margin:
-        0 0 16px;
-
+      margin: 0 0 16px;
       font-size: 24px;
-
     }
-
 
     /* =====================================================
        CHAPAS
     ===================================================== */
-
     .chapas-grid {
-
       display: grid;
-
-      grid-template-columns:
-        repeat(
-          auto-fit,
-          minmax(
-            290px,
-            1fr
-          )
-        );
-
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
       gap: 20px;
-
     }
-
 
     .chapa-card {
-
-      border:
-        1px solid #d8dee5;
-
+      border: 1px solid #d8dee5;
       border-radius: 20px;
-
       padding: 20px;
-
       background: #ffffff;
-
       box-sizing: border-box;
-
     }
-
 
     .chapa-top {
-
       display: flex;
-
       align-items: center;
-
       gap: 15px;
-
     }
-
 
     .chapa-foto {
-
       width: 82px;
-
       height: 82px;
-
       border-radius: 16px;
-
       overflow: hidden;
-
       background: #edf1f5;
-
       flex-shrink: 0;
-
     }
-
 
     .chapa-foto img {
-
       width: 100%;
-
       height: 100%;
-
       object-fit: cover;
-
       display: block;
-
     }
-
 
     .sem-foto {
-
       width: 100%;
-
       height: 100%;
-
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
       font-size: 27px;
-
     }
-
 
     .chapa-numero {
-
       font-size: 30px;
-
       font-weight: 900;
-
       color: #17609a;
-
       line-height: 1;
-
     }
-
 
     .chapa-nome {
-
       margin-top: 5px;
-
       font-size: 21px;
-
       font-weight: 800;
-
       line-height: 1.2;
-
     }
-
 
     .chapa-candidatos {
-
       margin-top: 17px;
-
       color: #66717b;
-
       line-height: 1.55;
-
       font-size: 15px;
-
     }
-
 
     .chapa-candidatos b {
-
       color: #39434c;
-
     }
-
 
     .chapa-slogan {
-
       margin-top: 8px;
-
       font-style: italic;
-
       color: #5d6973;
-
     }
-
 
     .votos-box {
-
       margin-top: 18px;
-
       padding-top: 16px;
-
-      border-top:
-        1px solid #e4e8ec;
-
+      border-top: 1px solid #e4e8ec;
       display: flex;
-
       justify-content: space-between;
-
       align-items: center;
-
     }
-
 
     .votos-box span {
-
       color: #67737d;
-
       font-weight: 700;
-
     }
-
 
     .votos-box strong {
-
       font-size: 31px;
-
     }
-
 
     /* =====================================================
        BRANCO / NULO
     ===================================================== */
-
     .extras {
-
       margin-top: 26px;
-
       display: grid;
-
-      grid-template-columns:
-        1fr 1fr;
-
+      grid-template-columns: 1fr 1fr;
       gap: 16px;
-
     }
-
 
     .extra-card {
-
       padding: 21px;
-
       border-radius: 17px;
-
       background: #f5f7f9;
-
       text-align: center;
-
     }
-
 
     .extra-card strong {
-
       font-size: 29px;
-
       display: block;
-
       margin-bottom: 5px;
-
     }
-
 
     .extra-card span {
-
       color: #6b7680;
-
       font-size: 14px;
-
       font-weight: 700;
-
     }
-
 
     /* =====================================================
-       BOTÃO
+       BOTÃO VOLTAR
     ===================================================== */
-
     .acoes {
-
       text-align: center;
-
       margin-top: 30px;
-
     }
-
 
     .botao-voltar {
-
       display: inline-block;
-
-      padding:
-        13px 22px;
-
+      padding: 13px 22px;
       border-radius: 12px;
-
       background: #17609a;
-
       color: #ffffff;
-
       text-decoration: none;
-
       font-weight: 800;
-
     }
-
 
     .botao-voltar:hover {
-
       filter: brightness(.95);
-
     }
-
 
     /* =====================================================
        RESPONSIVO
     ===================================================== */
-
     @media(max-width: 800px) {
-
       body.apuracao-page {
-
         padding: 15px;
-
       }
-
 
       .apuracao-container {
-
         padding: 24px;
-
         border-radius: 22px;
-
       }
-
 
       .apuracao-header h1 {
-
         font-size: 33px;
-
       }
-
 
       .metrics {
-
-        grid-template-columns:
-          1fr 1fr;
-
+        grid-template-columns: 1fr 1fr;
       }
-
     }
-
 
     @media(max-width: 520px) {
-
       .apuracao-container {
-
         padding: 18px;
-
         border-radius: 18px;
-
       }
-
 
       .apuracao-header h1 {
-
         font-size: 28px;
-
       }
-
 
       .apuracao-header p {
-
         font-size: 15px;
-
       }
-
 
       .metrics {
-
-        grid-template-columns:
-          1fr 1fr;
-
+        grid-template-columns: 1fr 1fr;
         gap: 10px;
-
       }
-
 
       .metric {
-
-        padding:
-          16px 8px;
-
+        padding: 16px 8px;
       }
-
 
       .metric b {
-
         font-size: 25px;
-
       }
-
 
       .countdown-number {
-
         font-size: 78px;
-
       }
-
 
       .countdown-text {
-
         font-size: 17px;
-
       }
-
 
       .extras {
-
-        grid-template-columns:
-          1fr;
-
+        grid-template-columns: 1fr;
       }
-
     }
-
   </style>
-
 </head>
-
 
 <body class="apuracao-page">
 
+  <!-- Sons da apuração -->
+  <audio
+    id="somContagem"
+    src="audio/apuracao_toque.wav"
+    preload="auto"
+  ></audio>
+
+  <audio
+    id="somFogos"
+    src="audio/apuracao_fogos_usuario.mp3"
+    preload="auto"
+  ></audio>
 
   <main class="apuracao-container">
 
-
-    <!-- ===================================================
-         CABEÇALHO
-    ==================================================== -->
-
+    <!-- CABEÇALHO -->
     <header class="apuracao-header">
-
-      <div class="eyebrow">
-        GRÊMIO ESTUDANTIL
-      </div>
-
-      <h1>
-        Apuração da Eleição
-      </h1>
-
-      <p id="escola">
-        E. E. PROFESSOR ANTÔNIO ROSAS DA SILVA GALVÃO
-      </p>
-
+      <div class="eyebrow">GRÊMIO ESTUDANTIL</div>
+      <h1>Apuração da Eleição</h1>
+      <p id="escola">E. E. PROFESSOR ANTÔNIO ROSAS DA SILVA GALVÃO</p>
     </header>
 
-
-    <!-- ===================================================
-         VERIFICANDO
-    ==================================================== -->
-
-    <section
-      id="aguardando"
-      class="status-box"
-    >
-
-      <h2>
-        Verificando situação da eleição...
-      </h2>
-
-      <p>
-        Aguarde enquanto consultamos o sistema.
-      </p>
-
+    <!-- VERIFICANDO -->
+    <section id="aguardando" class="status-box">
+      <h2>Verificando situação da eleição...</h2>
+      <p>Aguarde enquanto consultamos o sistema.</p>
     </section>
 
-
-    <!-- ===================================================
-         ELEIÇÃO ABERTA
-    ==================================================== -->
-
-    <section
-      id="aberta"
-      class="status-box"
-    >
-
+    <!-- ELEIÇÃO ABERTA -->
+    <section id="aberta" class="status-box">
       <h2>
-
         <span class="status-indicator"></span>
-
         VOTAÇÃO AINDA ABERTA
-
       </h2>
-
       <p>
-        A apuração pública será disponibilizada
-        após o encerramento oficial da votação.
+        A apuração pública será disponibilizada após o encerramento oficial da votação.
       </p>
-
     </section>
 
-
-    <!-- ===================================================
-         CONTAGEM REGRESSIVA
-    ==================================================== -->
-
-    <section
-      id="countdown"
-    >
-
-      <div
-        class="countdown-number"
-        id="countdownNumber"
+    <!-- BOTÃO PARA LIBERAR O ÁUDIO -->
+    <section id="iniciarArea">
+      <button
+        type="button"
+        id="iniciarApuracao"
+        class="botao-iniciar"
       >
-        10
+        🔊 INICIAR APURAÇÃO
+      </button>
+      <div class="iniciar-legenda">
+        Clique para iniciar a contagem regressiva e os efeitos sonoros.
       </div>
-
-      <div class="countdown-text">
-        PREPARANDO O RESULTADO OFICIAL
-      </div>
-
-      <div class="countdown-sub">
-        Aguarde a divulgação dos resultados.
-      </div>
-
     </section>
 
+    <!-- CONTAGEM -->
+    <section id="countdown">
+      <div class="countdown-number" id="countdownNumber">10</div>
+      <div class="countdown-text">PREPARANDO O RESULTADO OFICIAL</div>
+      <div class="countdown-sub">Aguarde a divulgação dos resultados.</div>
+    </section>
 
-    <!-- ===================================================
-         ERRO
-    ==================================================== -->
+    <!-- ERRO -->
+    <div id="erro"></div>
 
-    <div
-      id="erro"
-    ></div>
-
-
-    <!-- ===================================================
-         RESULTADO
-    ==================================================== -->
-
-    <section
-      id="resultadoArea"
-    >
+    <!-- RESULTADO -->
+    <section id="resultadoArea">
 
       <div class="resultado-titulo">
-
-        <div class="eyebrow">
-          ENCERRAMENTO DA ELEIÇÃO
-        </div>
-
-        <h2>
-          Resultado Oficial
-        </h2>
-
+        <div class="eyebrow">ENCERRAMENTO DA ELEIÇÃO</div>
+        <h2>Resultado Oficial</h2>
       </div>
 
-
-      <!-- RESULTADO FINAL -->
-
-      <div
-        id="resultadoFinal"
-        class="resultado-final"
-      ></div>
-
-
-      <!-- MÉTRICAS -->
+      <div id="resultadoFinal" class="resultado-final"></div>
 
       <div class="metrics">
-
-
         <div class="metric">
-
-          <b id="totalVotos">
-            0
-          </b>
-
-          <span>
-            TOTAL DE VOTOS
-          </span>
-
+          <b id="totalVotos">0</b>
+          <span>TOTAL DE VOTOS</span>
         </div>
 
-
         <div class="metric">
-
-          <b id="votosValidos">
-            0
-          </b>
-
-          <span>
-            VOTOS VÁLIDOS
-          </span>
-
+          <b id="votosValidos">0</b>
+          <span>VOTOS VÁLIDOS</span>
         </div>
 
-
         <div class="metric">
-
-          <b id="eleitores">
-            0
-          </b>
-
-          <span>
-            ELEITORES
-          </span>
-
+          <b id="eleitores">0</b>
+          <span>ELEITORES</span>
         </div>
 
-
         <div class="metric">
-
-          <b id="votaram">
-            0
-          </b>
-
-          <span>
-            VOTARAM
-          </span>
-
+          <b id="votaram">0</b>
+          <span>VOTARAM</span>
         </div>
-
-
       </div>
 
-
-      <!-- CHAPAS -->
-
-      <h3 class="section-title">
-        Resultado por chapa
-      </h3>
-
-
-      <div
-        id="chapasGrid"
-        class="chapas-grid"
-      ></div>
-
-
-      <!-- BRANCO / NULO -->
+      <h3 class="section-title">Resultado por chapa</h3>
+      <div id="chapasGrid" class="chapas-grid"></div>
 
       <div class="extras">
-
-
         <div class="extra-card">
-
-          <strong id="brancos">
-            0
-          </strong>
-
-          <span>
-            VOTOS EM BRANCO
-          </span>
-
+          <strong id="brancos">0</strong>
+          <span>VOTOS EM BRANCO</span>
         </div>
 
-
         <div class="extra-card">
-
-          <strong id="nulos">
-            0
-          </strong>
-
-          <span>
-            VOTOS NULOS
-          </span>
-
+          <strong id="nulos">0</strong>
+          <span>VOTOS NULOS</span>
         </div>
-
-
       </div>
-
-
-      <!-- VOLTAR -->
 
       <div class="acoes">
-
-        <a
-          href="index.html"
-          class="botao-voltar"
-        >
+        <a href="index.html" class="botao-voltar">
           VOLTAR AO INÍCIO
         </a>
-
       </div>
-
-
     </section>
 
-
   </main>
-
-
-  <!-- =====================================================
-       SCRIPTS
-  ====================================================== -->
 
   <script src="js/config.js?v=2"></script>
   <script src="js/api.js?v=2"></script>
 
-
   <script>
-
   (() => {
+    const $ = id => document.getElementById(id);
 
-    const $ =
-      id =>
-        document.getElementById(id);
+    let contagemIniciada = false;
+    let resultadoExibido = false;
 
-
-    let contagemIniciada =
-      false;
-
-
-    let resultadoExibido =
-      false;
-
-
-    /* =====================================================
-       MOSTRAR / ESCONDER
-    ===================================================== */
+    const somContagem = $('somContagem');
+    const somFogos = $('somFogos');
 
     function mostrar(id) {
-
-      const elemento =
-        $(id);
-
-      if (elemento) {
-
-        elemento.style.display =
-          'block';
-
-      }
-
+      const elemento = $(id);
+      if (elemento) elemento.style.display = 'block';
     }
-
 
     function esconder(id) {
-
-      const elemento =
-        $(id);
-
-      if (elemento) {
-
-        elemento.style.display =
-          'none';
-
-      }
-
+      const elemento = $(id);
+      if (elemento) elemento.style.display = 'none';
     }
-
-
-    /* =====================================================
-       ERRO
-    ===================================================== */
 
     function mostrarErro(mensagem) {
+      esconder('aguardando');
+      esconder('aberta');
+      esconder('iniciarArea');
+      esconder('countdown');
 
-      esconder(
-        'aguardando'
-      );
-
-      esconder(
-        'countdown'
-      );
-
-      const box =
-        $('erro');
-
-      box.textContent =
-        mensagem ||
-        'Não foi possível carregar a apuração.';
-
-      box.style.display =
-        'block';
-
+      const box = $('erro');
+      box.textContent = mensagem || 'Não foi possível carregar a apuração.';
+      box.style.display = 'block';
     }
-
-
-    /* =====================================================
-       VERIFICAR STATUS
-    ===================================================== */
 
     async function verificarStatus() {
-
-      if (resultadoExibido) {
-
-        return;
-
-      }
-
+      if (resultadoExibido || contagemIniciada) return;
 
       try {
+        const dados = await GremioAPI.call({
+          action: 'statusPublic'
+        });
 
-        const dados =
-          await GremioAPI.call({
+        esconder('aguardando');
 
-            action:
-              'statusPublic'
-
-          });
-
-
-        esconder(
-          'aguardando'
-        );
-
-
-        /* -----------------------------------------------
-           ELEIÇÃO ABERTA
-        ------------------------------------------------ */
-
-        if (
-          dados.election &&
-          dados.election.aberta
-        ) {
-
-          esconder(
-            'countdown'
-          );
-
-          esconder(
-            'resultadoArea'
-          );
-
-          mostrar(
-            'aberta'
-          );
-
+        if (dados.election && dados.election.aberta) {
+          esconder('iniciarArea');
+          esconder('countdown');
+          esconder('resultadoArea');
+          mostrar('aberta');
           return;
-
         }
 
+        esconder('aberta');
+        mostrar('iniciarArea');
 
-        /* -----------------------------------------------
-           ELEIÇÃO ENCERRADA
-        ------------------------------------------------ */
-
-        esconder(
-          'aberta'
-        );
-
-
-        if (
-          !contagemIniciada
-        ) {
-
-          iniciarContagem();
-
-        }
-
+      } catch (error) {
+        mostrarErro(error.message);
       }
-
-      catch(error) {
-
-        mostrarErro(
-          error.message
-        );
-
-      }
-
     }
 
-
-    /* =====================================================
-       CONTAGEM REGRESSIVA
-    ===================================================== */
-
-    function iniciarContagem() {
-
-      if (
-        contagemIniciada
-      ) {
-
-        return;
-
-      }
-
-
-      contagemIniciada =
-        true;
-
-
-      esconder(
-        'aguardando'
-      );
-
-      esconder(
-        'aberta'
-      );
-
-      mostrar(
-        'countdown'
-      );
-
-
-      let numero =
-        10;
-
-
-      $('countdownNumber')
-        .textContent =
-          numero;
-
-
-      const intervalo =
-        setInterval(
-          async function() {
-
-            numero--;
-
-            $('countdownNumber')
-              .textContent =
-                numero;
-
-
-            if (
-              numero <= 0
-            ) {
-
-              clearInterval(
-                intervalo
-              );
-
-
-              await carregarResultado();
-
-            }
-
-          },
-          1000
-        );
-
-    }
-
-
-    /* =====================================================
-       CARREGAR RESULTADO
-    ===================================================== */
-
-    async function carregarResultado() {
-
+    /* ===================================================
+       TOCAR TOQUE DA CONTAGEM
+    ==================================================== */
+    function tocarToque() {
       try {
+        somContagem.currentTime = 0;
+        const reproducao = somContagem.play();
+        if (reproducao) {
+          reproducao.catch(() => {});
+        }
+      } catch (error) {
+        console.log('Não foi possível reproduzir o toque:', error);
+      }
+    }
 
-        const dados =
-          await GremioAPI.call({
+    /* ===================================================
+       TOCAR FOGOS
+    ==================================================== */
+    function tocarFogos() {
+      try {
+        somFogos.currentTime = 0;
+        const reproducao = somFogos.play();
+        if (reproducao) {
+          reproducao.catch(() => {});
+        }
+      } catch (error) {
+        console.log('Não foi possível reproduzir os fogos:', error);
+      }
+    }
 
-            action:
-              'apuracaoPublica'
+    /* ===================================================
+       INICIAR APURAÇÃO
+    ==================================================== */
+    function iniciarContagem() {
+      if (contagemIniciada || resultadoExibido) return;
 
-          });
+      contagemIniciada = true;
 
+      esconder('aguardando');
+      esconder('aberta');
+      esconder('iniciarArea');
+      mostrar('countdown');
 
-        if (
-          !dados ||
-          dados.ok !== true
-        ) {
+      let numero = 10;
 
+      $('countdownNumber').textContent = numero;
+
+      // O primeiro toque acontece após o clique do usuário,
+      // liberando o áudio no navegador.
+      tocarToque();
+
+      const intervalo = setInterval(async () => {
+        numero--;
+
+        $('countdownNumber').textContent = numero;
+
+        tocarToque();
+
+        if (numero <= 0) {
+          clearInterval(intervalo);
+
+          // Dá tempo para o último toque terminar.
+          setTimeout(async () => {
+            tocarFogos();
+            await carregarResultado();
+          }, 500);
+        }
+      }, 1000);
+    }
+
+    /* ===================================================
+       CARREGAR RESULTADO
+    ==================================================== */
+    async function carregarResultado() {
+      try {
+        const dados = await GremioAPI.call({
+          action: 'apuracaoPublica'
+        });
+
+        if (!dados || dados.ok !== true) {
           throw new Error(
-            dados &&
-            dados.message
+            dados && dados.message
               ? dados.message
               : 'Não foi possível carregar a apuração.'
           );
-
         }
 
+        preencherResultado(dados);
 
-        preencherResultado(
-          dados
-        );
-
+      } catch (error) {
+        contagemIniciada = false;
+        mostrarErro(error.message);
       }
-
-      catch(error) {
-
-        contagemIniciada =
-          false;
-
-        mostrarErro(
-          error.message
-        );
-
-      }
-
     }
 
-
-    /* =====================================================
+    /* ===================================================
        PREENCHER RESULTADO
-    ===================================================== */
-
+    ==================================================== */
     function preencherResultado(dados) {
+      resultadoExibido = true;
 
-      resultadoExibido =
-        true;
+      esconder('countdown');
+      esconder('iniciarArea');
+      esconder('aberta');
+      mostrar('resultadoArea');
 
+      const config = dados.config || {};
+      const metrics = dados.metrics || {};
+      const apuracao = dados.apuracao || {};
 
-      esconder(
-        'countdown'
-      );
-
-      esconder(
-        'aberta'
-      );
-
-      mostrar(
-        'resultadoArea'
-      );
-
-
-      const config =
-        dados.config ||
-        {};
-
-
-      const metrics =
-        dados.metrics ||
-        {};
-
-
-      const apuracao =
-        dados.apuracao ||
-        {};
-
-
-      if (
-        config.escola
-      ) {
-
-        $('escola')
-          .textContent =
-            config.escola;
-
+      if (config.escola) {
+        $('escola').textContent = config.escola;
       }
 
+      $('totalVotos').textContent = Number(apuracao.total || 0);
+      $('votosValidos').textContent = Number(apuracao.validos || 0);
+      $('eleitores').textContent = Number(metrics.eleitores || 0);
+      $('votaram').textContent = Number(metrics.votaram || 0);
+      $('brancos').textContent = Number(apuracao.brancos || 0);
+      $('nulos').textContent = Number(apuracao.nulos || 0);
 
-      $('totalVotos')
-        .textContent =
-          Number(
-            apuracao.total || 0
-          );
-
-
-      $('votosValidos')
-        .textContent =
-          Number(
-            apuracao.validos || 0
-          );
-
-
-      $('eleitores')
-        .textContent =
-          Number(
-            metrics.eleitores || 0
-          );
-
-
-      $('votaram')
-        .textContent =
-          Number(
-            metrics.votaram || 0
-          );
-
-
-      $('brancos')
-        .textContent =
-          Number(
-            apuracao.brancos || 0
-          );
-
-
-      $('nulos')
-        .textContent =
-          Number(
-            apuracao.nulos || 0
-          );
-
-
-      montarResultadoFinal(
-        apuracao
-      );
-
-
-      montarChapas(
-        apuracao.resultados || []
-      );
-
+      montarResultadoFinal(apuracao);
+      montarChapas(apuracao.resultados || []);
     }
 
-
-    /* =====================================================
+    /* ===================================================
        RESULTADO FINAL
-    ===================================================== */
-
+    ==================================================== */
     function montarResultadoFinal(apuracao) {
+      const area = $('resultadoFinal');
+      const vencedoras = Array.isArray(apuracao.vencedoras)
+        ? apuracao.vencedoras
+        : [];
 
-      const area =
-        $('resultadoFinal');
-
-
-      const vencedoras =
-        Array.isArray(
-          apuracao.vencedoras
-        )
-          ? apuracao.vencedoras
-          : [];
-
-
-      /* -----------------------------------------------
-         SEM VOTOS
-      ------------------------------------------------ */
-
-      if (
-        !apuracao.total ||
-        vencedoras.length === 0
-      ) {
-
+      if (!apuracao.total || vencedoras.length === 0) {
         area.innerHTML = `
-
-          <div class="titulo">
-            RESULTADO OFICIAL
-          </div>
-
-          <h2>
-            Nenhum voto registrado
-          </h2>
-
-          <p>
-            Não há votos registrados para apresentar.
-          </p>
-
+          <div class="titulo">RESULTADO OFICIAL</div>
+          <h2>Nenhum voto registrado</h2>
+          <p>Não há votos registrados para apresentar.</p>
         `;
-
         return;
-
       }
 
-
-      /* -----------------------------------------------
-         EMPATE
-      ------------------------------------------------ */
-
-      if (
-        apuracao.empate === true ||
-        vencedoras.length > 1
-      ) {
-
-        const nomes =
-          vencedoras
-            .map(
-              item =>
-                `Chapa ${escapeHtml(item.numero)} — ${escapeHtml(item.nome)} (${Number(item.votos || 0)} voto(s))`
-            )
-            .join('<br>');
-
+      if (apuracao.empate === true || vencedoras.length > 1) {
+        const nomes = vencedoras
+          .map(item =>
+            'Chapa ' +
+            escapeHtml(item.numero) +
+            ' — ' +
+            escapeHtml(item.nome) +
+            ' (' +
+            Number(item.votos || 0) +
+            ' voto(s))'
+          )
+          .join('<br>');
 
         area.innerHTML = `
-
-          <div class="titulo">
-            RESULTADO OFICIAL
-          </div>
-
-          <h2>
-            EMPATE
-          </h2>
-
-          <p>
-            ${nomes}
-          </p>
-
+          <div class="titulo">RESULTADO OFICIAL</div>
+          <h2>EMPATE</h2>
+          <p>${nomes}</p>
         `;
-
         return;
-
       }
 
-
-      /* -----------------------------------------------
-         UMA CHAPA COM MAIOR NÚMERO DE VOTOS
-      ------------------------------------------------ */
-
-      const vencedora =
-        vencedoras[0];
-
+      const vencedora = vencedoras[0];
 
       area.innerHTML = `
-
-        <div class="titulo">
-          RESULTADO OFICIAL
-        </div>
-
-        <h2>
-          🏆 CHAPA ${escapeHtml(vencedora.numero)}
-        </h2>
-
+        <div class="titulo">RESULTADO OFICIAL</div>
+        <h2>🏆 CHAPA ${escapeHtml(vencedora.numero)}</h2>
         <p>
           ${escapeHtml(vencedora.nome)}
           —
-          ${Number(vencedora.votos || 0)}
-          voto(s)
+          ${Number(vencedora.votos || 0)} voto(s)
         </p>
-
       `;
-
     }
 
-
-    /* =====================================================
+    /* ===================================================
        MONTAR CHAPAS
-    ===================================================== */
-
+    ==================================================== */
     function montarChapas(resultados) {
-
-      const grid =
-        $('chapasGrid');
-
-
-      grid.innerHTML =
-        '';
-
-
-      resultados
-        .forEach(
-          function(chapa) {
-
-            const card =
-              document.createElement(
-                'div'
-              );
-
-
-            card.className =
-              'chapa-card';
-
-
-            let fotoHTML =
-              '';
-
-
-            if (
-              chapa.fotoUrl
-            ) {
-
-              fotoHTML = `
-
-                <img
-                  src="${escapeAttr(chapa.fotoUrl)}"
-                  alt="Foto da chapa"
-                  onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'sem-foto\\'>🗳️</div>';"
-                >
-
-              `;
-
-            }
-
-            else {
-
-              fotoHTML = `
-
-                <div class="sem-foto">
-                  🗳️
-                </div>
-
-              `;
-
-            }
-
-
-            let sloganHTML =
-              '';
-
-
-            if (
-              chapa.slogan
-            ) {
-
-              sloganHTML = `
-
-                <div class="chapa-slogan">
-                  <b>Slogan:</b>
-                  ${escapeHtml(chapa.slogan)}
-                </div>
-
-              `;
-
-            }
-
-
-            card.innerHTML = `
-
-              <div class="chapa-top">
-
-                <div class="chapa-foto">
-                  ${fotoHTML}
-                </div>
-
-
-                <div>
-
-                  <div class="chapa-numero">
-                    ${escapeHtml(chapa.numero)}
-                  </div>
-
-                  <div class="chapa-nome">
-                    ${escapeHtml(chapa.nome)}
-                  </div>
-
-                </div>
-
-              </div>
-
-
-              <div class="chapa-candidatos">
-
-                <div>
-                  <b>Presidente:</b>
-                  ${escapeHtml(chapa.presidente || '—')}
-                </div>
-
-                <div>
-                  <b>Vice:</b>
-                  ${escapeHtml(chapa.vice || '—')}
-                </div>
-
-                ${sloganHTML}
-
-              </div>
-
-
-              <div class="votos-box">
-
-                <span>
-                  VOTOS
-                </span>
-
-                <strong>
-                  ${Number(chapa.votos || 0)}
-                </strong>
-
-              </div>
-
-            `;
-
-
-            grid.appendChild(
-              card
-            );
-
-          }
-        );
-
-    }
-
-
-    /* =====================================================
-       SEGURANÇA
-    ===================================================== */
-
-    function escapeHtml(valor) {
-
-      return String(
-        valor ?? ''
-      )
-
-        .replaceAll(
-          '&',
-          '&amp;'
-        )
-
-        .replaceAll(
-          '<',
-          '&lt;'
-        )
-
-        .replaceAll(
-          '>',
-          '&gt;'
-        )
-
-        .replaceAll(
-          '"',
-          '&quot;'
-        )
-
-        .replaceAll(
-          "'",
-          '&#039;'
-        );
-
-    }
-
-
-    function escapeAttr(valor) {
-
-      return escapeHtml(
-        valor
-      );
-
-    }
-
-
-    /* =====================================================
-       INÍCIO
-    ===================================================== */
-
-    verificarStatus();
-
-
-    /* =====================================================
-       ATUALIZA O STATUS AUTOMATICAMENTE
-       ENQUANTO A ELEIÇÃO ESTIVER ABERTA
-    ===================================================== */
-
-    setInterval(
-      function() {
-
-        if (
-          !resultadoExibido &&
-          !contagemIniciada
-        ) {
-
-          verificarStatus();
-
+      const grid = $('chapasGrid');
+      grid.innerHTML = '';
+
+      resultados.forEach(chapa => {
+        const card = document.createElement('div');
+        card.className = 'chapa-card';
+
+        let fotoHTML = '';
+
+        if (chapa.fotoUrl) {
+          fotoHTML = `
+            <img
+              src="${escapeAttr(chapa.fotoUrl)}"
+              alt="Foto da chapa"
+              onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'sem-foto\'>🗳️</div>';"
+            >
+          `;
+        } else {
+          fotoHTML = `
+            <div class="sem-foto">🗳️</div>
+          `;
         }
 
-      },
-      5000
+        let sloganHTML = '';
+
+        if (chapa.slogan) {
+          sloganHTML = `
+            <div class="chapa-slogan">
+              <b>Slogan:</b>
+              ${escapeHtml(chapa.slogan)}
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="chapa-top">
+            <div class="chapa-foto">
+              ${fotoHTML}
+            </div>
+
+            <div>
+              <div class="chapa-numero">
+                ${escapeHtml(chapa.numero)}
+              </div>
+
+              <div class="chapa-nome">
+                ${escapeHtml(chapa.nome)}
+              </div>
+            </div>
+          </div>
+
+          <div class="chapa-candidatos">
+            <div>
+              <b>Presidente:</b>
+              ${escapeHtml(chapa.presidente || '—')}
+            </div>
+
+            <div>
+              <b>Vice:</b>
+              ${escapeHtml(chapa.vice || '—')}
+            </div>
+
+            ${sloganHTML}
+          </div>
+
+          <div class="votos-box">
+            <span>VOTOS</span>
+            <strong>${Number(chapa.votos || 0)}</strong>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    /* ===================================================
+       SEGURANÇA
+    ==================================================== */
+    function escapeHtml(valor) {
+      return String(valor ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function escapeAttr(valor) {
+      return escapeHtml(valor);
+    }
+
+    /* ===================================================
+       EVENTO DO BOTÃO
+    ==================================================== */
+    $('iniciarApuracao').addEventListener(
+      'click',
+      iniciarContagem
     );
 
+    /* ===================================================
+       INÍCIO
+    ==================================================== */
+    verificarStatus();
+
+    /* Atualiza o status enquanto a eleição estiver aberta. */
+    setInterval(() => {
+      if (!resultadoExibido && !contagemIniciada) {
+        verificarStatus();
+      }
+    }, 5000);
 
   })();
-
   </script>
 
-
 </body>
-
 </html>
