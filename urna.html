@@ -39,6 +39,528 @@
     letter-spacing: .5px;
   }
 </style>
+
+<style>
+
+  /* ==========================================================
+     AJUSTE PARA TABLETS
+  ========================================================== */
+
+  @media (max-width: 900px) {
+
+    body.urn {
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+
+    body.urn > header {
+      min-height: 68px;
+      padding: 8px 12px;
+      gap: 3px;
+    }
+
+
+    body.urn > header .school-name {
+      font-size: 13px;
+    }
+
+
+    body.urn > header .election-name {
+      font-size: 17px;
+    }
+
+
+    .machine {
+
+      width: calc(100% - 18px);
+
+      margin: 9px auto;
+
+      border-width: 5px;
+
+      border-radius: 16px;
+
+    }
+
+
+    .machine-top {
+
+      padding: 9px 12px;
+
+    }
+
+
+    .machine-top b {
+
+      font-size: 19px;
+
+    }
+
+
+    .machine-top strong {
+
+      padding: 5px 8px;
+
+      font-size: 10px;
+
+    }
+
+
+    .machine-body {
+
+      /*
+       * Mantém tela e teclado lado a lado
+       * no tablet.
+       */
+
+      grid-template-columns:
+        minmax(0, 1.25fr)
+        minmax(250px, .75fr);
+
+      gap: 14px;
+
+      padding: 14px;
+
+    }
+
+
+    .screen {
+
+      min-height: 445px;
+
+      height: 445px;
+
+      padding: 18px 20px;
+
+    }
+
+
+    .step {
+
+      min-height: 400px;
+
+    }
+
+
+    .screen h2 {
+
+      font-size: 22px;
+
+      margin-bottom: 8px;
+
+    }
+
+
+    .screen p {
+
+      font-size: 14px;
+
+      margin-top: 8px;
+
+    }
+
+
+    .eyebrow {
+
+      font-size: 10px;
+
+      letter-spacing: 1.2px;
+
+    }
+
+
+    .display {
+
+      min-height: 56px;
+
+      height: 56px;
+
+      margin: 15px 0 12px;
+
+      font-size: 30px;
+
+      padding: 6px 12px;
+
+    }
+
+
+    .msg {
+
+      font-size: 12px;
+
+      padding: 9px 10px;
+
+    }
+
+
+    .student-box {
+
+      margin: 13px 0;
+
+      padding: 12px;
+
+      gap: 4px;
+
+    }
+
+
+    .student-box small {
+
+      font-size: 9px;
+
+      margin-top: 4px;
+
+    }
+
+
+    .student-box b {
+
+      font-size: 15px;
+
+      margin-bottom: 3px;
+
+    }
+
+
+    .hint {
+
+      font-size: 11px;
+
+      padding-top: 12px;
+
+    }
+
+
+    /* ======================================================
+       CHAPA
+    ====================================================== */
+
+    .candidate {
+
+      margin-top: 12px;
+
+      padding: 11px;
+
+      grid-template-columns: 75px 1fr;
+
+      gap: 11px;
+
+    }
+
+
+    .photo {
+
+      width: 75px;
+
+      height: 92px;
+
+      font-size: 34px;
+
+    }
+
+
+    .candidate b {
+
+      font-size: 15px;
+
+    }
+
+
+    .candidate em {
+
+      margin-top: 5px;
+
+      font-size: 11px;
+
+    }
+
+
+    .candidate #presidente,
+    .candidate #vice {
+
+      font-size: 11px;
+
+      margin-top: 4px;
+
+    }
+
+
+    /* ======================================================
+       TELA FIM
+    ====================================================== */
+
+    .fim {
+
+      width: 65px;
+
+      height: 65px;
+
+      font-size: 40px;
+
+      margin-bottom: 12px;
+
+    }
+
+
+    .fim-title {
+
+      font-size: 34px !important;
+
+    }
+
+
+    .center {
+
+      font-size: 15px !important;
+
+    }
+
+
+    .restart {
+
+      margin-top: 15px;
+
+      padding: 9px 16px;
+
+      font-size: 12px;
+
+    }
+
+
+    /* ======================================================
+       TECLADO
+    ====================================================== */
+
+    .keypad-area {
+
+      padding: 11px;
+
+    }
+
+
+    .keypad-title {
+
+      font-size: 10px;
+
+      margin-bottom: 8px;
+
+      letter-spacing: 1px;
+
+    }
+
+
+    .keypad {
+
+      gap: 6px;
+
+    }
+
+
+    .key.num {
+
+      min-height: 51px;
+
+      height: 51px;
+
+      font-size: 22px;
+
+      border-width: 2px;
+
+      box-shadow: 0 3px 0 #111;
+
+    }
+
+
+    .key {
+
+      min-height: 46px;
+
+      height: 46px;
+
+      font-size: 10px;
+
+      box-shadow: 0 3px 0 #111;
+
+    }
+
+
+    .keypad-area::after {
+
+      font-size: 8px;
+
+      margin-top: 8px;
+
+    }
+
+
+    /* ======================================================
+       RODAPÉ
+    ====================================================== */
+
+    .machine footer {
+
+      padding: 7px 12px;
+
+      font-size: 10px;
+
+    }
+
+  }
+
+
+  /* ==========================================================
+     TABLET MENOR
+     Aproximadamente 600-700px de largura
+  ========================================================== */
+
+  @media (max-width: 700px) {
+
+    .machine-body {
+
+      grid-template-columns:
+        minmax(0, 1.18fr)
+        minmax(220px, .82fr);
+
+      gap: 10px;
+
+      padding: 10px;
+
+    }
+
+
+    .screen {
+
+      height: 420px;
+
+      min-height: 420px;
+
+      padding: 15px;
+
+    }
+
+
+    .step {
+
+      min-height: 380px;
+
+    }
+
+
+    .machine-top b {
+
+      font-size: 16px;
+
+    }
+
+
+    .machine-top strong {
+
+      font-size: 9px;
+
+    }
+
+
+    .keypad-area {
+
+      padding: 9px;
+
+    }
+
+
+    .key.num {
+
+      min-height: 46px;
+
+      height: 46px;
+
+      font-size: 20px;
+
+    }
+
+
+    .key {
+
+      min-height: 42px;
+
+      height: 42px;
+
+      font-size: 9px;
+
+    }
+
+
+    .candidate {
+
+      grid-template-columns: 65px 1fr;
+
+      gap: 8px;
+
+    }
+
+
+    .photo {
+
+      width: 65px;
+
+      height: 80px;
+
+    }
+
+
+    .candidate b {
+
+      font-size: 13px;
+
+    }
+
+
+    .candidate #presidente,
+    .candidate #vice {
+
+      font-size: 10px;
+
+    }
+
+  }
+
+
+  /* ==========================================================
+     TABLET EM PÉ / TELA MAIS ESTREITA
+  ========================================================== */
+
+  @media (max-width: 560px) {
+
+    body.urn {
+      overflow: auto;
+    }
+
+
+    .machine-body {
+
+      grid-template-columns: 1fr;
+
+    }
+
+
+    .screen {
+
+      height: 430px;
+
+      min-height: 430px;
+
+    }
+
+
+    .keypad-area {
+
+      padding: 10px;
+
+    }
+
+  }
+
+</style>
   
 </head>
 
