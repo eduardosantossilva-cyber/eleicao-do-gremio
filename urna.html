@@ -17,614 +17,145 @@
     href="css/style.css"
   >
 
-<style>
-  body.urn > header {
-    height: auto;
-    min-height: 72px;
-    flex-direction: column;
-    gap: 4px;
-    padding: 10px 15px;
-    line-height: 1.2;
-  }
+  <style>
 
-  body.urn > header .school-name {
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: .6px;
-  }
-
-  body.urn > header .election-name {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: .5px;
-  }
-</style>
-
-<style>
-
-  /* ==========================================================
-     AJUSTE PARA TABLETS
-  ========================================================== */
-
-  @media (max-width: 900px) {
-
-    body.urn {
-      min-height: 100vh;
-      overflow: hidden;
-    }
-
+    /* ==========================================================
+       AJUSTES DO CABEÇALHO
+    ========================================================== */
 
     body.urn > header {
-      min-height: 68px;
-      padding: 8px 12px;
-      gap: 3px;
+      height: auto;
+      min-height: 72px;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 15px;
+      line-height: 1.2;
     }
-
 
     body.urn > header .school-name {
-      font-size: 13px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: .6px;
+      text-align: center;
     }
-
 
     body.urn > header .election-name {
-      font-size: 17px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-align: center;
     }
 
 
-    .machine {
+    /* ==========================================================
+       TELA DE CARGOS
+    ========================================================== */
 
-      width: calc(100% - 18px);
-
-      margin: 9px auto;
-
-      border-width: 5px;
-
-      border-radius: 16px;
-
-    }
-
-
-    .machine-top {
-
-      padding: 9px 12px;
-
-    }
-
-
-    .machine-top b {
-
-      font-size: 19px;
-
-    }
-
-
-    .machine-top strong {
-
-      padding: 5px 8px;
-
-      font-size: 10px;
-
-    }
-
-
-    .machine-body {
-
-      /*
-       * Mantém tela e teclado lado a lado
-       * no tablet.
-       */
-
-      grid-template-columns:
-        minmax(0, 1.25fr)
-        minmax(250px, .75fr);
-
-      gap: 14px;
-
-      padding: 14px;
-
-    }
-
-
-   .screen {
-
-  min-height: 400px;
-
-  height: 400px;
-
-  padding: 18px 20px;
-
-}
-
-
-    .step {
-
-  min-height: 320px;
-
-}
-
-
-    .screen h2 {
-
-      font-size: 22px;
-
-      margin-bottom: 8px;
-
-    }
-
-
-    .screen p {
-
+    .cargo-progress {
+      margin-top: 4px;
+      color: #17609a;
+      font-weight: 800;
       font-size: 14px;
-
-      margin-top: 8px;
-
+      letter-spacing: .5px;
     }
 
-
-    .eyebrow {
-
-      font-size: 10px;
-
-      letter-spacing: 1.2px;
-
-    }
-
-
-    .display {
-
-      min-height: 56px;
-
-      height: 56px;
-
-      margin: 15px 0 12px;
-
-      font-size: 30px;
-
-      padding: 6px 12px;
-
-    }
-
-
-    .msg {
-
-      font-size: 12px;
-
-      padding: 9px 10px;
-
-    }
-
-
-    .student-box {
-
-      margin: 13px 0;
-
-      padding: 12px;
-
-      gap: 4px;
-
-    }
-
-
-    .student-box small {
-
-      font-size: 9px;
-
-      margin-top: 4px;
-
-    }
-
-
-    .student-box b {
-
-      font-size: 15px;
-
-      margin-bottom: 3px;
-
-    }
-
-
-    .hint {
-
-      font-size: 11px;
-
-      padding-top: 12px;
-
-    }
-
-
-    /* ======================================================
-       CHAPA
-    ====================================================== */
-
-    .candidate {
-
-      margin-top: 12px;
-
-      padding: 11px;
-
-      grid-template-columns: 75px 1fr;
-
-      gap: 11px;
-
-    }
-
-
-    .photo {
-
-      width: 75px;
-
-      height: 92px;
-
-      font-size: 34px;
-
-    }
-
-
-    .candidate b {
-
-      font-size: 15px;
-
-    }
-
-
-    .candidate em {
-
-      margin-top: 5px;
-
-      font-size: 11px;
-
-    }
-
-
-    .candidate #presidente,
-    .candidate #vice {
-
-      font-size: 11px;
-
-      margin-top: 4px;
-
-    }
-
-
-    /* ======================================================
-       TELA FIM
-    ====================================================== */
-
-    .fim {
-
-      width: 65px;
-
-      height: 65px;
-
-      font-size: 40px;
-
-      margin-bottom: 12px;
-
-    }
-
-
-    .fim-title {
-
-      font-size: 34px !important;
-
-    }
-
-
-    .center {
-
-      font-size: 15px !important;
-
-    }
-
-
-    .restart {
-
-      margin-top: 15px;
-
-      padding: 9px 16px;
-
-      font-size: 12px;
-
-    }
-
-
-    /* ======================================================
-       TECLADO
-    ====================================================== */
-
-    .keypad-area {
-
-      padding: 11px;
-
-    }
-
-
-    .keypad-title {
-
-      font-size: 10px;
-
-      margin-bottom: 8px;
-
-      letter-spacing: 1px;
-
-    }
-
-
-    .keypad {
-
-      gap: 6px;
-
-    }
-
-
-    .key.num {
-
-      min-height: 51px;
-
-      height: 51px;
-
-      font-size: 22px;
-
-      border-width: 2px;
-
-      box-shadow: 0 3px 0 #111;
-
-    }
-
-
-    .key {
-
-      min-height: 46px;
-
-      height: 46px;
-
-      font-size: 10px;
-
-      box-shadow: 0 3px 0 #111;
-
-    }
-
-
-    .keypad-area::after {
-
-      font-size: 8px;
-
-      margin-top: 8px;
-
-    }
-
-
-    /* ======================================================
-       RODAPÉ
-    ====================================================== */
-
-    .machine footer {
-
-      padding: 7px 12px;
-
-      font-size: 10px;
-
-    }
-
-  }
-
-
-  /* ==========================================================
-     TABLET MENOR
-     Aproximadamente 600-700px de largura
-  ========================================================== */
-
-  @media (max-width: 700px) {
-
-    .machine-body {
-
-      grid-template-columns:
-        minmax(0, 1.18fr)
-        minmax(220px, .82fr);
-
-      gap: 10px;
-
-      padding: 10px;
-
-    }
-
-
-    .screen {
-
-      height: 420px;
-
-      min-height: 420px;
-
-      padding: 15px;
-
-    }
-
-
-    .step {
-
-      min-height: 380px;
-
-    }
-
-
-    .machine-top b {
-
-      font-size: 16px;
-
-    }
-
-
-    .machine-top strong {
-
-      font-size: 9px;
-
-    }
-
-
-    .keypad-area {
-
-      padding: 9px;
-
-    }
-
-
-    .key.num {
-
-      min-height: 46px;
-
-      height: 46px;
-
-      font-size: 20px;
-
-    }
-
-
-    .key {
-
-      min-height: 42px;
-
-      height: 42px;
-
-      font-size: 9px;
-
-    }
-
-
-    .candidate {
-
-      grid-template-columns: 65px 1fr;
-
-      gap: 8px;
-
-    }
-
-
-    .photo {
-
-      width: 65px;
-
-      height: 80px;
-
-    }
-
-
-    .candidate b {
-
-      font-size: 13px;
-
-    }
-
-
-    .candidate #presidente,
-    .candidate #vice {
-
-      font-size: 10px;
-
-    }
-
-  }
-
-
-  /* ==========================================================
-     TABLET EM PÉ / TELA MAIS ESTREITA
-  ========================================================== */
-
-  @media (max-width: 560px) {
-
-    body.urn {
-      overflow: auto;
-    }
-
-
-    .machine-body {
-
-      grid-template-columns: 1fr;
-
-    }
-
-
-    .screen {
-
-      height: 430px;
-
-      min-height: 430px;
-
-    }
-
-
-    .keypad-area {
-
-      padding: 10px;
-
-    }
-
-  }
-
-</style>
-  
-
-<style>
-  /* ==========================================================
-     ELEIÇÃO POR CARGO
-  ========================================================== */
-
-  .cargo-progress {
-    margin-top: 4px;
-    color: #17609a;
-    font-weight: 800;
-    font-size: 14px;
-    letter-spacing: .5px;
-  }
-
-  #cargoNome {
-    font-size: 30px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .cargo-instruction {
-    font-size: 18px;
-    margin-top: 6px;
-  }
-
-  #candidatoNome {
-    display: block;
-    font-size: 30px !important;
-    line-height: 1.1;
-    margin-top: 6px;
-  }
-
-  #candidatoSlogan {
-    display: block;
-    margin-top: 9px;
-    font-size: 17px;
-    font-style: italic;
-    color: #59636d;
-  }
-
-  #candidatoPresidente,
-  #candidatoVice {
-    display: none !important;
-  }
-
-  @media (max-width: 900px) {
     #cargoNome {
-      font-size: 24px;
+      font-size: 30px;
+      text-transform: uppercase;
+      margin: 8px 0;
+      line-height: 1.1;
     }
 
     .cargo-instruction {
-      font-size: 14px;
+      font-size: 18px;
+      margin-top: 6px;
+    }
+
+    #candidatoNumero {
+      margin: 16px 0 12px;
     }
 
     #candidatoNome {
-      font-size: 22px !important;
+      display: block;
+      font-size: 30px !important;
+      line-height: 1.1;
+      margin-top: 6px;
     }
 
     #candidatoSlogan {
-      font-size: 13px;
+      display: block;
+      margin-top: 9px;
+      font-size: 17px;
+      font-style: italic;
+      color: #59636d;
     }
-  }
-</style>
+
+    #candidatoPresidente,
+    #candidatoVice {
+      display: none !important;
+    }
+
+
+    /* ==========================================================
+       RESPONSIVO
+    ========================================================== */
+
+    @media (max-width: 900px) {
+
+      body.urn > header {
+        min-height: 68px;
+        padding: 8px 12px;
+        gap: 3px;
+      }
+
+      body.urn > header .school-name {
+        font-size: 13px;
+      }
+
+      body.urn > header .election-name {
+        font-size: 17px;
+      }
+
+      #cargoNome {
+        font-size: 24px;
+      }
+
+      .cargo-instruction {
+        font-size: 14px;
+      }
+
+      #candidatoNome {
+        font-size: 22px !important;
+      }
+
+      #candidatoSlogan {
+        font-size: 13px;
+      }
+
+    }
+
+
+    @media (max-width: 700px) {
+
+      #cargoNome {
+        font-size: 21px;
+      }
+
+      .cargo-progress {
+        font-size: 12px;
+      }
+
+      #candidatoNome {
+        font-size: 18px !important;
+      }
+
+      #candidatoSlogan {
+        font-size: 12px;
+      }
+
+    }
+
+  </style>
 
 </head>
 
@@ -632,31 +163,33 @@
 <body class="urn">
 
 
-  <!-- ======================================================
+  <!-- ==========================================================
        CABEÇALHO
-  ======================================================= -->
+  ========================================================== -->
 
   <header>
-  <div class="school-name">
-    E. E. PROFESSOR ANTÔNIO ROSAS DA SILVA GALVÃO
-  </div>
 
-  <div class="election-name">
-    ELEIÇÃO DO GRÊMIO ESTUDANTIL
-  </div>
-</header>
+    <div class="school-name">
+      E. E. PROFESSOR ANTÔNIO ROSAS DA SILVA GALVÃO
+    </div>
+
+    <div class="election-name">
+      ELEIÇÃO DO GRÊMIO ESTUDANTIL
+    </div>
+
+  </header>
 
 
-  <!-- ======================================================
+  <!-- ==========================================================
        URNA
-  ======================================================= -->
+  ========================================================== -->
 
   <main class="machine">
 
 
-    <!-- ====================================================
+    <!-- ========================================================
          TOPO
-    ===================================================== -->
+    ========================================================= -->
 
     <div class="machine-top">
 
@@ -668,7 +201,6 @@
 
       </div>
 
-
       <strong id="status">
         AGUARDANDO
       </strong>
@@ -676,25 +208,25 @@
     </div>
 
 
-    <!-- ====================================================
+    <!-- ========================================================
          CORPO
-    ===================================================== -->
+    ========================================================= -->
 
     <div class="machine-body">
 
 
-      <!-- ==================================================
+      <!-- ======================================================
            TELA
-      =================================================== -->
+      ======================================================= -->
 
       <div class="screen-wrap">
 
         <div class="screen">
 
 
-          <!-- ==============================================
+          <!-- ==================================================
                TELA RA
-          =============================================== -->
+          =================================================== -->
 
           <section
             id="stepRA"
@@ -705,16 +237,13 @@
               ELEIÇÃO DO GRÊMIO
             </div>
 
-
             <h2>
               IDENTIFICAÇÃO
             </h2>
 
-
             <p>
               Digite seu <b>RA</b> no teclado ao lado.
             </p>
-
 
             <div
               id="raView"
@@ -722,7 +251,6 @@
             >
               —
             </div>
-
 
             <div
               id="raMsg"
@@ -734,9 +262,9 @@
           </section>
 
 
-          <!-- ==============================================
-               TELA ALUNO
-          =============================================== -->
+          <!-- ==================================================
+               TELA DE CONFIRMAÇÃO DO ALUNO
+          =================================================== -->
 
           <section
             id="stepAluno"
@@ -747,42 +275,33 @@
               CONFIRMAÇÃO DO ELEITOR
             </div>
 
-
             <h2>
               CONFIRA SEUS DADOS
             </h2>
 
-
             <div class="student-box">
-
 
               <small>
                 NOME
               </small>
 
-
               <b id="nomeAluno">
                 —
               </b>
-
 
               <small>
                 DATA DE NASCIMENTO
               </small>
 
-
               <b id="dataAluno">
                 —
               </b>
 
-
             </div>
-
 
             <p>
               Os dados estão corretos?
             </p>
-
 
             <div class="hint">
               CORRIGE = voltar
@@ -793,9 +312,9 @@
           </section>
 
 
-          <!-- ==============================================
-               TELA CARGO
-          =============================================== -->
+          <!-- ==================================================
+               TELA DE CARGO
+          =================================================== -->
 
           <section
             id="stepCargo"
@@ -815,9 +334,7 @@
             </div>
 
 
-            <h2
-              id="cargoNome"
-            >
+            <h2 id="cargoNome">
               COORDENADOR-GERAL
             </h2>
 
@@ -835,12 +352,16 @@
             </div>
 
 
-            <!-- CARD DO CANDIDATO -->
+            <!-- ================================================
+                 CARD DO CANDIDATO
+            ================================================= -->
 
             <div
               id="candidatoCard"
               class="candidate"
             >
+
+              <!-- FOTO -->
 
               <div
                 id="candidatoPhotoBox"
@@ -855,29 +376,31 @@
               </div>
 
 
+              <!-- DADOS -->
+
               <div>
 
                 <small>
                   CANDIDATO
                 </small>
 
-                <b
-                  id="candidatoNome"
-                >
+                <b id="candidatoNome">
                   —
                 </b>
+
 
                 <div
                   id="candidatoPresidente"
                 ></div>
 
+
                 <div
                   id="candidatoVice"
                 ></div>
 
-                <em
-                  id="candidatoSlogan"
-                ></em>
+
+                <em id="candidatoSlogan">
+                </em>
 
               </div>
 
@@ -894,30 +417,26 @@
           </section>
 
 
-          <!-- ==============================================
-               TELA FIM
-          =============================================== -->
+          <!-- ==================================================
+               TELA FINAL
+          =================================================== -->
 
           <section
             id="stepFim"
             class="step"
           >
 
-
             <div class="fim">
               ✓
             </div>
-
 
             <h2 class="fim-title">
               FIM
             </h2>
 
-
             <p class="center">
               SEU VOTO FOI REGISTRADO.
             </p>
-
 
             <button
               id="restart"
@@ -927,34 +446,29 @@
               VOLTAR AO INÍCIO
             </button>
 
-
           </section>
 
 
-          <!-- ==============================================
+          <!-- ==================================================
                TELA VOTAÇÃO ENCERRADA
-          =============================================== -->
+          =================================================== -->
 
           <section
             id="stepClosed"
             class="step"
           >
 
-
             <div class="fim red">
               !
             </div>
-
 
             <h2 class="fim-title">
               VOTAÇÃO ENCERRADA
             </h2>
 
-
             <p class="center">
               A comissão eleitoral encerrou a votação.
             </p>
-
 
           </section>
 
@@ -964,12 +478,11 @@
       </div>
 
 
-      <!-- ==================================================
+      <!-- ======================================================
            TECLADO
-      =================================================== -->
+      ======================================================= -->
 
       <aside class="keypad-area">
-
 
         <div class="keypad-title">
           TECLADO DE VOTAÇÃO
@@ -979,7 +492,9 @@
         <div class="keypad">
 
 
-          <!-- NÚMEROS -->
+          <!-- ==================================================
+               NÚMEROS
+          =================================================== -->
 
           <button
             class="key num"
@@ -1071,7 +586,9 @@
           </button>
 
 
-          <!-- BRANCO -->
+          <!-- ==================================================
+               BRANCO
+          =================================================== -->
 
           <button
             class="key white"
@@ -1082,7 +599,9 @@
           </button>
 
 
-          <!-- CORRIGE -->
+          <!-- ==================================================
+               CORRIGE
+          =================================================== -->
 
           <button
             class="key correct"
@@ -1093,7 +612,9 @@
           </button>
 
 
-          <!-- CONFIRMA -->
+          <!-- ==================================================
+               CONFIRMA
+          =================================================== -->
 
           <button
             class="key confirm"
@@ -1106,19 +627,16 @@
 
         </div>
 
-
       </aside>
-
 
     </div>
 
 
-    <!-- ======================================================
+    <!-- ========================================================
          RODAPÉ
-    ======================================================= -->
+    ========================================================= -->
 
     <footer>
-
 
       <span>
 
@@ -1135,16 +653,15 @@
         Conexão: aguardando
       </span>
 
-
     </footer>
 
 
   </main>
 
 
-  <!-- ======================================================
+  <!-- ==========================================================
        JAVASCRIPT
-  ======================================================= -->
+  ========================================================== -->
 
   <script src="js/config.js?v=2"></script>
 
