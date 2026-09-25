@@ -5,6 +5,29 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Administrativo - Grêmio</title>
 <link rel="stylesheet" href="css/style.css">
+<style>
+  .cargo-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}
+  .cargo-tabs button{padding:8px 11px;border:1px solid #c7d0d7;background:#fff;border-radius:8px;font-size:11px;font-weight:900;cursor:pointer}
+  .cargo-tabs button.active{background:#19598e;color:#fff;border-color:#19598e}
+  .cargo-result-title{font-size:18px;font-weight:900;margin-bottom:8px;color:#1f2f3a}
+  .result-meta{font-size:11px;color:#6b757d;margin-bottom:10px}
+  .candidate-status{font-size:10px;font-weight:900;padding:4px 7px;border-radius:20px;display:inline-block}
+  .candidate-status.active{background:#e9f6ed;color:#20854a}
+  .candidate-status.inactive{background:#f4eee0;color:#7c6a3f}
+  .filter-row{display:flex;align-items:center;gap:10px;margin:0 0 15px}
+  .filter-row label{font-size:10px;font-weight:900;color:#6b757d;text-transform:uppercase}
+  .filter-row select,.form-grid select{width:100%;padding:10px 11px;border:1px solid #c2c9cf;border-radius:7px;background:#fff}
+  .filter-row select{max-width:360px}
+  .candidate-actions{white-space:nowrap}
+  .candidate-actions .small-btn{margin-right:5px}
+  .empty{padding:18px;color:#6d777f;font-size:13px}
+  .modal-card{max-height:92vh;overflow:auto}
+  .danger-small{border-color:#d5a5a1;color:#a43b35}
+  @media(max-width:700px){
+    .filter-row{align-items:flex-start;flex-direction:column}
+    .filter-row select{max-width:none}
+  }
+</style>
 </head>
 <body class="admin">
 <header class="admin-head">
@@ -12,7 +35,10 @@
     <div class="eyebrow">GRÊMIO ESTUDANTIL</div>
     <h1>Painel Administrativo</h1>
   </div>
-  <button id="refresh" class="secondary">↻ Atualizar</button>
+  <div>
+    <button id="refresh" class="secondary">↻ Atualizar</button>
+    <button id="sair" class="secondary">Sair</button>
+  </div>
 </header>
 
 <main class="admin-main">
@@ -20,7 +46,7 @@
     <div class="login-icon">🔐</div>
     <h2>Comissão Eleitoral</h2>
     <p>Digite a senha administrativa.</p>
-    <input id="senha" type="password" placeholder="Senha">
+    <input id="senha" type="password" placeholder="Senha" autocomplete="current-password">
     <button id="entrar" class="primary">Entrar</button>
     <div id="loginMsg" class="msg"></div>
   </section>
@@ -48,10 +74,15 @@
     <div class="two-cols">
       <section class="panel">
         <div class="panel-title">
-          <div><div class="eyebrow">APURAÇÃO</div><h3>Resultado</h3></div>
+          <div>
+            <div class="eyebrow">APURAÇÃO</div>
+            <h3>Resultado parcial por cargo</h3>
+          </div>
           <span>ATUALIZAÇÃO AUTOMÁTICA</span>
         </div>
-        <div id="resultados"></div>
+
+        <div id="cargoTabs" class="cargo-tabs"></div>
+        <div id="cargoResultado"></div>
       </section>
 
       <section class="panel">
@@ -63,17 +94,45 @@
 
     <section class="panel">
       <div class="panel-title">
-        <h3>Chapas</h3>
-        <button id="novaChapa" class="secondary">+ Nova chapa</button>
+        <div>
+          <div class="eyebrow">CANDIDATOS</div>
+          <h3>Cadastro por cargo</h3>
+        </div>
+        <button id="novoCandidato" class="secondary">+ Novo candidato</button>
       </div>
+
+      <div class="filter-row">
+        <label for="filtroCargo">Visualizar cargo</label>
+        <select id="filtroCargo"></select>
+      </div>
+
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Nº</th><th>Chapa</th><th>Presidente</th><th>Vice</th><th>Ativa</th><th></th></tr>
+            <tr>
+              <th>Nº</th>
+              <th>Cargo</th>
+              <th>Nome</th>
+              <th>Slogan</th>
+              <th>Ativa</th>
+              <th></th>
+            </tr>
           </thead>
-          <tbody id="chapaTable"></tbody>
+          <tbody id="candidatoTable"></tbody>
         </table>
       </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">
+        <h3>Configuração</h3>
+      </div>
+      <div class="form-grid">
+        <label>Nome da escola<input id="cfgEscola"></label>
+        <label>Título da eleição<input id="cfgEleicao"></label>
+      </div>
+      <button id="salvarConfig" class="primary">Salvar configuração</button>
+      <div id="configMsg" class="msg"></div>
     </section>
   </section>
 </main>
@@ -81,24 +140,37 @@
 <div id="modal" class="modal hidden">
   <div class="modal-card">
     <div class="panel-title">
-      <h3 id="modalTitle">Nova chapa</h3>
+      <h3 id="modalTitle">Novo candidato</h3>
       <button id="closeModal" class="x">×</button>
     </div>
 
     <div class="form-grid">
-      <label>Número<input id="cNum"></label>
-      <label>Nome<input id="cNome"></label>
-      <label>Presidente<input id="cPres"></label>
-      <label>Vice<input id="cVice"></label>
-      <label class="full">Slogan<input id="cSlogan"></label>
-      <label class="full">URL da foto<input id="cFoto" placeholder="https://..."></label>
-      <label class="full check"><input id="cAtiva" type="checkbox" checked> Chapa ativa</label>
+      <label class="full">Cargo
+        <select id="cCargo"></select>
+      </label>
+      <label>Número
+        <input id="cNum" inputmode="numeric" maxlength="3">
+      </label>
+      <label>Nome do candidato
+        <input id="cNome">
+      </label>
+      <label class="full">Slogan
+        <input id="cSlogan">
+      </label>
+      <label class="full">URL da foto
+        <input id="cFoto" placeholder="https://...">
+      </label>
+      <label class="full check">
+        <input id="cAtiva" type="checkbox" checked>
+        Candidato ativo para votação
+      </label>
     </div>
 
     <div id="cMsg" class="msg"></div>
+
     <div class="modal-actions">
       <button id="cancel" class="secondary">Cancelar</button>
-      <button id="salvar" class="primary">Salvar</button>
+      <button id="salvar" class="primary">Salvar candidato</button>
     </div>
   </div>
 </div>
