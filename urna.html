@@ -564,27 +564,65 @@
   
 
 <style>
-  /* Oculta Presidente e Vice na tela de confirmação da chapa */
-  #presidente,
-  #vice {
+  /* ==========================================================
+     ELEIÇÃO POR CARGO
+  ========================================================== */
+
+  .cargo-progress {
+    margin-top: 4px;
+    color: #17609a;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: .5px;
+  }
+
+  #cargoNome {
+    font-size: 30px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .cargo-instruction {
+    font-size: 18px;
+    margin-top: 6px;
+  }
+
+  #candidatoNome {
+    display: block;
+    font-size: 30px !important;
+    line-height: 1.1;
+    margin-top: 6px;
+  }
+
+  #candidatoSlogan {
+    display: block;
+    margin-top: 9px;
+    font-size: 17px;
+    font-style: italic;
+    color: #59636d;
+  }
+
+  #candidatoPresidente,
+  #candidatoVice {
     display: none !important;
   }
 
-  /* Mantém o slogan logo abaixo do nome da chapa */
-  #slogan {
-    display: block;
-    margin-top: 9px;
-    font-size: 17px !important;
-    line-height: 1.25 !important;
-    font-weight: 700 !important;
-  }
+  @media (max-width: 900px) {
+    #cargoNome {
+      font-size: 24px;
+    }
 
-  /* Aumenta o nome da chapa para ficar em maior destaque */
-  #chapaNome {
-    display: block;
-    font-size: 32px !important;
-    line-height: 1.08 !important;
-    margin-top: 3px;
+    .cargo-instruction {
+      font-size: 14px;
+    }
+
+    #candidatoNome {
+      font-size: 22px !important;
+    }
+
+    #candidatoSlogan {
+      font-size: 13px;
+    }
   }
 </style>
 
@@ -756,100 +794,102 @@
 
 
           <!-- ==============================================
-               TELA CHAPA
+               TELA CARGO
           =============================================== -->
 
           <section
-            id="stepChapa"
+            id="stepCargo"
             class="step"
           >
 
             <div class="eyebrow">
-              SEU VOTO PARA
+              ELEIÇÃO POR CARGO
             </div>
 
 
-            <h2>
-              GRÊMIO ESTUDANTIL
+            <div
+              id="cargoProgress"
+              class="cargo-progress"
+            >
+              CARGO 1 DE 1
+            </div>
+
+
+            <h2
+              id="cargoNome"
+            >
+              PRESIDENTE
             </h2>
 
 
-            <p>
-              Digite o número da chapa.
+            <p class="cargo-instruction">
+              Digite o número do candidato.
             </p>
 
 
             <div
-              id="chapaNumero"
+              id="candidatoNumero"
               class="display"
             >
               —
             </div>
 
 
-            <!-- CARD DA CHAPA -->
+            <!-- CARD DO CANDIDATO -->
 
             <div
-              id="chapaCard"
+              id="candidatoCard"
               class="candidate"
             >
 
-
-              <!-- FOTO -->
-
               <div
-                id="photoBox"
+                id="candidatoPhotoBox"
                 class="photo"
               >
 
                 <img
-                  id="foto"
-                  alt="Foto da chapa"
+                  id="candidatoFoto"
+                  alt="Foto do candidato"
                 >
 
               </div>
 
 
-              <!-- DADOS -->
-
               <div>
 
-
                 <small>
-                  CHAPA
+                  CANDIDATO
                 </small>
 
-
-                <b id="chapaNome">
+                <b
+                  id="candidatoNome"
+                >
                   —
                 </b>
 
+                <div
+                  id="candidatoPresidente"
+                ></div>
 
-                <div id="presidente">
-                </div>
+                <div
+                  id="candidatoVice"
+                ></div>
 
-
-                <div id="vice">
-                </div>
-
-
-                <em id="slogan">
-                </em>
-
+                <em
+                  id="candidatoSlogan"
+                ></em>
 
               </div>
-
 
             </div>
 
 
             <div
-              id="voteMsg"
+              id="cargoMsg"
               class="msg"
             >
-              Digite o número da chapa.
+              Digite o número do candidato.
             </div>
-
 
           </section>
 
@@ -1110,7 +1150,7 @@
 
   <script src="js/api.js?v=2"></script>
 
-  <script src="js/urna.js?v=11"></script>
+  <script src="js/urna.js?v=12"></script>
 
 
 </body>
