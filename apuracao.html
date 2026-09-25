@@ -1,182 +1,2751 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Administrativo - Grêmio</title>
-<link rel="stylesheet" href="css/style.css">
-<style>
-  .cargo-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}
-  .cargo-tabs button{padding:8px 11px;border:1px solid #c7d0d7;background:#fff;border-radius:8px;font-size:11px;font-weight:900;cursor:pointer}
-  .cargo-tabs button.active{background:#19598e;color:#fff;border-color:#19598e}
-  .cargo-result-title{font-size:18px;font-weight:900;margin-bottom:8px;color:#1f2f3a}
-  .result-meta{font-size:11px;color:#6b757d;margin-bottom:10px}
-  .candidate-status{font-size:10px;font-weight:900;padding:4px 7px;border-radius:20px;display:inline-block}
-  .candidate-status.active{background:#e9f6ed;color:#20854a}
-  .candidate-status.inactive{background:#f4eee0;color:#7c6a3f}
-  .filter-row{display:flex;align-items:center;gap:10px;margin:0 0 15px}
-  .filter-row label{font-size:10px;font-weight:900;color:#6b757d;text-transform:uppercase}
-  .filter-row select,.form-grid select{width:100%;padding:10px 11px;border:1px solid #c2c9cf;border-radius:7px;background:#fff}
-  .filter-row select{max-width:360px}
-  .candidate-actions{white-space:nowrap}
-  .candidate-actions .small-btn{margin-right:5px}
-  .empty{padding:18px;color:#6d777f;font-size:13px}
-  .modal-card{max-height:92vh;overflow:auto}
-  .danger-small{border-color:#d5a5a1;color:#a43b35}
-  @media(max-width:700px){
-    .filter-row{align-items:flex-start;flex-direction:column}
-    .filter-row select{max-width:none}
-  }
-</style>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
+
+  <title>Apuração - Eleição do Grêmio</title>
+
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  >
+
+  <style>
+
+    /* =====================================================
+       PÁGINA
+    ===================================================== */
+
+    body.apuracao-page {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      background:
+        linear-gradient(
+          135deg,
+          #174d78 0%,
+          #1c6394 48%,
+          #9ebbd2 100%
+        );
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      color: #20252b;
+
+      padding: 30px 20px;
+
+      box-sizing: border-box;
+
+    }
+
+
+    .apuracao-container {
+
+      width:
+        min(
+          1200px,
+          100%
+        );
+
+      margin: 0 auto;
+
+      background: #ffffff;
+
+      border-radius: 28px;
+
+      padding: 38px;
+
+      box-sizing: border-box;
+
+      box-shadow:
+        0 25px 60px
+        rgba(
+          0,
+          0,
+          0,
+          .18
+        );
+
+    }
+
+
+    /* =====================================================
+       CABEÇALHO
+    ===================================================== */
+
+    .apuracao-header {
+
+      text-align: center;
+
+      margin-bottom: 30px;
+
+    }
+
+
+    .apuracao-header .eyebrow {
+
+      font-size: 14px;
+
+      font-weight: 800;
+
+      letter-spacing: 2px;
+
+      color: #17609a;
+
+      margin-bottom: 10px;
+
+    }
+
+
+    .apuracao-header h1 {
+
+      margin: 0;
+
+      font-size: 42px;
+
+      line-height: 1.1;
+
+    }
+
+
+    .apuracao-header p {
+
+      margin: 12px 0 0;
+
+      font-size: 18px;
+
+      color: #68737d;
+
+    }
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    .status-box {
+
+      text-align: center;
+
+      background: #f4f7fa;
+
+      border-radius: 20px;
+
+      padding: 34px 25px;
+
+      margin-bottom: 25px;
+
+    }
+
+
+    .status-box h2 {
+
+      margin:
+        0 0 10px;
+
+      font-size: 27px;
+
+    }
+
+
+    .status-box p {
+
+      margin: 0;
+
+      color: #68737d;
+
+      font-size: 17px;
+
+      line-height: 1.5;
+
+    }
+
+
+    #aguardando {
+
+      display: block;
+
+    }
+
+
+    #aberta {
+
+      display: none;
+
+    }
+
+
+    .status-indicator {
+
+      width: 16px;
+
+      height: 16px;
+
+      border-radius: 50%;
+
+      background: #d9a400;
+
+      display: inline-block;
+
+      margin-right: 8px;
+
+      vertical-align: middle;
+
+    }
+
+
+    /* =====================================================
+       BOTÃO INICIAR
+    ===================================================== */
+
+    #iniciarArea {
+
+      display: none;
+
+      text-align: center;
+
+      padding:
+        10px 20px 35px;
+
+    }
+
+
+    .botao-iniciar {
+
+      border: 0;
+
+      border-radius: 15px;
+
+      background: #17609a;
+
+      color: #fff;
+
+      font-size: 18px;
+
+      font-weight: 800;
+
+      padding:
+        17px 30px;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 8px 20px
+        rgba(
+          23,
+          96,
+          154,
+          .24
+        );
+
+    }
+
+
+    .botao-iniciar:hover {
+
+      filter: brightness(.96);
+
+      transform:
+        translateY(-1px);
+
+    }
+
+
+    .botao-iniciar:active {
+
+      transform:
+        translateY(0);
+
+    }
+
+
+    .iniciar-legenda {
+
+      margin-top: 10px;
+
+      color: #68737d;
+
+      font-size: 14px;
+
+    }
+
+
+    /* =====================================================
+       CONTAGEM
+    ===================================================== */
+
+    #countdown {
+
+      display: none;
+
+      text-align: center;
+
+      padding:
+        20px 20px 35px;
+
+    }
+
+
+    .countdown-number {
+
+      font-size: 110px;
+
+      font-weight: 900;
+
+      line-height: 1;
+
+      color: #d9a400;
+
+    }
+
+
+    .countdown-text {
+
+      margin-top: 18px;
+
+      font-size: 21px;
+
+      font-weight: 800;
+
+      letter-spacing: .5px;
+
+    }
+
+
+    .countdown-sub {
+
+      margin-top: 8px;
+
+      color: #707b84;
+
+      font-size: 15px;
+
+    }
+
+
+    /* =====================================================
+       ERRO
+    ===================================================== */
+
+    #erro {
+
+      display: none;
+
+      background: #fff0f0;
+
+      color: #a02c2c;
+
+      border:
+        1px solid #efb4b4;
+
+      border-radius: 16px;
+
+      padding: 18px;
+
+      text-align: center;
+
+      margin-bottom: 24px;
+
+    }
+
+
+    /* =====================================================
+       RESULTADO
+    ===================================================== */
+
+    #resultadoArea {
+
+      display: none;
+
+    }
+
+
+    .resultado-titulo {
+
+      text-align: center;
+
+      margin:
+        0 0 25px;
+
+    }
+
+
+    .resultado-titulo .eyebrow {
+
+      font-size: 13px;
+
+      font-weight: 800;
+
+      letter-spacing: 1.8px;
+
+      color: #17609a;
+
+      margin-bottom: 7px;
+
+    }
+
+
+    .resultado-titulo h2 {
+
+      margin: 0;
+
+      font-size: 34px;
+
+    }
+
+
+    /* =====================================================
+       RESULTADO GERAL
+    ===================================================== */
+
+    .resultado-geral {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          4,
+          1fr
+        );
+
+      gap: 16px;
+
+      margin-bottom: 32px;
+
+    }
+
+
+    .metric {
+
+      background: #f5f7f9;
+
+      border-radius: 17px;
+
+      padding:
+        19px 14px;
+
+      text-align: center;
+
+    }
+
+
+    .metric b {
+
+      display: block;
+
+      font-size: 31px;
+
+      line-height: 1;
+
+      margin-bottom: 7px;
+
+    }
+
+
+    .metric span {
+
+      color: #697580;
+
+      font-size: 13px;
+
+      font-weight: 700;
+
+    }
+
+
+    /* =====================================================
+       CARGOS
+    ===================================================== */
+
+    .cargos-tabs {
+
+      display: flex;
+
+      gap: 8px;
+
+      flex-wrap: wrap;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .cargo-tab {
+
+      border:
+        1px solid #ccd4dc;
+
+      background: #ffffff;
+
+      color: #44515c;
+
+      border-radius: 10px;
+
+      padding:
+        11px 14px;
+
+      font-size: 12px;
+
+      font-weight: 800;
+
+      cursor: pointer;
+
+      transition:
+        .15s ease;
+
+    }
+
+
+    .cargo-tab:hover {
+
+      background: #f3f6f8;
+
+    }
+
+
+    .cargo-tab.active {
+
+      background: #17609a;
+
+      color: #ffffff;
+
+      border-color: #17609a;
+
+    }
+
+
+    .cargo-painel {
+
+      display: none;
+
+      border:
+        1px solid #d9e0e6;
+
+      border-radius: 22px;
+
+      overflow: hidden;
+
+      background: #ffffff;
+
+    }
+
+
+    .cargo-painel.active {
+
+      display: block;
+
+    }
+
+
+    .cargo-header {
+
+      padding: 25px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #eef5fa,
+          #f9fbfd
+        );
+
+      border-bottom:
+        1px solid #dfe5ea;
+
+    }
+
+
+    .cargo-header .eyebrow {
+
+      color: #17609a;
+
+      font-size: 12px;
+
+      font-weight: 900;
+
+      letter-spacing: 1.5px;
+
+      margin-bottom: 5px;
+
+    }
+
+
+    .cargo-header h3 {
+
+      margin: 0;
+
+      font-size: 25px;
+
+      color: #1f2e3a;
+
+    }
+
+
+    .cargo-header p {
+
+      margin:
+        8px 0 0;
+
+      color: #68737d;
+
+      font-size: 14px;
+
+    }
+
+
+    /* =====================================================
+       VENCEDOR / MAIS VOTADO
+    ===================================================== */
+
+    .mais-votado {
+
+      margin:
+        20px 25px 0;
+
+      border-radius: 18px;
+
+      padding: 20px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #fff7d6,
+          #fffdf2
+        );
+
+      border:
+        2px solid #e1bc36;
+
+      text-align: center;
+
+    }
+
+
+    .mais-votado .label {
+
+      font-size: 12px;
+
+      font-weight: 900;
+
+      color: #8a6700;
+
+      letter-spacing: 1.5px;
+
+    }
+
+
+    .mais-votado h4 {
+
+      margin:
+        7px 0 5px;
+
+      font-size: 29px;
+
+      color: #2d2d26;
+
+    }
+
+
+    .mais-votado p {
+
+      margin: 0;
+
+      font-size: 16px;
+
+      color: #6a5c30;
+
+    }
+
+
+    .empate {
+
+      background:
+        #f5f7f9;
+
+      border:
+        1px solid #d9e0e6;
+
+    }
+
+
+    .empate .label {
+
+      color: #5c6973;
+
+    }
+
+
+    /* =====================================================
+       CARDS DOS CANDIDATOS
+    ===================================================== */
+
+    .candidatos-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(
+            280px,
+            1fr
+          )
+        );
+
+      gap: 18px;
+
+      padding: 25px;
+
+    }
+
+
+    .candidato-card {
+
+      border:
+        1px solid #d7dee5;
+
+      border-radius: 18px;
+
+      overflow: hidden;
+
+      background: #fff;
+
+    }
+
+
+    .candidato-card.inativo {
+
+      opacity: .7;
+
+    }
+
+
+    .candidato-topo {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 15px;
+
+      padding: 18px;
+
+    }
+
+
+    .candidato-foto {
+
+      width: 76px;
+
+      height: 76px;
+
+      border-radius: 15px;
+
+      overflow: hidden;
+
+      background: #edf1f5;
+
+      flex-shrink: 0;
+
+    }
+
+
+    .candidato-foto img {
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: cover;
+
+      display: block;
+
+    }
+
+
+    .sem-foto {
+
+      width: 100%;
+
+      height: 100%;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      font-size: 26px;
+
+    }
+
+
+    .candidato-numero {
+
+      font-size: 29px;
+
+      font-weight: 900;
+
+      line-height: 1;
+
+      color: #17609a;
+
+    }
+
+
+    .candidato-nome {
+
+      margin-top: 6px;
+
+      font-size: 18px;
+
+      font-weight: 900;
+
+      line-height: 1.2;
+
+    }
+
+
+    .candidato-slogan {
+
+      padding:
+        0 18px 16px;
+
+      min-height: 42px;
+
+      font-size: 14px;
+
+      color: #697580;
+
+      font-style: italic;
+
+      line-height: 1.4;
+
+    }
+
+
+    .candidato-votos {
+
+      border-top:
+        1px solid #e4e8ec;
+
+      padding:
+        15px 18px;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+    }
+
+
+    .candidato-votos span {
+
+      color: #697580;
+
+      font-size: 12px;
+
+      font-weight: 800;
+
+    }
+
+
+    .candidato-votos strong {
+
+      font-size: 28px;
+
+    }
+
+
+    .candidato-percentual {
+
+      margin-top: 8px;
+
+      padding:
+        0 18px 18px;
+
+    }
+
+
+    .barra {
+
+      height: 8px;
+
+      background: #e7edf2;
+
+      border-radius: 10px;
+
+      overflow: hidden;
+
+    }
+
+
+    .barra i {
+
+      display: block;
+
+      height: 100%;
+
+      background: #17609a;
+
+      border-radius: 10px;
+
+      transition:
+        width .4s ease;
+
+    }
+
+
+    .percentual {
+
+      margin-top: 6px;
+
+      text-align: right;
+
+      font-size: 12px;
+
+      color: #68737d;
+
+      font-weight: 700;
+
+    }
+
+
+    /* =====================================================
+       BRANCO / NULO
+    ===================================================== */
+
+    .cargo-extras {
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 14px;
+
+      padding:
+        0 25px 25px;
+
+    }
+
+
+    .extra-card {
+
+      padding: 18px;
+
+      border-radius: 16px;
+
+      background: #f5f7f9;
+
+      text-align: center;
+
+    }
+
+
+    .extra-card strong {
+
+      font-size: 27px;
+
+      display: block;
+
+      margin-bottom: 5px;
+
+    }
+
+
+    .extra-card span {
+
+      color: #6b7680;
+
+      font-size: 13px;
+
+      font-weight: 700;
+
+    }
+
+
+    /* =====================================================
+       BOTÃO VOLTAR
+    ===================================================== */
+
+    .acoes {
+
+      text-align: center;
+
+      margin-top: 30px;
+
+    }
+
+
+    .botao-voltar {
+
+      display: inline-block;
+
+      padding:
+        13px 22px;
+
+      border-radius: 12px;
+
+      background: #17609a;
+
+      color: #ffffff;
+
+      text-decoration: none;
+
+      font-weight: 800;
+
+    }
+
+
+    .botao-voltar:hover {
+
+      filter: brightness(.95);
+
+    }
+
+
+    /* =====================================================
+       RESPONSIVO
+    ===================================================== */
+
+    @media(
+      max-width: 900px
+    ) {
+
+      .resultado-geral {
+
+        grid-template-columns:
+          1fr 1fr;
+
+      }
+
+    }
+
+
+    @media(
+      max-width: 700px
+    ) {
+
+      body.apuracao-page {
+
+        padding: 15px;
+
+      }
+
+
+      .apuracao-container {
+
+        padding: 24px;
+
+        border-radius: 22px;
+
+      }
+
+
+      .apuracao-header h1 {
+
+        font-size: 33px;
+
+      }
+
+
+      .cargo-tab {
+
+        width: 100%;
+
+        text-align: left;
+
+      }
+
+    }
+
+
+    @media(
+      max-width: 520px
+    ) {
+
+      .apuracao-container {
+
+        padding: 18px;
+
+        border-radius: 18px;
+
+      }
+
+
+      .apuracao-header h1 {
+
+        font-size: 28px;
+
+      }
+
+
+      .apuracao-header p {
+
+        font-size: 15px;
+
+      }
+
+
+      .resultado-geral {
+
+        grid-template-columns:
+          1fr 1fr;
+
+        gap: 10px;
+
+      }
+
+
+      .metric {
+
+        padding:
+          16px 8px;
+
+      }
+
+
+      .metric b {
+
+        font-size: 25px;
+
+      }
+
+
+      .countdown-number {
+
+        font-size: 78px;
+
+      }
+
+
+      .countdown-text {
+
+        font-size: 17px;
+
+      }
+
+
+      .cargo-header h3 {
+
+        font-size: 21px;
+
+      }
+
+
+      .candidatos-grid {
+
+        grid-template-columns:
+          1fr;
+
+        padding: 18px;
+
+      }
+
+
+      .cargo-extras {
+
+        grid-template-columns:
+          1fr;
+
+        padding:
+          0 18px 18px;
+
+      }
+
+    }
+
+  </style>
+
 </head>
-<body class="admin">
-<header class="admin-head">
-  <div>
-    <div class="eyebrow">GRÊMIO ESTUDANTIL</div>
-    <h1>Painel Administrativo</h1>
-  </div>
-  <div>
-    <button id="refresh" class="secondary">↻ Atualizar</button>
-    <button id="sair" class="secondary">Sair</button>
-  </div>
-</header>
 
-<main class="admin-main">
-  <section id="loginBox" class="login">
-    <div class="login-icon">🔐</div>
-    <h2>Comissão Eleitoral</h2>
-    <p>Digite a senha administrativa.</p>
-    <input id="senha" type="password" placeholder="Senha" autocomplete="current-password">
-    <button id="entrar" class="primary">Entrar</button>
-    <div id="loginMsg" class="msg"></div>
-  </section>
 
-  <section id="dash" class="hidden">
-    <div class="dash-top">
-      <div>
-        <div class="eyebrow">ACOMPANHAMENTO</div>
-        <h2 id="eleicaoTitle">Eleição do Grêmio</h2>
-        <p id="eleicaoStatus"></p>
-      </div>
-      <div>
-        <button id="abrir" class="primary">Abrir votação</button>
-        <button id="fechar" class="danger">Encerrar votação</button>
-      </div>
-    </div>
+<body class="apuracao-page">
 
-    <div class="stats">
-      <div><small>ELEITORES</small><b id="mEleitores">0</b></div>
-      <div><small>JÁ VOTARAM</small><b id="mVotaram">0</b></div>
-      <div><small>RESTANTES</small><b id="mRestantes">0</b></div>
-      <div><small>PARTICIPAÇÃO</small><b id="mPart">0%</b></div>
-    </div>
 
-    <div class="two-cols">
-      <section class="panel">
-        <div class="panel-title">
-          <div>
-            <div class="eyebrow">APURAÇÃO</div>
-            <h3>Resultado parcial por cargo</h3>
-          </div>
-          <span>ATUALIZAÇÃO AUTOMÁTICA</span>
-        </div>
+  <!-- =====================================================
+       ÁUDIOS
+  ====================================================== -->
 
-        <div id="cargoTabs" class="cargo-tabs"></div>
-        <div id="cargoResultado"></div>
-      </section>
+  <audio
+    id="somContagem"
+    src="audio/apuracao_toque.wav"
+    preload="auto"
+  ></audio>
 
-      <section class="panel">
-        <div class="eyebrow">URNAS</div>
-        <h3>Computadores</h3>
-        <div id="urnas"></div>
-      </section>
-    </div>
 
-    <section class="panel">
-      <div class="panel-title">
-        <div>
-          <div class="eyebrow">CANDIDATOS</div>
-          <h3>Cadastro por cargo</h3>
-        </div>
-        <button id="novoCandidato" class="secondary">+ Novo candidato</button>
+  <audio
+    id="somFogos"
+    src="audio/apuracao_fogos_usuario.mp3"
+    preload="auto"
+  ></audio>
+
+
+  <main class="apuracao-container">
+
+
+    <!-- ===================================================
+         CABEÇALHO
+    ==================================================== -->
+
+    <header class="apuracao-header">
+
+      <div class="eyebrow">
+        GRÊMIO ESTUDANTIL
       </div>
 
-      <div class="filter-row">
-        <label for="filtroCargo">Visualizar cargo</label>
-        <select id="filtroCargo"></select>
-      </div>
+      <h1>
+        Apuração da Eleição
+      </h1>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Nº</th>
-              <th>Cargo</th>
-              <th>Nome</th>
-              <th>Slogan</th>
-              <th>Ativa</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="candidatoTable"></tbody>
-        </table>
-      </div>
+      <p id="escola">
+        E. E. PROFESSOR ANTÔNIO ROSAS DA SILVA GALVÃO
+      </p>
+
+    </header>
+
+
+    <!-- ===================================================
+         VERIFICANDO
+    ==================================================== -->
+
+    <section
+      id="aguardando"
+      class="status-box"
+    >
+
+      <h2>
+        Verificando situação da eleição...
+      </h2>
+
+      <p>
+        Aguarde enquanto consultamos o sistema.
+      </p>
+
     </section>
 
-    <section class="panel">
-      <div class="panel-title">
-        <h3>Configuração</h3>
-      </div>
-      <div class="form-grid">
-        <label>Nome da escola<input id="cfgEscola"></label>
-        <label>Título da eleição<input id="cfgEleicao"></label>
-      </div>
-      <button id="salvarConfig" class="primary">Salvar configuração</button>
-      <div id="configMsg" class="msg"></div>
+
+    <!-- ===================================================
+         ELEIÇÃO ABERTA
+    ==================================================== -->
+
+    <section
+      id="aberta"
+      class="status-box"
+    >
+
+      <h2>
+
+        <span class="status-indicator"></span>
+
+        VOTAÇÃO AINDA ABERTA
+
+      </h2>
+
+      <p>
+        A apuração pública será disponibilizada
+        após o encerramento oficial da votação.
+      </p>
+
     </section>
-  </section>
-</main>
 
-<div id="modal" class="modal hidden">
-  <div class="modal-card">
-    <div class="panel-title">
-      <h3 id="modalTitle">Novo candidato</h3>
-      <button id="closeModal" class="x">×</button>
-    </div>
 
-    <div class="form-grid">
-      <label class="full">Cargo
-        <select id="cCargo"></select>
-      </label>
-      <label>Número
-        <input id="cNum" inputmode="numeric" maxlength="3">
-      </label>
-      <label>Nome do candidato
-        <input id="cNome">
-      </label>
-      <label class="full">Slogan
-        <input id="cSlogan">
-      </label>
-      <label class="full">URL da foto
-        <input id="cFoto" placeholder="https://...">
-      </label>
-      <label class="full check">
-        <input id="cAtiva" type="checkbox" checked>
-        Candidato ativo para votação
-      </label>
-    </div>
+    <!-- ===================================================
+         INICIAR APURAÇÃO
+    ==================================================== -->
 
-    <div id="cMsg" class="msg"></div>
+    <section id="iniciarArea">
 
-    <div class="modal-actions">
-      <button id="cancel" class="secondary">Cancelar</button>
-      <button id="salvar" class="primary">Salvar candidato</button>
-    </div>
-  </div>
-</div>
+      <button
+        type="button"
+        id="iniciarApuracao"
+        class="botao-iniciar"
+      >
 
-<script src="js/config.js"></script>
-<script src="js/api.js"></script>
-<script src="js/admin.js"></script>
+        🔊 INICIAR APURAÇÃO
+
+      </button>
+
+
+      <div class="iniciar-legenda">
+
+        Clique para iniciar a contagem regressiva
+        e os efeitos sonoros.
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         CONTAGEM
+    ==================================================== -->
+
+    <section id="countdown">
+
+      <div
+        class="countdown-number"
+        id="countdownNumber"
+      >
+        10
+      </div>
+
+
+      <div class="countdown-text">
+
+        PREPARANDO O RESULTADO OFICIAL
+
+      </div>
+
+
+      <div class="countdown-sub">
+
+        Aguarde a divulgação dos resultados.
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         ERRO
+    ==================================================== -->
+
+    <div id="erro"></div>
+
+
+    <!-- ===================================================
+         RESULTADO
+    ==================================================== -->
+
+    <section id="resultadoArea">
+
+
+      <div class="resultado-titulo">
+
+        <div class="eyebrow">
+          ENCERRAMENTO DA ELEIÇÃO
+        </div>
+
+        <h2>
+          Resultado Oficial
+        </h2>
+
+      </div>
+
+
+      <!-- =================================================
+           MÉTRICAS
+      ================================================== -->
+
+      <div class="resultado-geral">
+
+
+        <div class="metric">
+
+          <b id="totalVotos">
+            0
+          </b>
+
+          <span>
+            VOTOS REGISTRADOS
+          </span>
+
+        </div>
+
+
+        <div class="metric">
+
+          <b id="votosValidos">
+            0
+          </b>
+
+          <span>
+            VOTOS VÁLIDOS
+          </span>
+
+        </div>
+
+
+        <div class="metric">
+
+          <b id="eleitores">
+            0
+          </b>
+
+          <span>
+            ELEITORES
+          </span>
+
+        </div>
+
+
+        <div class="metric">
+
+          <b id="votaram">
+            0
+          </b>
+
+          <span>
+            VOTARAM
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           CARGOS
+      ================================================== -->
+
+      <div
+        id="cargosTabs"
+        class="cargos-tabs"
+      ></div>
+
+
+      <div
+        id="cargosContainer"
+      ></div>
+
+
+      <!-- =================================================
+           VOLTAR
+      ================================================== -->
+
+      <div class="acoes">
+
+        <a
+          href="index.html"
+          class="botao-voltar"
+        >
+
+          VOLTAR AO INÍCIO
+
+        </a>
+
+      </div>
+
+
+    </section>
+
+
+  </main>
+
+
+  <!-- =====================================================
+       API
+  ====================================================== -->
+
+  <script src="js/config.js"></script>
+
+  <script src="js/api.js"></script>
+
+
+  <script>
+
+  (() => {
+
+
+    // ====================================================
+    // ELEMENTOS
+    // ====================================================
+
+    const $ =
+      id =>
+        document.getElementById(id);
+
+
+    let contagemIniciada =
+      false;
+
+
+    let resultadoExibido =
+      false;
+
+
+    let dadosResultado =
+      null;
+
+
+    let cargoAtual =
+      0;
+
+
+    const somContagem =
+      $("somContagem");
+
+
+    const somFogos =
+      $("somFogos");
+
+
+    // ====================================================
+    // MOSTRAR / ESCONDER
+    // ====================================================
+
+    function mostrar(id) {
+
+      const elemento =
+        $(id);
+
+
+      if (elemento) {
+
+        elemento.style.display =
+          "block";
+
+      }
+
+    }
+
+
+    function esconder(id) {
+
+      const elemento =
+        $(id);
+
+
+      if (elemento) {
+
+        elemento.style.display =
+          "none";
+
+      }
+
+    }
+
+
+    // ====================================================
+    // ERRO
+    // ====================================================
+
+    function mostrarErro(
+      mensagem
+    ) {
+
+      esconder(
+        "aguardando"
+      );
+
+      esconder(
+        "aberta"
+      );
+
+      esconder(
+        "iniciarArea"
+      );
+
+      esconder(
+        "countdown"
+      );
+
+
+      const box =
+        $("erro");
+
+
+      box.textContent =
+        mensagem ||
+        "Não foi possível carregar a apuração.";
+
+
+      box.style.display =
+        "block";
+
+    }
+
+
+    // ====================================================
+    // ESCAPAR HTML
+    // ====================================================
+
+    function escapeHtml(
+      valor
+    ) {
+
+      return String(
+        valor ?? ""
+      )
+        .replace(
+          /[&<>"']/g,
+          char => ({
+
+            "&":
+              "&amp;",
+
+            "<":
+              "&lt;",
+
+            ">":
+              "&gt;",
+
+            '"':
+              "&quot;",
+
+            "'":
+              "&#039;"
+
+          }[char])
+        );
+
+    }
+
+
+    // ====================================================
+    // ESCAPAR ATRIBUTO
+    // ====================================================
+
+    function escapeAttr(
+      valor
+    ) {
+
+      return escapeHtml(
+        valor
+      );
+
+    }
+
+
+    // ====================================================
+    // NORMALIZAR
+    // ====================================================
+
+    function normalize(
+      valor
+    ) {
+
+      return String(
+        valor ?? ""
+      )
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(
+          /[\u0300-\u036f]/g,
+          ""
+        );
+
+    }
+
+
+    // ====================================================
+    // TOQUE DA CONTAGEM
+    // ====================================================
+
+    function tocarToque() {
+
+      try {
+
+        somContagem.currentTime =
+          0;
+
+
+        const reproducao =
+          somContagem.play();
+
+
+        if (
+          reproducao
+        ) {
+
+          reproducao.catch(
+            () => {}
+          );
+
+        }
+
+      }
+
+      catch (
+        error
+      ) {
+
+        console.log(
+          "Erro no toque:",
+          error
+        );
+
+      }
+
+    }
+
+
+    // ====================================================
+    // FOGOS
+    // ====================================================
+
+    function tocarFogos() {
+
+      try {
+
+        somFogos.currentTime =
+          0;
+
+
+        const reproducao =
+          somFogos.play();
+
+
+        if (
+          reproducao
+        ) {
+
+          reproducao.catch(
+            () => {}
+          );
+
+        }
+
+      }
+
+      catch (
+        error
+      ) {
+
+        console.log(
+          "Erro nos fogos:",
+          error
+        );
+
+      }
+
+    }
+
+
+    // ====================================================
+    // STATUS
+    // ====================================================
+
+    async function verificarStatus() {
+
+      if (
+        resultadoExibido ||
+        contagemIniciada
+      ) {
+
+        return;
+
+      }
+
+
+      try {
+
+        const dados =
+          await GremioAPI.call({
+
+            action:
+              "statusPublic"
+
+          });
+
+
+        esconder(
+          "aguardando"
+        );
+
+
+        if (
+          dados.election &&
+          dados.election.aberta
+        ) {
+
+          esconder(
+            "iniciarArea"
+          );
+
+          esconder(
+            "countdown"
+          );
+
+          esconder(
+            "resultadoArea"
+          );
+
+
+          mostrar(
+            "aberta"
+          );
+
+
+          return;
+
+        }
+
+
+        esconder(
+          "aberta"
+        );
+
+
+        mostrar(
+          "iniciarArea"
+        );
+
+      }
+
+      catch (
+        error
+      ) {
+
+        mostrarErro(
+          error.message
+        );
+
+      }
+
+    }
+
+
+    // ====================================================
+    // INICIAR CONTAGEM
+    // ====================================================
+
+    function iniciarContagem() {
+
+      if (
+        contagemIniciada ||
+        resultadoExibido
+      ) {
+
+        return;
+
+      }
+
+
+      contagemIniciada =
+        true;
+
+
+      esconder(
+        "aguardando"
+      );
+
+
+      esconder(
+        "aberta"
+      );
+
+
+      esconder(
+        "iniciarArea"
+      );
+
+
+      mostrar(
+        "countdown"
+      );
+
+
+      let numero =
+        10;
+
+
+      $("countdownNumber")
+        .textContent =
+          numero;
+
+
+      tocarToque();
+
+
+      const intervalo =
+        setInterval(
+          async () => {
+
+            numero--;
+
+
+            $("countdownNumber")
+              .textContent =
+                numero;
+
+
+            tocarToque();
+
+
+            if (
+              numero <= 0
+            ) {
+
+              clearInterval(
+                intervalo
+              );
+
+
+              /*
+               * O resultado só aparece depois
+               * do fim da contagem.
+               */
+
+              setTimeout(
+                async () => {
+
+                  await carregarResultado();
+
+                },
+                500
+              );
+
+            }
+
+          },
+          1000
+        );
+
+    }
+
+
+    // ====================================================
+    // CARREGAR RESULTADO
+    // ====================================================
+
+    async function carregarResultado() {
+
+      try {
+
+        const dados =
+          await GremioAPI.call({
+
+            action:
+              "apuracaoPublica"
+
+          });
+
+
+        if (
+          !dados ||
+          dados.ok !== true
+        ) {
+
+          throw new Error(
+
+            dados &&
+            dados.message
+
+              ? dados.message
+
+              : "Não foi possível carregar a apuração."
+
+          );
+
+        }
+
+
+        dadosResultado =
+          dados;
+
+
+        /*
+         * Os fogos começam somente quando
+         * os dados foram recebidos.
+         */
+
+        tocarFogos();
+
+
+        preencherResultado(
+          dados
+        );
+
+      }
+
+      catch (
+        error
+      ) {
+
+        contagemIniciada =
+          false;
+
+
+        mostrarErro(
+          error.message
+        );
+
+      }
+
+    }
+
+
+    // ====================================================
+    // PREENCHER RESULTADO
+    // ====================================================
+
+    function preencherResultado(
+      dados
+    ) {
+
+      resultadoExibido =
+        true;
+
+
+      esconder(
+        "countdown"
+      );
+
+
+      esconder(
+        "iniciarArea"
+      );
+
+
+      esconder(
+        "aberta"
+      );
+
+
+      mostrar(
+        "resultadoArea"
+      );
+
+
+      const config =
+        dados.config ||
+        {};
+
+
+      const metrics =
+        dados.metrics ||
+        {};
+
+
+      const apuracao =
+        dados.apuracao ||
+        {};
+
+
+      if (
+        config.escola
+      ) {
+
+        $("escola")
+          .textContent =
+            config.escola;
+
+      }
+
+
+      $("totalVotos")
+        .textContent =
+          Number(
+            apuracao.total ||
+            0
+          ).toLocaleString(
+            "pt-BR"
+          );
+
+
+      $("votosValidos")
+        .textContent =
+          Number(
+            apuracao.validos ||
+            0
+          ).toLocaleString(
+            "pt-BR"
+          );
+
+
+      $("eleitores")
+        .textContent =
+          Number(
+            metrics.eleitores ||
+            0
+          ).toLocaleString(
+            "pt-BR"
+          );
+
+
+      $("votaram")
+        .textContent =
+          Number(
+            metrics.votaram ||
+            0
+          ).toLocaleString(
+            "pt-BR"
+          );
+
+
+      const cargos =
+        Array.isArray(
+          apuracao.cargos
+        )
+          ? apuracao.cargos
+          : [];
+
+
+      montarAbas(
+        cargos
+      );
+
+
+      montarCargos(
+        cargos
+      );
+
+
+      abrirCargo(
+        0
+      );
+
+    }
+
+
+    // ====================================================
+    // ABAS DOS CARGOS
+    // ====================================================
+
+    function montarAbas(
+      cargos
+    ) {
+
+      const tabs =
+        $("cargosTabs");
+
+
+      tabs.innerHTML =
+        "";
+
+
+      cargos.forEach(
+        (cargo, index) => {
+
+          const button =
+            document.createElement(
+              "button"
+            );
+
+
+          button.type =
+            "button";
+
+
+          button.className =
+            "cargo-tab";
+
+
+          button.dataset.index =
+            index;
+
+
+          button.textContent =
+            String(
+              cargo.cargo
+            ).toUpperCase();
+
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              abrirCargo(
+                index
+              );
+
+            }
+          );
+
+
+          tabs.appendChild(
+            button
+          );
+
+        }
+      );
+
+    }
+
+
+    // ====================================================
+    // MONTAR TODOS OS CARGOS
+    // ====================================================
+
+    function montarCargos(
+      cargos
+    ) {
+
+      const container =
+        $("cargosContainer");
+
+
+      container.innerHTML =
+        "";
+
+
+      cargos.forEach(
+        (cargo, index) => {
+
+          const painel =
+            document.createElement(
+              "section"
+            );
+
+
+          painel.className =
+            "cargo-painel";
+
+
+          painel.id =
+            "cargo-" +
+            index;
+
+
+          const total =
+            Number(
+              cargo.total ||
+              0
+            );
+
+
+          const validos =
+            Number(
+              cargo.validos ||
+              0
+            );
+
+
+          const brancos =
+            Number(
+              cargo.brancos ||
+              0
+            );
+
+
+          const nulos =
+            Number(
+              cargo.nulos ||
+              0
+            );
+
+
+          // ------------------------------------------------
+          // MAIS VOTADOS
+          // ------------------------------------------------
+
+          const vencedoras =
+            Array.isArray(
+              cargo.vencedoras
+            )
+              ? cargo.vencedoras
+              : [];
+
+
+          let destaqueHTML =
+            "";
+
+
+          if (
+            vencedoras.length ===
+            1
+          ) {
+
+            const vencedor =
+              vencedoras[0];
+
+
+            destaqueHTML = `
+
+              <div class="mais-votado">
+
+                <div class="label">
+                  MAIS VOTADO
+                </div>
+
+                <h4>
+                  ${escapeHtml(
+                    vencedor.nome
+                  )}
+                </h4>
+
+                <p>
+                  Número
+                  <strong>
+                    ${escapeHtml(
+                      vencedor.numero
+                    )}
+                  </strong>
+                  —
+                  ${Number(
+                    vencedor.votos ||
+                    0
+                  )} voto(s)
+                </p>
+
+              </div>
+
+            `;
+
+          }
+
+
+          else if (
+            vencedoras.length >
+            1
+          ) {
+
+            const lista =
+              vencedoras
+                .map(
+                  vencedor =>
+
+                    `
+                      <strong>
+                        ${escapeHtml(
+                          vencedor.nome
+                        )}
+                      </strong>
+                      —
+                      ${Number(
+                        vencedor.votos ||
+                        0
+                      )}
+                      voto(s)
+                    `
+                )
+                .join(
+                  "<br>"
+                );
+
+
+            destaqueHTML = `
+
+              <div
+                class="
+                  mais-votado
+                  empate
+                "
+              >
+
+                <div class="label">
+                  EMPATE
+                </div>
+
+                <h4>
+                  Mais de um candidato
+                </h4>
+
+                <p>
+                  ${lista}
+                </p>
+
+              </div>
+
+            `;
+
+          }
+
+
+          // ------------------------------------------------
+          // CANDIDATOS
+          // ------------------------------------------------
+
+          const resultados =
+            Array.isArray(
+              cargo.resultados
+            )
+              ? cargo.resultados
+                  .filter(
+                    item =>
+                      !item.especial
+                  )
+              : [];
+
+
+          let candidatosHTML =
+            "";
+
+
+          if (
+            resultados.length
+          ) {
+
+            candidatosHTML =
+              resultados
+                .map(
+                  candidato => {
+
+                    const votos =
+                      Number(
+                        candidato.votos ||
+                        0
+                      );
+
+
+                    const percentual =
+                      total > 0
+
+                        ? (
+                            votos /
+                            total
+                          ) * 100
+
+                        : 0;
+
+
+                    let fotoHTML;
+
+
+                    if (
+                      candidato.fotoUrl
+                    ) {
+
+                      fotoHTML = `
+
+                        <img
+                          src="${escapeAttr(
+                            candidato.fotoUrl
+                          )}"
+                          alt="Foto do candidato"
+                          onerror="
+                            this.style.display='none';
+                            this.parentElement.innerHTML='<div class=&quot;sem-foto&quot;>🗳️</div>';
+                          "
+                        >
+
+                      `;
+
+                    }
+
+                    else {
+
+                      fotoHTML = `
+
+                        <div class="sem-foto">
+                          🗳️
+                        </div>
+
+                      `;
+
+                    }
+
+
+                    return `
+
+                      <div
+                        class="
+                          candidato-card
+                          ${
+                            candidato.ativa === false
+                              ? "inativo"
+                              : ""
+                          }
+                        "
+                      >
+
+                        <div class="candidato-topo">
+
+                          <div class="candidato-foto">
+
+                            ${fotoHTML}
+
+                          </div>
+
+
+                          <div>
+
+                            <div class="candidato-numero">
+
+                              ${escapeHtml(
+                                candidato.numero
+                              )}
+
+                            </div>
+
+
+                            <div class="candidato-nome">
+
+                              ${escapeHtml(
+                                candidato.nome
+                              )}
+
+                            </div>
+
+                          </div>
+
+                        </div>
+
+
+                        <div class="candidato-slogan">
+
+                          ${
+                            candidato.slogan
+                              ? escapeHtml(
+                                  candidato.slogan
+                                )
+                              : "Sem slogan informado."
+                          }
+
+                        </div>
+
+
+                        <div class="candidato-votos">
+
+                          <span>
+                            VOTOS
+                          </span>
+
+                          <strong>
+                            ${votos.toLocaleString(
+                              "pt-BR"
+                            )}
+                          </strong>
+
+                        </div>
+
+
+                        <div class="candidato-percentual">
+
+                          <div class="barra">
+
+                            <i
+                              style="
+                                width:
+                                ${percentual.toFixed(
+                                  1
+                                )}%
+                              "
+                            ></i>
+
+                          </div>
+
+
+                          <div class="percentual">
+
+                            ${percentual.toFixed(
+                              1
+                            )}%
+
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    `;
+
+                  }
+                )
+                .join("");
+
+          }
+
+          else {
+
+            candidatosHTML = `
+
+              <div class="empty">
+
+                Nenhum candidato cadastrado
+                para este cargo.
+
+              </div>
+
+            `;
+
+          }
+
+
+          // ------------------------------------------------
+          // PAINEL
+          // ------------------------------------------------
+
+          painel.innerHTML = `
+
+            <div class="cargo-header">
+
+              <div class="eyebrow">
+                RESULTADO POR CARGO
+              </div>
+
+              <h3>
+                ${escapeHtml(
+                  String(
+                    cargo.cargo
+                  ).toUpperCase()
+                )}
+              </h3>
+
+              <p>
+
+                ${total.toLocaleString(
+                  "pt-BR"
+                )}
+                voto(s) registrado(s)
+
+                •
+                ${validos.toLocaleString(
+                  "pt-BR"
+                )}
+                válido(s)
+
+              </p>
+
+            </div>
+
+
+            ${destaqueHTML}
+
+
+            <div class="candidatos-grid">
+
+              ${candidatosHTML}
+
+            </div>
+
+
+            <div class="cargo-extras">
+
+              <div class="extra-card">
+
+                <strong>
+                  ${brancos.toLocaleString(
+                    "pt-BR"
+                  )}
+                </strong>
+
+                <span>
+                  VOTOS EM BRANCO
+                </span>
+
+              </div>
+
+
+              <div class="extra-card">
+
+                <strong>
+                  ${nulos.toLocaleString(
+                    "pt-BR"
+                  )}
+                </strong>
+
+                <span>
+                  VOTOS NULOS
+                </span>
+
+              </div>
+
+            </div>
+
+          `;
+
+
+          container.appendChild(
+            painel
+          );
+
+        }
+      );
+
+    }
+
+
+    // ====================================================
+    // ABRIR CARGO
+    // ====================================================
+
+    function abrirCargo(
+      index
+    ) {
+
+      cargoAtual =
+        index;
+
+
+      document
+        .querySelectorAll(
+          ".cargo-tab"
+        )
+        .forEach(
+          button => {
+
+            button.classList.toggle(
+              "active",
+              Number(
+                button.dataset.index
+              ) ===
+              index
+            );
+
+          }
+        );
+
+
+      document
+        .querySelectorAll(
+          ".cargo-painel"
+        )
+        .forEach(
+          painel => {
+
+            painel.classList.toggle(
+              "active",
+              painel.id ===
+                "cargo-" +
+                index
+            );
+
+          }
+        );
+
+    }
+
+
+    // ====================================================
+    // EVENTO
+    // ====================================================
+
+    $("iniciarApuracao")
+      .addEventListener(
+        "click",
+        iniciarContagem
+      );
+
+
+    // ====================================================
+    // INÍCIO
+    // ====================================================
+
+    verificarStatus();
+
+
+    // Mantém o status atualizado enquanto
+    // ainda não começou a apuração.
+
+    setInterval(
+      () => {
+
+        if (
+          !resultadoExibido &&
+          !contagemIniciada
+        ) {
+
+          verificarStatus();
+
+        }
+
+      },
+      5000
+    );
+
+
+  })();
+
+  </script>
+
 </body>
+
 </html>
