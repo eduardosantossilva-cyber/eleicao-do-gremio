@@ -1,172 +1,267 @@
+// ==========================================================
+// URNA ELETRÔNICA - GRÊMIO ESTUDANTIL
+// IDENTIFICAÇÃO AUTOMÁTICA DAS URNAS
+// ==========================================================
+
 (() => {
 
-  const $ = id => document.getElementById(id);
+  // ==========================================================
+  // UTILITÁRIO
+  // ==========================================================
 
-  const params = new URLSearchParams(window.location.search);
+  const $ = id =>
+    document.getElementById(id);
 
-  const urna = String(params.get("urna") || "01")
-    .replace(/\D/g, "")
-    .padStart(2, "0");
 
   // ==========================================================
-  // CARGOS DA ELEIÇÃO
+  // CARGOS
   // ==========================================================
 
   const CARGOS = [
+
     "Coordenador-Geral",
+
     "Coordenador Comunitário",
+
     "Coordenador de Convivência Escolar",
+
     "Vice-Coordenador-Geral",
+
     "Coordenador Artístico",
+
     "Coordenador Desportivo",
+
     "Coordenador de Saúde e Sustentabilidade",
+
     "Coordenador de Comunicação"
+
   ];
 
 
+  // ==========================================================
+  // IDENTIFICAÇÃO DO COMPUTADOR
+  // ==========================================================
+
+  const CHAVE_DISPOSITIVO =
+    "gremio_dispositivo_id";
+
+
+  function criarIdDispositivo() {
+
+    if (
+      window.crypto &&
+      typeof window.crypto.randomUUID ===
+      "function"
+    ) {
+
+      return window.crypto.randomUUID();
+
+    }
+
+    return (
+
+      "disp-" +
+
+      Date.now() +
+
+      "-" +
+
+      Math.random()
+        .toString(36)
+        .substring(
+          2,
+          10
+        )
+
+    );
+
+  }
+
+
+  function obterDispositivoId() {
+
+    let id =
+      localStorage.getItem(
+        CHAVE_DISPOSITIVO
+      );
+
+    if (!id) {
+
+      id =
+        criarIdDispositivo();
+
+      localStorage.setItem(
+        CHAVE_DISPOSITIVO,
+        id
+      );
+
+    }
+
+    return id;
+
+  }
+
+
+  const dispositivoId =
+    obterDispositivoId();
+
+
+  // ==========================================================
+  // URNA
+  // ==========================================================
+
+  let urna =
+    "";
+
+
+  let heartbeatEmAndamento =
+    false;
+
+
+  // ==========================================================
+  // ESTADO
+  // ==========================================================
+
   const state = {
-    step: "stepRA",
-    ra: "",
-    aluno: null,
-    cargoIndex: 0,
-    numero: "",
-    candidato: null,
-    votos: [],
-    busy: false
+
+    step:
+      "stepRA",
+
+    ra:
+      "",
+
+    aluno:
+      null,
+
+    cargoIndex:
+      0,
+
+    numero:
+      "",
+
+    candidato:
+      null,
+
+    votos:
+      [],
+
+    busy:
+      false
+
   };
 
 
-  $("urnLabel").textContent = "URNA " + urna;
-  $("urnFooter").textContent = urna;
-
-
   // ==========================================================
-  // STATUS VISUAL
+  // STATUS
   // ==========================================================
 
   function setStatus(text) {
-    $("status").textContent = text;
-  }
 
+    if ($("status")) {
 
-  // ==========================================================
-  // ÁUDIO DE FINALIZAÇÃO
-  // ==========================================================
+      $("status").textContent =
+        text;
 
-  const somFim = new Audio("audio/som-urna-fim.mp3");
-  somFim.preload = "auto";
-
-
-  function prepararAudio() {
-    try {
-      somFim.load();
-    } catch (error) {
-      console.log("Não foi possível carregar o áudio:", error);
     }
-  }
 
-
-  function somFimUrna() {
-    try {
-      somFim.currentTime = 0;
-
-      const reproducao = somFim.play();
-
-      if (reproducao) {
-        reproducao.catch(function(error) {
-          console.log("Não foi possível reproduzir o som:", error);
-        });
-      }
-
-    } catch (error) {
-      console.log("Erro ao reproduzir o som:", error);
-    }
   }
 
 
   // ==========================================================
-  // TROCAR TELA
+  // MOSTRAR TELA
   // ==========================================================
 
   function showStep(id) {
 
-    document.querySelectorAll(".step").forEach(element => {
-      element.classList.remove("active");
-    });
+    document
+      .querySelectorAll(
+        ".step"
+      )
+      .forEach(
+        element => {
 
-    const tela = $(id);
+          element.classList.remove(
+            "active"
+          );
+
+        }
+      );
+
+
+    const tela =
+      $(id);
 
     if (!tela) {
+
       return;
+
     }
 
-    tela.classList.add("active");
-    state.step = id;
+    tela.classList.add(
+      "active"
+    );
+
+    state.step =
+      id;
+
   }
 
 
   // ==========================================================
-  // BLOQUEAR TECLADO
+  // BLOQUEAR / LIBERAR TECLADO
   // ==========================================================
 
   function disableKeys(value) {
 
-    document.querySelectorAll(".key").forEach(button => {
-      button.disabled = value;
-    });
+    document
+      .querySelectorAll(
+        ".key"
+      )
+      .forEach(
+        button => {
+
+          button.disabled =
+            value;
+
+        }
+      );
 
   }
 
 
   // ==========================================================
-  // LIMPAR TELA DO CARGO
+  // ATUALIZA NÚMERO DA URNA NA TELA
   // ==========================================================
 
-  function limparCargo() {
+  function atualizarUrnaNaTela() {
 
-    state.numero = "";
-    state.candidato = null;
+    if (
+      !urna
+    ) {
 
-    $("candidatoNumero").textContent = "—";
+      return;
 
-    $("candidatoCard").classList.remove("visible");
-
-    $("candidatoPhotoBox").classList.remove("has-image");
-
-    $("candidatoFoto").removeAttribute("src");
-
-    $("candidatoNome").textContent = "—";
-
-    $("candidatoSlogan").textContent = "";
-
-    $("cargoMsg").textContent =
-      "Digite o número do candidato.";
-
-    setStatus("DIGITE O CANDIDATO");
-
-  }
+    }
 
 
-  // ==========================================================
-  // MOSTRAR CARGO ATUAL
-  // ==========================================================
+    if (
+      $("urnLabel")
+    ) {
 
-  function mostrarCargoAtual() {
+      $("urnLabel").textContent =
+        "URNA " + urna;
 
-    const cargo = CARGOS[state.cargoIndex];
+    }
 
-    $("cargoProgress").textContent =
-      "CARGO " +
-      (state.cargoIndex + 1) +
-      " DE " +
-      CARGOS.length;
 
-    $("cargoNome").textContent =
-      cargo.toUpperCase();
+    if (
+      $("urnFooter")
+    ) {
 
-    limparCargo();
+      $("urnFooter").textContent =
+        urna;
 
-    showStep("stepCargo");
+    }
 
   }
 
@@ -177,62 +272,341 @@
 
   function reset() {
 
-    state.step = "stepRA";
+    state.step =
+      "stepRA";
 
-    state.ra = "";
+    state.ra =
+      "";
 
-    state.aluno = null;
+    state.aluno =
+      null;
 
-    state.cargoIndex = 0;
+    state.cargoIndex =
+      0;
 
-    state.numero = "";
+    state.numero =
+      "";
 
-    state.candidato = null;
+    state.candidato =
+      null;
 
-    state.votos = [];
+    state.votos =
+      [];
 
-    state.busy = false;
-
-
-    $("raView").textContent = "—";
-
-    $("raMsg").textContent =
-      "Pressione CONFIRMA depois de digitar.";
-
-
-    $("nomeAluno").textContent = "—";
-
-    $("dataAluno").textContent = "—";
+    state.busy =
+      false;
 
 
-    $("cargoProgress").textContent =
-      "CARGO 1 DE " + CARGOS.length;
+    if (
+      $("raView")
+    ) {
 
-    $("cargoNome").textContent =
-      CARGOS[0].toUpperCase();
+      $("raView").textContent =
+        "—";
 
-
-    $("candidatoNumero").textContent = "—";
-
-    $("candidatoCard").classList.remove("visible");
-
-    $("candidatoPhotoBox").classList.remove("has-image");
-
-    $("candidatoFoto").removeAttribute("src");
-
-    $("candidatoNome").textContent = "—";
-
-    $("candidatoSlogan").textContent = "";
-
-    $("cargoMsg").textContent =
-      "Digite o número do candidato.";
+    }
 
 
-    showStep("stepRA");
+    if (
+      $("raMsg")
+    ) {
 
-    setStatus("AGUARDANDO");
+      $("raMsg").textContent =
+        "Pressione CONFIRMA depois de digitar.";
 
-    disableKeys(false);
+    }
+
+
+    if (
+      $("nomeAluno")
+    ) {
+
+      $("nomeAluno").textContent =
+        "—";
+
+    }
+
+
+    if (
+      $("dataAluno")
+    ) {
+
+      $("dataAluno").textContent =
+        "—";
+
+    }
+
+
+    if (
+      $("cargoProgress")
+    ) {
+
+      $("cargoProgress").textContent =
+        "1 de " +
+        CARGOS.length;
+
+    }
+
+
+    if (
+      $("cargoNome")
+    ) {
+
+      $("cargoNome").textContent =
+        CARGOS[0];
+
+    }
+
+
+    if (
+      $("candidatoNumero")
+    ) {
+
+      $("candidatoNumero").textContent =
+        "—";
+
+    }
+
+
+    if (
+      $("candidatoCard")
+    ) {
+
+      $("candidatoCard")
+        .classList.remove(
+          "visible"
+        );
+
+    }
+
+
+    if (
+      $("candidatoPhotoBox")
+    ) {
+
+      $("candidatoPhotoBox")
+        .classList.remove(
+          "has-image"
+        );
+
+    }
+
+
+    if (
+      $("candidatoFoto")
+    ) {
+
+      $("candidatoFoto")
+        .removeAttribute(
+          "src"
+        );
+
+    }
+
+
+    if (
+      $("candidatoNome")
+    ) {
+
+      $("candidatoNome").textContent =
+        "—";
+
+    }
+
+
+    if (
+      $("candidatoSlogan")
+    ) {
+
+      $("candidatoSlogan").textContent =
+        "";
+
+    }
+
+
+    if (
+      $("cargoMsg")
+    ) {
+
+      $("cargoMsg").textContent =
+        "Digite o número do candidato.";
+
+    }
+
+
+    if (
+      $("sync")
+    ) {
+
+      if (
+        urna
+      ) {
+
+        $("sync").textContent =
+          "Urna " +
+          urna +
+          ": aguardando";
+
+      }
+
+      else {
+
+        $("sync").textContent =
+          "Identificando urna...";
+
+      }
+
+    }
+
+
+    showStep(
+      "stepRA"
+    );
+
+
+    setStatus(
+      urna
+        ? "AGUARDANDO"
+        : "IDENTIFICANDO URNA..."
+    );
+
+
+    if (
+      urna
+    ) {
+
+      disableKeys(
+        false
+      );
+
+    }
+
+    else {
+
+      disableKeys(
+        true
+      );
+
+    }
+
+  }
+
+
+  // ==========================================================
+  // HEARTBEAT / IDENTIFICAÇÃO DA URNA
+  // ==========================================================
+
+  async function heartbeat() {
+
+    if (
+      heartbeatEmAndamento
+    ) {
+
+      return;
+
+    }
+
+    heartbeatEmAndamento =
+      true;
+
+    try {
+
+      const resposta =
+        await GremioAPI.call({
+
+          action:
+            "heartbeat",
+
+          dispositivoId:
+            dispositivoId
+
+        });
+
+
+      if (
+        !resposta ||
+        resposta.ok !== true
+      ) {
+
+        throw new Error(
+          "Não foi possível identificar a urna."
+        );
+
+      }
+
+
+      urna =
+        String(
+          resposta.urna
+        )
+          .replace(
+            /\D/g,
+            ""
+          )
+          .padStart(
+            2,
+            "0"
+          );
+
+
+      atualizarUrnaNaTela();
+
+
+      if (
+        state.step !==
+        "stepClosed"
+      ) {
+
+        if (
+          $("sync")
+        ) {
+
+          $("sync").textContent =
+            "Urna " +
+            urna +
+            ": ONLINE • " +
+            new Date()
+              .toLocaleTimeString(
+                "pt-BR"
+              );
+
+          }
+
+
+        if (
+          state.step ===
+          "stepRA"
+        ) {
+
+          disableKeys(
+            false
+          );
+
+        }
+
+      }
+
+    }
+
+    catch (error) {
+
+      if (
+        $("sync")
+      ) {
+
+        $("sync").textContent =
+          "Urna: sem comunicação";
+
+      }
+
+    }
+
+    finally {
+
+      heartbeatEmAndamento =
+        false;
+
+    }
 
   }
 
@@ -243,58 +617,90 @@
 
   async function checkElection() {
 
-    // Não interrompe um voto em andamento.
-
-    if (
-      state.busy ||
-      state.step === "stepAluno" ||
-      state.step === "stepCargo" ||
-      state.step === "stepFim"
-    ) {
-      return;
-    }
-
-
     try {
 
-      const data = await GremioAPI.call({
-        action: "statusPublic"
-      });
+      const data =
+        await GremioAPI.call({
+
+          action:
+            "statusPublic"
+
+        });
 
 
       if (
+        data &&
         data.election &&
         data.election.aberta
       ) {
 
-        if (state.step === "stepClosed") {
+        if (
+          state.step ===
+          "stepClosed"
+        ) {
+
           reset();
+
         }
 
-        setStatus("AGUARDANDO");
+        setStatus(
+          "AGUARDANDO"
+        );
 
-      } else {
+      }
 
-        showStep("stepClosed");
+      else {
 
-        setStatus("ENCERRADA");
+        showStep(
+          "stepClosed"
+        );
+
+        setStatus(
+          "ENCERRADA"
+        );
+
+        disableKeys(
+          true
+        );
 
       }
 
 
-      $("sync").textContent =
-        "Conexão: " +
-        new Date().toLocaleTimeString("pt-BR");
+      if (
+        $("sync")
+      ) {
 
+        $("sync").textContent =
+          urna
+            ? "Urna " +
+              urna +
+              ": conexão " +
+              new Date()
+                .toLocaleTimeString(
+                  "pt-BR"
+                )
 
-    } catch (error) {
+            : "Identificando urna...";
 
-      if (!state.busy) {
-        setStatus("SEM CONEXÃO");
       }
 
-      $("sync").textContent =
-        "Conexão: falhou";
+    }
+
+    catch (error) {
+
+      if (
+        $("sync")
+      ) {
+
+        $("sync").textContent =
+          urna
+            ? "Urna " +
+              urna +
+              ": sem comunicação"
+
+            : "Sem comunicação com a API";
+
+      }
 
     }
 
@@ -302,46 +708,17 @@
 
 
   // ==========================================================
-  // HEARTBEAT
-  // ==========================================================
-
-  async function heartbeat() {
-
-    try {
-
-      await GremioAPI.call({
-        action: "heartbeat",
-        urna: urna
-      });
-
-
-      $("sync").textContent =
-        "Urna " +
-        urna +
-        ": ONLINE • " +
-        new Date().toLocaleTimeString("pt-BR");
-
-
-    } catch (error) {
-
-      $("sync").textContent =
-        "Urna " +
-        urna +
-        ": sem comunicação";
-
-    }
-
-  }
-
-
-  // ==========================================================
-  // DIGITAR NÚMERO
+  // DIGITAR
   // ==========================================================
 
   function digit(number) {
 
-    if (state.busy) {
+    if (
+      state.busy
+    ) {
+
       return;
+
     }
 
 
@@ -349,17 +726,31 @@
     // RA
     // --------------------------------------------------------
 
-    if (state.step === "stepRA") {
+    if (
+      state.step ===
+      "stepRA"
+    ) {
 
-      if (state.ra.length >= 9) {
+      if (
+        state.ra.length >=
+        12
+      ) {
+
         return;
+
       }
 
+      state.ra +=
+        number;
 
-      state.ra += number;
+      if (
+        $("raView")
+      ) {
 
-      $("raView").textContent =
-        state.ra;
+        $("raView").textContent =
+          state.ra;
+
+      }
 
       return;
 
@@ -367,29 +758,178 @@
 
 
     // --------------------------------------------------------
-    // CANDIDATO DO CARGO
+    // CANDIDATO
     // --------------------------------------------------------
 
-    if (state.step === "stepCargo") {
+    if (
+      state.step ===
+      "stepCargo"
+    ) {
 
-      if (state.numero.length >= 3) {
+      if (
+        state.numero.length >=
+        3
+      ) {
+
         return;
+
+      }
+
+      state.numero +=
+        number;
+
+      if (
+        $("candidatoNumero")
+      ) {
+
+        $("candidatoNumero").textContent =
+          state.numero;
+
       }
 
 
-      state.numero += number;
+      if (
+        state.numero.length >=
+        2
+      ) {
 
-      $("candidatoNumero").textContent =
-        state.numero;
-
-
-      // Consulta com 2 ou 3 dígitos.
-
-      if (state.numero.length >= 2) {
         buscarCandidato();
+
       }
 
     }
+
+  }
+
+
+  // ==========================================================
+  // LIMPAR CANDIDATO NA TELA
+  // ==========================================================
+
+  function limparCandidato() {
+
+    state.candidato =
+      null;
+
+
+    if (
+      $("candidatoCard")
+    ) {
+
+      $("candidatoCard")
+        .classList.remove(
+          "visible"
+        );
+
+    }
+
+
+    if (
+      $("candidatoPhotoBox")
+    ) {
+
+      $("candidatoPhotoBox")
+        .classList.remove(
+          "has-image"
+        );
+
+    }
+
+
+    if (
+      $("candidatoFoto")
+    ) {
+
+      $("candidatoFoto")
+        .removeAttribute(
+          "src"
+        );
+
+    }
+
+
+    if (
+      $("candidatoNome")
+    ) {
+
+      $("candidatoNome").textContent =
+        "—";
+
+    }
+
+
+    if (
+      $("candidatoSlogan")
+    ) {
+
+      $("candidatoSlogan").textContent =
+        "";
+
+    }
+
+  }
+
+
+  // ==========================================================
+  // ATUALIZAR TELA DO CARGO
+  // ==========================================================
+
+  function prepararCargo() {
+
+    state.numero =
+      "";
+
+    state.candidato =
+      null;
+
+
+    if (
+      $("cargoProgress")
+    ) {
+
+      $("cargoProgress").textContent =
+        (
+          state.cargoIndex + 1
+        ) +
+        " de " +
+        CARGOS.length;
+
+    }
+
+
+    if (
+      $("cargoNome")
+    ) {
+
+      $("cargoNome").textContent =
+        CARGOS[
+          state.cargoIndex
+        ];
+
+    }
+
+
+    if (
+      $("candidatoNumero")
+    ) {
+
+      $("candidatoNumero").textContent =
+        "—";
+
+    }
+
+
+    if (
+      $("cargoMsg")
+    ) {
+
+      $("cargoMsg").textContent =
+        "Digite o número do candidato.";
+
+    }
+
+
+    limparCandidato();
 
   }
 
@@ -400,18 +940,33 @@
 
   async function buscarCandidato() {
 
-    if (state.busy) {
+    if (
+      state.busy ||
+      state.step !==
+      "stepCargo"
+    ) {
+
       return;
+
     }
 
 
-    state.busy = true;
+    if (
+      state.numero.length <
+      2
+    ) {
 
-    disableKeys(true);
+      return;
+
+    }
 
 
-    const cargo =
-      CARGOS[state.cargoIndex];
+    state.busy =
+      true;
+
+    disableKeys(
+      true
+    );
 
 
     try {
@@ -419,11 +974,16 @@
       const data =
         await GremioAPI.call({
 
-          action: "buscarCandidato",
+          action:
+            "buscarCandidato",
 
-          cargo: cargo,
+          cargo:
+            CARGOS[
+              state.cargoIndex
+            ],
 
-          numero: state.numero
+          numero:
+            state.numero
 
         });
 
@@ -432,70 +992,147 @@
         data.candidato;
 
 
-      $("candidatoNome").textContent =
-        state.candidato.nome || "";
+      if (
+        $("candidatoNome")
+      ) {
 
-
-      $("candidatoSlogan").textContent =
-        state.candidato.slogan || "";
-
-
-      if (state.candidato.fotoUrl) {
-
-        $("candidatoFoto").src =
-          state.candidato.fotoUrl;
-
-        $("candidatoPhotoBox")
-          .classList
-          .add("has-image");
-
-      } else {
-
-        $("candidatoFoto")
-          .removeAttribute("src");
-
-        $("candidatoPhotoBox")
-          .classList
-          .remove("has-image");
+        $("candidatoNome").textContent =
+          state.candidato.nome ||
+          "";
 
       }
 
 
-      $("candidatoCard")
-        .classList
-        .add("visible");
+      if (
+        $("candidatoSlogan")
+      ) {
+
+        $("candidatoSlogan").textContent =
+          state.candidato.slogan ||
+          "";
+
+      }
 
 
-      $("cargoMsg").textContent =
-        "Confira o candidato e pressione CONFIRMA.";
+      if (
+        $("candidatoNumero")
+      ) {
+
+        $("candidatoNumero").textContent =
+          state.candidato.numero ||
+          state.numero;
+
+      }
 
 
-      setStatus("CONFIRA O VOTO");
+      if (
+        state.candidato.fotoUrl
+      ) {
+
+        if (
+          $("candidatoFoto")
+        ) {
+
+          $("candidatoFoto").src =
+            state.candidato.fotoUrl;
+
+        }
+
+        if (
+          $("candidatoPhotoBox")
+        ) {
+
+          $("candidatoPhotoBox")
+            .classList.add(
+              "has-image"
+            );
+
+        }
+
+      }
+
+      else {
+
+        if (
+          $("candidatoFoto")
+        ) {
+
+          $("candidatoFoto")
+            .removeAttribute(
+              "src"
+            );
+
+        }
+
+        if (
+          $("candidatoPhotoBox")
+        ) {
+
+          $("candidatoPhotoBox")
+            .classList.remove(
+              "has-image"
+            );
+
+        }
+
+      }
 
 
-    } catch (error) {
+      if (
+        $("candidatoCard")
+      ) {
 
-      state.candidato = null;
+        $("candidatoCard")
+          .classList.add(
+            "visible"
+          );
 
-
-      $("candidatoCard")
-        .classList
-        .remove("visible");
-
-
-      $("cargoMsg").textContent =
-        error.message ||
-        "Candidato não encontrado.";
+      }
 
 
-      setStatus("NÚMERO INVÁLIDO");
+      if (
+        $("cargoMsg")
+      ) {
+
+        $("cargoMsg").textContent =
+          "Confira o candidato e pressione CONFIRMA.";
+
+      }
 
 
-    } finally {
+      setStatus(
+        "CONFIRA O CANDIDATO"
+      );
 
-      state.busy = false;
+    }
 
-      disableKeys(false);
+    catch (error) {
+
+      limparCandidato();
+
+      if (
+        $("cargoMsg")
+      ) {
+
+        $("cargoMsg").textContent =
+          error.message;
+
+      }
+
+      setStatus(
+        "NÚMERO INVÁLIDO"
+      );
+
+    }
+
+    finally {
+
+      state.busy =
+        false;
+
+      disableKeys(
+        false
+      );
 
     }
 
@@ -503,21 +1140,157 @@
 
 
   // ==========================================================
-  // GUARDAR VOTO DO CARGO
+  // CONFIRMAR ALUNO
   // ==========================================================
 
-  function guardarVotoCargo(numero) {
+  async function confirmarAluno() {
 
-    const cargo =
-      CARGOS[state.cargoIndex];
+    if (
+      !state.ra
+    ) {
 
+      if (
+        $("raMsg")
+      ) {
+
+        $("raMsg").textContent =
+          "Digite o RA.";
+
+      }
+
+      return;
+
+    }
+
+
+    state.busy =
+      true;
+
+    disableKeys(
+      true
+    );
+
+    setStatus(
+      "CONSULTANDO..."
+    );
+
+
+    try {
+
+      const data =
+        await GremioAPI.call({
+
+          action:
+            "buscarAluno",
+
+          ra:
+            state.ra
+
+        });
+
+
+      if (
+        data.aluno.jaVotou
+      ) {
+
+        throw new Error(
+          "Este RA já possui um voto registrado."
+        );
+
+      }
+
+
+      state.aluno =
+        data.aluno;
+
+
+      if (
+        $("nomeAluno")
+      ) {
+
+        $("nomeAluno").textContent =
+          data.aluno.nome;
+
+      }
+
+
+      if (
+        $("dataAluno")
+      ) {
+
+        $("dataAluno").textContent =
+          data.aluno.dataNascimento;
+
+      }
+
+
+      state.cargoIndex =
+        0;
+
+      prepararCargo();
+
+      showStep(
+        "stepCargo"
+      );
+
+      setStatus(
+        "DIGITE O CANDIDATO"
+      );
+
+    }
+
+    catch (error) {
+
+      if (
+        $("raMsg")
+      ) {
+
+        $("raMsg").textContent =
+          error.message;
+
+      }
+
+      setStatus(
+        "RA NÃO LOCALIZADO"
+      );
+
+    }
+
+    finally {
+
+      state.busy =
+        false;
+
+      if (
+        urna
+      ) {
+
+        disableKeys(
+          false
+        );
+
+      }
+
+    }
+
+  }
+
+
+  // ==========================================================
+  // SALVAR ESCOLHA DO CARGO
+  // ==========================================================
+
+  function salvarEscolhaCargo(numero) {
 
     state.votos.push({
 
-      cargo: cargo,
+      cargo:
+        CARGOS[
+          state.cargoIndex
+        ],
 
       numero:
-        String(numero).toUpperCase()
+        numero
 
     });
 
@@ -525,181 +1298,34 @@
 
 
   // ==========================================================
-  // AVANÇAR PARA O PRÓXIMO CARGO
+  // PRÓXIMO CARGO
   // ==========================================================
 
-  async function confirmarCargo(numero) {
+  function proximoCargo() {
 
-    guardarVotoCargo(numero);
+    if (
+      state.cargoIndex >=
+      CARGOS.length - 1
+    ) {
+
+      registrarVotos();
+
+      return;
+
+    }
 
 
     state.cargoIndex++;
 
-
-    if (
-      state.cargoIndex >=
-      CARGOS.length
-    ) {
-
-      await registrarTodosVotos();
-
-      return;
-
-    }
-
-
-    mostrarCargoAtual();
-
-  }
-
-
-  // ==========================================================
-  // CONFIRMAR
-  // ==========================================================
-
-  async function confirm() {
-
-    prepararAudio();
-
-
-    if (state.busy) {
-      return;
-    }
-
-
-    // --------------------------------------------------------
-    // RA
-    // --------------------------------------------------------
-
-    if (state.step === "stepRA") {
-
-      if (state.ra.length !== 9) {
-
-        $("raMsg").textContent =
-          "Digite o RA completo com 9 números.";
-
-        return;
-
-      }
-
-
-      state.busy = true;
-
-      disableKeys(true);
-
-      setStatus("CONSULTANDO...");
-
-
-      try {
-
-        const data =
-          await GremioAPI.call({
-
-            action: "buscarAluno",
-
-            ra: state.ra
-
-          });
-
-
-        if (data.aluno.jaVotou) {
-
-          throw new Error(
-            "Este RA já possui um voto registrado."
-          );
-
-        }
-
-
-        state.aluno =
-          data.aluno;
-
-
-        $("nomeAluno").textContent =
-          data.aluno.nome;
-
-
-        $("dataAluno").textContent =
-          data.aluno.dataNascimento;
-
-
-        showStep("stepAluno");
-
-
-        setStatus("CONFIRA SEUS DADOS");
-
-
-      } catch (error) {
-
-        $("raMsg").textContent =
-          error.message;
-
-
-        setStatus("RA NÃO LOCALIZADO");
-
-
-      } finally {
-
-        state.busy = false;
-
-        disableKeys(false);
-
-      }
-
-
-      return;
-
-    }
-
-
-    // --------------------------------------------------------
-    // CONFIRMAR ALUNO
-    // --------------------------------------------------------
-
-    if (state.step === "stepAluno") {
-
-      state.cargoIndex = 0;
-
-      state.votos = [];
-
-      mostrarCargoAtual();
-
-      return;
-
-    }
-
-
-    // --------------------------------------------------------
-    // CONFIRMAR CANDIDATO
-    // --------------------------------------------------------
-
-    if (state.step === "stepCargo") {
-
-      if (!state.numero) {
-
-        $("cargoMsg").textContent =
-          "Digite o número do candidato.";
-
-        return;
-
-      }
-
-
-      if (!state.candidato) {
-
-        $("cargoMsg").textContent =
-          "Digite um candidato válido ou pressione BRANCO.";
-
-        return;
-
-      }
-
-
-      await confirmarCargo(
-        state.numero
-      );
-
-    }
+    prepararCargo();
+
+    showStep(
+      "stepCargo"
+    );
+
+    setStatus(
+      "DIGITE O CANDIDATO"
+    );
 
   }
 
@@ -708,66 +1334,125 @@
   // REGISTRAR TODOS OS VOTOS
   // ==========================================================
 
-  async function registrarTodosVotos() {
+  async function registrarVotos() {
 
-    state.busy = true;
+    if (
+      state.busy
+    ) {
 
-    disableKeys(true);
+      return;
 
-    setStatus("REGISTRANDO VOTOS...");
+    }
+
+
+    state.busy =
+      true;
+
+    disableKeys(
+      true
+    );
+
+    setStatus(
+      "REGISTRANDO VOTO..."
+    );
+
+
+    let registroConfirmado =
+      false;
 
 
     try {
 
-      let registroConfirmado = false;
-
+      // ------------------------------------------------------
+      // ENVIA O VOTO
+      // ------------------------------------------------------
 
       try {
 
         const resposta =
           await GremioAPI.call({
 
-            action: "registrarVotos",
+            action:
+              "registrarVotos",
 
-            ra: state.ra,
+            ra:
+              state.ra,
 
             dataNascimento:
               state.aluno.dataNascimento,
 
-            urna: urna,
-
             votos:
-              JSON.stringify(state.votos)
+              JSON.stringify(
+                state.votos
+              ),
+
+            dispositivoId:
+              dispositivoId
 
           });
 
 
-        registroConfirmado =
+        if (
           resposta &&
-          resposta.ok === true;
+          resposta.ok === true
+        ) {
+
+          registroConfirmado =
+            true;
 
 
-      } catch (erroApi) {
+          if (
+            resposta.urna
+          ) {
 
-        registroConfirmado = false;
+            urna =
+              String(
+                resposta.urna
+              )
+                .replace(
+                  /\D/g,
+                  ""
+                )
+                .padStart(
+                  2,
+                  "0"
+                );
+
+            atualizarUrnaNaTela();
+
+          }
+
+        }
+
+      }
+
+      catch (erroApi) {
+
+        registroConfirmado =
+          false;
 
       }
 
 
       // ------------------------------------------------------
-      // Se a resposta se perdeu, verifica se o voto foi salvo.
+      // SE A RESPOSTA FALHAR,
+      // VERIFICA SE O RA JÁ FOI MARCADO COMO VOTANTE
       // ------------------------------------------------------
 
-      if (!registroConfirmado) {
+      if (
+        !registroConfirmado
+      ) {
 
         try {
 
           const verificacao =
             await GremioAPI.call({
 
-              action: "buscarAluno",
+              action:
+                "buscarAluno",
 
-              ra: state.ra
+              ra:
+                state.ra
 
             });
 
@@ -775,57 +1460,69 @@
           if (
             verificacao &&
             verificacao.aluno &&
-            verificacao.aluno.jaVotou === true
+            verificacao.aluno.jaVotou ===
+            true
           ) {
 
-            registroConfirmado = true;
+            registroConfirmado =
+              true;
 
           }
 
+        }
 
-        } catch (erroVerificacao) {
+        catch (erroVerificacao) {
 
-          registroConfirmado = false;
+          registroConfirmado =
+            false;
 
         }
 
       }
 
 
-      if (!registroConfirmado) {
+      // ------------------------------------------------------
+      // MOSTRA FIM
+      // ------------------------------------------------------
 
-        throw new Error(
-          "Não foi possível confirmar o registro dos votos."
-        );
+      if (
+        registroConfirmado
+      ) {
+
+        mostrarFim();
+
+        return;
 
       }
 
 
-      mostrarTelaFim();
+      throw new Error(
+        "Não foi possível confirmar o registro do voto."
+      );
 
+    }
 
-    } catch (error) {
+    catch (error) {
 
-      state.cargoIndex =
-        CARGOS.length - 1;
+      if (
+        $("cargoMsg")
+      ) {
 
+        $("cargoMsg").textContent =
+          error.message;
 
-      $("cargoMsg").textContent =
-        error.message;
+      }
 
+      setStatus(
+        "NÃO REGISTRADO"
+      );
 
-      showStep("stepCargo");
+      state.busy =
+        false;
 
-
-      setStatus("NÃO REGISTRADO");
-
-
-      disableKeys(false);
-
-
-    } finally {
-
-      state.busy = false;
+      disableKeys(
+        false
+      );
 
     }
 
@@ -833,59 +1530,111 @@
 
 
   // ==========================================================
-  // TELA FINAL
+  // MOSTRAR FIM
   // ==========================================================
 
-  function mostrarTelaFim() {
+  function mostrarFim() {
 
-    const fim = $("stepFim");
+    const telaFim =
+      $("stepFim");
 
 
-    if (!fim) {
+    if (
+      !telaFim
+    ) {
 
-      throw new Error(
-        "A tela final não foi encontrada."
-      );
+      return;
 
     }
 
 
-    document.querySelectorAll(".step")
-      .forEach(element => {
+    document
+      .querySelectorAll(
+        ".step"
+      )
+      .forEach(
+        element => {
 
-        element.classList.remove("active");
+          element.classList.remove(
+            "active"
+          );
 
-      });
-
-
-    fim.classList.add("active");
-
-
-    state.step = "stepFim";
-
-
-    setStatus("VOTO REGISTRADO");
+        }
+      );
 
 
-    $("sync").textContent =
-      "Votos registrados • Urna " +
-      urna;
+    telaFim.classList.add(
+      "active"
+    );
 
 
-    somFimUrna();
+    state.step =
+      "stepFim";
 
-    disableKeys(true);
+
+    setStatus(
+      "VOTO REGISTRADO"
+    );
 
 
-    setTimeout(() => {
+    if (
+      $("sync")
+    ) {
 
-      reset();
+      $("sync").textContent =
+        urna
+          ? "Urna " +
+            urna +
+            ": voto registrado"
 
-      checkElection();
+          : "Voto registrado";
 
-      heartbeat();
+    }
 
-    }, 5000);
+
+    disableKeys(
+      true
+    );
+
+
+    // Som final da urna
+
+    try {
+
+      const audio =
+        new Audio(
+          "audio/som-urna-fim.mp3"
+        );
+
+      audio.volume =
+        1;
+
+      audio.play()
+        .catch(
+          () => {}
+        );
+
+    }
+
+    catch (error) {}
+
+
+    // --------------------------------------------------------
+    // DEPOIS DE 5 SEGUNDOS
+    // --------------------------------------------------------
+
+    setTimeout(
+      function() {
+
+        reset();
+
+        checkElection();
+
+        heartbeat();
+
+      },
+      5000
+    );
 
   }
 
@@ -896,24 +1645,9 @@
 
   function correct() {
 
-    if (state.busy) {
-      return;
-    }
-
-
-    // --------------------------------------------------------
-    // CORRIGIR RA
-    // --------------------------------------------------------
-
-    if (state.step === "stepRA") {
-
-      state.ra = "";
-
-      $("raView").textContent =
-        "—";
-
-      $("raMsg").textContent =
-        "Número apagado.";
+    if (
+      state.busy
+    ) {
 
       return;
 
@@ -921,10 +1655,48 @@
 
 
     // --------------------------------------------------------
-    // VOLTAR DOS DADOS DO ALUNO
+    // RA
     // --------------------------------------------------------
 
-    if (state.step === "stepAluno") {
+    if (
+      state.step ===
+      "stepRA"
+    ) {
+
+      state.ra =
+        "";
+
+      if (
+        $("raView")
+      ) {
+
+        $("raView").textContent =
+          "—";
+
+      }
+
+      if (
+        $("raMsg")
+      ) {
+
+        $("raMsg").textContent =
+          "Número apagado.";
+
+      }
+
+      return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // ALUNO
+    // --------------------------------------------------------
+
+    if (
+      state.step ===
+      "stepAluno"
+    ) {
 
       reset();
 
@@ -934,47 +1706,40 @@
 
 
     // --------------------------------------------------------
-    // CORRIGIR NÚMERO DO CANDIDATO
+    // CARGO
     // --------------------------------------------------------
 
-    if (state.step === "stepCargo") {
+    if (
+      state.step ===
+      "stepCargo"
+    ) {
 
-      state.numero = "";
-
-      state.candidato = null;
-
-
-      $("candidatoNumero").textContent =
-        "—";
-
-
-      $("candidatoCard")
-        .classList
-        .remove("visible");
-
-
-      $("candidatoPhotoBox")
-        .classList
-        .remove("has-image");
-
-
-      $("candidatoFoto")
-        .removeAttribute("src");
-
-
-      $("candidatoNome").textContent =
-        "—";
-
-
-      $("candidatoSlogan").textContent =
+      state.numero =
         "";
 
+      limparCandidato();
 
-      $("cargoMsg").textContent =
-        "Número apagado. Digite novamente.";
+      if (
+        $("candidatoNumero")
+      ) {
 
+        $("candidatoNumero").textContent =
+          "—";
 
-      setStatus("DIGITE O CANDIDATO");
+      }
+
+      if (
+        $("cargoMsg")
+      ) {
+
+        $("cargoMsg").textContent =
+          "Número apagado.";
+
+      }
+
+      setStatus(
+        "DIGITE O CANDIDATO"
+      );
 
     }
 
@@ -982,13 +1747,22 @@
 
 
   // ==========================================================
-  // BRANCO — PARA O CARGO ATUAL
+  // BRANCO
   // ==========================================================
 
   async function voteWhite() {
 
     if (
-      state.step !== "stepCargo" ||
+      state.step !==
+      "stepCargo"
+    ) {
+
+      return;
+
+    }
+
+
+    if (
       state.busy
     ) {
 
@@ -997,10 +1771,211 @@
     }
 
 
-    prepararAudio();
+    salvarEscolhaCargo(
+      "BRANCO"
+    );
 
 
-    await confirmarCargo("BRANCO");
+    if (
+      $("cargoMsg")
+    ) {
+
+      $("cargoMsg").textContent =
+        "VOTO EM BRANCO REGISTRADO.";
+
+    }
+
+
+    setStatus(
+      "BRANCO"
+    );
+
+
+    setTimeout(
+      function() {
+
+        proximoCargo();
+
+      },
+      500
+    );
+
+  }
+
+
+  // ==========================================================
+  // CONFIRMAR
+  // ==========================================================
+
+  async function confirm() {
+
+    if (
+      state.busy
+    ) {
+
+      return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // RA
+    // --------------------------------------------------------
+
+    if (
+      state.step ===
+      "stepRA"
+    ) {
+
+      await confirmarAluno();
+
+      return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // ALUNO
+    // --------------------------------------------------------
+
+    if (
+      state.step ===
+      "stepAluno"
+    ) {
+
+      state.cargoIndex =
+        0;
+
+      prepararCargo();
+
+      showStep(
+        "stepCargo"
+      );
+
+      setStatus(
+        "DIGITE O CANDIDATO"
+      );
+
+      return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // CARGO
+    // --------------------------------------------------------
+
+    if (
+      state.step ===
+      "stepCargo"
+    ) {
+
+      if (
+        !state.numero
+      ) {
+
+        if (
+          $("cargoMsg")
+        ) {
+
+          $("cargoMsg").textContent =
+            "Digite o número do candidato.";
+
+        }
+
+        return;
+
+      }
+
+
+      // Se ainda não carregou o candidato,
+      // consulta agora.
+
+      if (
+        !state.candidato
+      ) {
+
+        state.busy =
+          true;
+
+        disableKeys(
+          true
+        );
+
+
+        try {
+
+          const data =
+            await GremioAPI.call({
+
+              action:
+                "buscarCandidato",
+
+              cargo:
+                CARGOS[
+                  state.cargoIndex
+                ],
+
+              numero:
+                state.numero
+
+            });
+
+
+          state.candidato =
+            data.candidato;
+
+        }
+
+        catch (error) {
+
+          if (
+            $("cargoMsg")
+          ) {
+
+            $("cargoMsg").textContent =
+              error.message;
+
+          }
+
+          setStatus(
+            "NÚMERO INVÁLIDO"
+          );
+
+          state.busy =
+            false;
+
+          disableKeys(
+            false
+          );
+
+          return;
+
+        }
+
+        state.busy =
+          false;
+
+        disableKeys(
+          false
+        );
+
+      }
+
+
+      salvarEscolhaCargo(
+        state.numero
+      );
+
+
+      setStatus(
+        "VOTO CONFIRMADO"
+      );
+
+
+      proximoCargo();
+
+    }
 
   }
 
@@ -1009,89 +1984,123 @@
   // BOTÕES
   // ==========================================================
 
-  document.querySelectorAll(".num")
-    .forEach(button => {
+  document
+    .querySelectorAll(
+      ".num"
+    )
+    .forEach(
+      button => {
 
-      button.addEventListener(
-        "click",
-        () => digit(button.dataset.n)
-      );
+        button.addEventListener(
+          "click",
+          () => {
 
-    });
+            digit(
+              button.dataset.n
+            );
 
-
-  $("confirma")
-    .addEventListener(
-      "click",
-      confirm
-    );
-
-
-  $("corrige")
-    .addEventListener(
-      "click",
-      correct
-    );
-
-
-  $("branco")
-    .addEventListener(
-      "click",
-      voteWhite
-    );
-
-
-  $("restart")
-    .addEventListener(
-      "click",
-      () => {
-
-        reset();
-
-        checkElection();
-
-        heartbeat();
+          }
+        );
 
       }
     );
+
+
+  if (
+    $("confirma")
+  ) {
+
+    $("confirma")
+      .addEventListener(
+        "click",
+        confirm
+      );
+
+  }
+
+
+  if (
+    $("corrige")
+  ) {
+
+    $("corrige")
+      .addEventListener(
+        "click",
+        correct
+      );
+
+  }
+
+
+  if (
+    $("branco")
+  ) {
+
+    $("branco")
+      .addEventListener(
+        "click",
+        voteWhite
+      );
+
+  }
+
+
+  if (
+    $("restart")
+  ) {
+
+    $("restart")
+      .addEventListener(
+        "click",
+        function() {
+
+          reset();
+
+          checkElection();
+
+          heartbeat();
+
+        }
+      );
+
+  }
 
 
   // ==========================================================
   // TECLADO FÍSICO
   // ==========================================================
 
-  document.addEventListener(
+  window.addEventListener(
     "keydown",
     event => {
 
-      const key = event.key;
+      if (
+        /^[0-9]$/.test(
+          event.key
+        )
+      ) {
 
-
-      if (/^\d$/.test(key)) {
-
-        event.preventDefault();
-
-        digit(key);
-
-        return;
+        digit(
+          event.key
+        );
 
       }
 
 
-      if (key === "Enter") {
-
-        event.preventDefault();
+      if (
+        event.key ===
+        "Enter"
+      ) {
 
         confirm();
 
-        return;
-
       }
 
 
-      if (key === "Escape") {
-
-        event.preventDefault();
+      if (
+        event.key ===
+        "Backspace"
+      ) {
 
         correct();
 
@@ -1102,30 +2111,29 @@
 
 
   // ==========================================================
-  // INÍCIO
+  // INICIALIZAÇÃO
   // ==========================================================
 
-  prepararAudio();
-
-  checkElection();
+  reset();
 
   heartbeat();
 
+  checkElection();
+
+
+  // Atualiza eleição
 
   setInterval(
-    () => {
-      heartbeat();
-    },
+    checkElection,
+    10000
+  );
+
+
+  // Mantém a urna online
+
+  setInterval(
+    heartbeat,
     20000
   );
-
-
-  setInterval(
-    () => {
-      checkElection();
-    },
-    5000
-  );
-
 
 })();
