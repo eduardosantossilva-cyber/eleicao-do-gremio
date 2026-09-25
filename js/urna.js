@@ -1,6 +1,6 @@
 // ==========================================================
 // URNA ELETRÔNICA - GRÊMIO ESTUDANTIL
-// IDENTIFICAÇÃO AUTOMÁTICA DAS URNAS
+// CARGOS + IDENTIFICAÇÃO AUTOMÁTICA DA URNA
 // ==========================================================
 
 (() => {
@@ -14,7 +14,7 @@
 
 
   // ==========================================================
-  // CARGOS
+  // CARGOS DA ELEIÇÃO
   // ==========================================================
 
   const CARGOS = [
@@ -39,7 +39,7 @@
 
 
   // ==========================================================
-  // IDENTIFICAÇÃO DO COMPUTADOR
+  // IDENTIFICADOR DO COMPUTADOR
   // ==========================================================
 
   const CHAVE_DISPOSITIVO =
@@ -59,20 +59,12 @@
     }
 
     return (
-
       "disp-" +
-
       Date.now() +
-
       "-" +
-
       Math.random()
         .toString(36)
-        .substring(
-          2,
-          10
-        )
-
+        .substring(2, 10)
     );
 
   }
@@ -114,7 +106,7 @@
     "";
 
 
-  let heartbeatEmAndamento =
+  let heartbeatExecutando =
     false;
 
 
@@ -193,9 +185,10 @@
 
     if (!tela) {
 
-      return;
+      return false;
 
     }
+
 
     tela.classList.add(
       "active"
@@ -203,6 +196,9 @@
 
     state.step =
       id;
+
+
+    return true;
 
   }
 
@@ -230,23 +226,19 @@
 
 
   // ==========================================================
-  // ATUALIZA NÚMERO DA URNA NA TELA
+  // ATUALIZAR IDENTIFICAÇÃO DA URNA
   // ==========================================================
 
-  function atualizarUrnaNaTela() {
+  function atualizarUrnaTela() {
 
-    if (
-      !urna
-    ) {
+    if (!urna) {
 
       return;
 
     }
 
 
-    if (
-      $("urnLabel")
-    ) {
+    if ($("urnLabel")) {
 
       $("urnLabel").textContent =
         "URNA " + urna;
@@ -254,12 +246,57 @@
     }
 
 
-    if (
-      $("urnFooter")
-    ) {
+    if ($("urnFooter")) {
 
       $("urnFooter").textContent =
         urna;
+
+    }
+
+  }
+
+
+  // ==========================================================
+  // ATUALIZAR TELA DO CARGO
+  // ==========================================================
+
+  function atualizarTextoCargo() {
+
+    const telaCargo =
+      $("stepChapa");
+
+    if (!telaCargo) {
+
+      return;
+
+    }
+
+
+    const titulo =
+      telaCargo.querySelector(
+        "h2"
+      );
+
+    const texto =
+      telaCargo.querySelector(
+        "p"
+      );
+
+
+    if (titulo) {
+
+      titulo.textContent =
+        CARGOS[
+          state.cargoIndex
+        ];
+
+    }
+
+
+    if (texto) {
+
+      texto.textContent =
+        "Digite o número do candidato.";
 
     }
 
@@ -297,9 +334,7 @@
       false;
 
 
-    if (
-      $("raView")
-    ) {
+    if ($("raView")) {
 
       $("raView").textContent =
         "—";
@@ -307,9 +342,7 @@
     }
 
 
-    if (
-      $("raMsg")
-    ) {
+    if ($("raMsg")) {
 
       $("raMsg").textContent =
         "Pressione CONFIRMA depois de digitar.";
@@ -317,9 +350,7 @@
     }
 
 
-    if (
-      $("nomeAluno")
-    ) {
+    if ($("nomeAluno")) {
 
       $("nomeAluno").textContent =
         "—";
@@ -327,9 +358,7 @@
     }
 
 
-    if (
-      $("dataAluno")
-    ) {
+    if ($("dataAluno")) {
 
       $("dataAluno").textContent =
         "—";
@@ -337,42 +366,57 @@
     }
 
 
-    if (
-      $("cargoProgress")
-    ) {
+    if ($("chapaNumero")) {
 
-      $("cargoProgress").textContent =
-        "1 de " +
-        CARGOS.length;
-
-    }
-
-
-    if (
-      $("cargoNome")
-    ) {
-
-      $("cargoNome").textContent =
-        CARGOS[0];
-
-    }
-
-
-    if (
-      $("candidatoNumero")
-    ) {
-
-      $("candidatoNumero").textContent =
+      $("chapaNumero").textContent =
         "—";
 
     }
 
 
-    if (
-      $("candidatoCard")
-    ) {
+    if ($("chapaNome")) {
 
-      $("candidatoCard")
+      $("chapaNome").textContent =
+        "—";
+
+    }
+
+
+    if ($("presidente")) {
+
+      $("presidente").textContent =
+        "";
+
+    }
+
+
+    if ($("vice")) {
+
+      $("vice").textContent =
+        "";
+
+    }
+
+
+    if ($("slogan")) {
+
+      $("slogan").textContent =
+        "";
+
+    }
+
+
+    if ($("voteMsg")) {
+
+      $("voteMsg").textContent =
+        "Digite o número do candidato.";
+
+    }
+
+
+    if ($("chapaCard")) {
+
+      $("chapaCard")
         .classList.remove(
           "visible"
         );
@@ -380,11 +424,9 @@
     }
 
 
-    if (
-      $("candidatoPhotoBox")
-    ) {
+    if ($("photoBox")) {
 
-      $("candidatoPhotoBox")
+      $("photoBox")
         .classList.remove(
           "has-image"
         );
@@ -392,11 +434,9 @@
     }
 
 
-    if (
-      $("candidatoFoto")
-    ) {
+    if ($("foto")) {
 
-      $("candidatoFoto")
+      $("foto")
         .removeAttribute(
           "src"
         );
@@ -404,60 +444,7 @@
     }
 
 
-    if (
-      $("candidatoNome")
-    ) {
-
-      $("candidatoNome").textContent =
-        "—";
-
-    }
-
-
-    if (
-      $("candidatoSlogan")
-    ) {
-
-      $("candidatoSlogan").textContent =
-        "";
-
-    }
-
-
-    if (
-      $("cargoMsg")
-    ) {
-
-      $("cargoMsg").textContent =
-        "Digite o número do candidato.";
-
-    }
-
-
-    if (
-      $("sync")
-    ) {
-
-      if (
-        urna
-      ) {
-
-        $("sync").textContent =
-          "Urna " +
-          urna +
-          ": aguardando";
-
-      }
-
-      else {
-
-        $("sync").textContent =
-          "Identificando urna...";
-
-      }
-
-    }
-
+    atualizarUrnaTela();
 
     showStep(
       "stepRA"
@@ -471,43 +458,31 @@
     );
 
 
-    if (
-      urna
-    ) {
-
-      disableKeys(
-        false
-      );
-
-    }
-
-    else {
-
-      disableKeys(
-        true
-      );
-
-    }
+    disableKeys(
+      !urna
+    );
 
   }
 
 
   // ==========================================================
-  // HEARTBEAT / IDENTIFICAÇÃO DA URNA
+  // IDENTIFICAR URNA
   // ==========================================================
 
   async function heartbeat() {
 
     if (
-      heartbeatEmAndamento
+      heartbeatExecutando
     ) {
 
       return;
 
     }
 
-    heartbeatEmAndamento =
+
+    heartbeatExecutando =
       true;
+
 
     try {
 
@@ -537,7 +512,7 @@
 
       urna =
         String(
-          resposta.urna
+          resposta.urna || ""
         )
           .replace(
             /\D/g,
@@ -549,40 +524,31 @@
           );
 
 
-      atualizarUrnaNaTela();
+      atualizarUrnaTela();
+
+
+      if ($("sync")) {
+
+        $("sync").textContent =
+          "Urna " +
+          urna +
+          ": ONLINE • " +
+          new Date()
+            .toLocaleTimeString(
+              "pt-BR"
+            );
+
+      }
 
 
       if (
-        state.step !==
-        "stepClosed"
+        state.step ===
+        "stepRA"
       ) {
 
-        if (
-          $("sync")
-        ) {
-
-          $("sync").textContent =
-            "Urna " +
-            urna +
-            ": ONLINE • " +
-            new Date()
-              .toLocaleTimeString(
-                "pt-BR"
-              );
-
-          }
-
-
-        if (
-          state.step ===
-          "stepRA"
-        ) {
-
-          disableKeys(
-            false
-          );
-
-        }
+        disableKeys(
+          false
+        );
 
       }
 
@@ -590,9 +556,7 @@
 
     catch (error) {
 
-      if (
-        $("sync")
-      ) {
+      if ($("sync")) {
 
         $("sync").textContent =
           "Urna: sem comunicação";
@@ -603,7 +567,7 @@
 
     finally {
 
-      heartbeatEmAndamento =
+      heartbeatExecutando =
         false;
 
     }
@@ -616,6 +580,17 @@
   // ==========================================================
 
   async function checkElection() {
+
+    // Não mexe na tela final
+    if (
+      state.step ===
+      "stepFim"
+    ) {
+
+      return;
+
+    }
+
 
     try {
 
@@ -647,58 +622,39 @@
           "AGUARDANDO"
         );
 
-      }
-
-      else {
-
-        showStep(
-          "stepClosed"
-        );
-
-        setStatus(
-          "ENCERRADA"
-        );
-
-        disableKeys(
-          true
-        );
+        return;
 
       }
 
 
-      if (
-        $("sync")
-      ) {
+      showStep(
+        "stepClosed"
+      );
 
-        $("sync").textContent =
-          urna
-            ? "Urna " +
-              urna +
-              ": conexão " +
-              new Date()
-                .toLocaleTimeString(
-                  "pt-BR"
-                )
+      setStatus(
+        "ENCERRADA"
+      );
 
-            : "Identificando urna...";
-
-      }
+      disableKeys(
+        true
+      );
 
     }
 
     catch (error) {
 
-      if (
-        $("sync")
-      ) {
+      setStatus(
+        "SEM CONEXÃO"
+      );
+
+      if ($("sync")) {
 
         $("sync").textContent =
           urna
             ? "Urna " +
               urna +
               ": sem comunicação"
-
-            : "Sem comunicação com a API";
+            : "Sem comunicação";
 
       }
 
@@ -708,7 +664,7 @@
 
 
   // ==========================================================
-  // DIGITAR
+  // DIGITAR NÚMERO
   // ==========================================================
 
   function digit(number) {
@@ -740,17 +696,18 @@
 
       }
 
+
       state.ra +=
         number;
 
-      if (
-        $("raView")
-      ) {
+
+      if ($("raView")) {
 
         $("raView").textContent =
           state.ra;
 
       }
+
 
       return;
 
@@ -763,7 +720,7 @@
 
     if (
       state.step ===
-      "stepCargo"
+      "stepChapa"
     ) {
 
       if (
@@ -775,18 +732,20 @@
 
       }
 
+
       state.numero +=
         number;
 
-      if (
-        $("candidatoNumero")
-      ) {
 
-        $("candidatoNumero").textContent =
+      if ($("chapaNumero")) {
+
+        $("chapaNumero").textContent =
           state.numero;
 
       }
 
+
+      // Procura automaticamente após 2 números
 
       if (
         state.numero.length >=
@@ -803,7 +762,7 @@
 
 
   // ==========================================================
-  // LIMPAR CANDIDATO NA TELA
+  // LIMPAR CARD DO CANDIDATO
   // ==========================================================
 
   function limparCandidato() {
@@ -812,11 +771,9 @@
       null;
 
 
-    if (
-      $("candidatoCard")
-    ) {
+    if ($("chapaCard")) {
 
-      $("candidatoCard")
+      $("chapaCard")
         .classList.remove(
           "visible"
         );
@@ -824,11 +781,9 @@
     }
 
 
-    if (
-      $("candidatoPhotoBox")
-    ) {
+    if ($("photoBox")) {
 
-      $("candidatoPhotoBox")
+      $("photoBox")
         .classList.remove(
           "has-image"
         );
@@ -836,11 +791,9 @@
     }
 
 
-    if (
-      $("candidatoFoto")
-    ) {
+    if ($("foto")) {
 
-      $("candidatoFoto")
+      $("foto")
         .removeAttribute(
           "src"
         );
@@ -848,21 +801,33 @@
     }
 
 
-    if (
-      $("candidatoNome")
-    ) {
+    if ($("chapaNome")) {
 
-      $("candidatoNome").textContent =
+      $("chapaNome").textContent =
         "—";
 
     }
 
 
-    if (
-      $("candidatoSlogan")
-    ) {
+    if ($("presidente")) {
 
-      $("candidatoSlogan").textContent =
+      $("presidente").textContent =
+        "";
+
+    }
+
+
+    if ($("vice")) {
+
+      $("vice").textContent =
+        "";
+
+    }
+
+
+    if ($("slogan")) {
+
+      $("slogan").textContent =
         "";
 
     }
@@ -871,7 +836,7 @@
 
 
   // ==========================================================
-  // ATUALIZAR TELA DO CARGO
+  // PREPARAR CARGO
   // ==========================================================
 
   function prepararCargo() {
@@ -883,47 +848,20 @@
       null;
 
 
-    if (
-      $("cargoProgress")
-    ) {
-
-      $("cargoProgress").textContent =
-        (
-          state.cargoIndex + 1
-        ) +
-        " de " +
-        CARGOS.length;
-
-    }
+    atualizarTextoCargo();
 
 
-    if (
-      $("cargoNome")
-    ) {
+    if ($("chapaNumero")) {
 
-      $("cargoNome").textContent =
-        CARGOS[
-          state.cargoIndex
-        ];
-
-    }
-
-
-    if (
-      $("candidatoNumero")
-    ) {
-
-      $("candidatoNumero").textContent =
+      $("chapaNumero").textContent =
         "—";
 
     }
 
 
-    if (
-      $("cargoMsg")
-    ) {
+    if ($("voteMsg")) {
 
-      $("cargoMsg").textContent =
+      $("voteMsg").textContent =
         "Digite o número do candidato.";
 
     }
@@ -943,7 +881,7 @@
     if (
       state.busy ||
       state.step !==
-      "stepCargo"
+      "stepChapa"
     ) {
 
       return;
@@ -963,6 +901,7 @@
 
     state.busy =
       true;
+
 
     disableKeys(
       true
@@ -992,35 +931,48 @@
         data.candidato;
 
 
-      if (
-        $("candidatoNome")
-      ) {
+      if ($("chapaNome")) {
 
-        $("candidatoNome").textContent =
+        $("chapaNome").textContent =
           state.candidato.nome ||
           "";
 
       }
 
 
-      if (
-        $("candidatoSlogan")
-      ) {
+      if ($("chapaNumero")) {
 
-        $("candidatoSlogan").textContent =
+        $("chapaNumero").textContent =
+          state.candidato.numero ||
+          state.numero;
+
+      }
+
+
+      if ($("slogan")) {
+
+        $("slogan").textContent =
           state.candidato.slogan ||
           "";
 
       }
 
 
-      if (
-        $("candidatoNumero")
-      ) {
+      // Campo antigo "presidente"
+      // não será mais usado
 
-        $("candidatoNumero").textContent =
-          state.candidato.numero ||
-          state.numero;
+      if ($("presidente")) {
+
+        $("presidente").textContent =
+          "";
+
+      }
+
+
+      if ($("vice")) {
+
+        $("vice").textContent =
+          "";
 
       }
 
@@ -1029,20 +981,17 @@
         state.candidato.fotoUrl
       ) {
 
-        if (
-          $("candidatoFoto")
-        ) {
+        if ($("foto")) {
 
-          $("candidatoFoto").src =
+          $("foto").src =
             state.candidato.fotoUrl;
 
         }
 
-        if (
-          $("candidatoPhotoBox")
-        ) {
 
-          $("candidatoPhotoBox")
+        if ($("photoBox")) {
+
+          $("photoBox")
             .classList.add(
               "has-image"
             );
@@ -1051,24 +1000,22 @@
 
       }
 
+
       else {
 
-        if (
-          $("candidatoFoto")
-        ) {
+        if ($("foto")) {
 
-          $("candidatoFoto")
+          $("foto")
             .removeAttribute(
               "src"
             );
 
         }
 
-        if (
-          $("candidatoPhotoBox")
-        ) {
 
-          $("candidatoPhotoBox")
+        if ($("photoBox")) {
+
+          $("photoBox")
             .classList.remove(
               "has-image"
             );
@@ -1078,11 +1025,9 @@
       }
 
 
-      if (
-        $("candidatoCard")
-      ) {
+      if ($("chapaCard")) {
 
-        $("candidatoCard")
+        $("chapaCard")
           .classList.add(
             "visible"
           );
@@ -1090,11 +1035,9 @@
       }
 
 
-      if (
-        $("cargoMsg")
-      ) {
+      if ($("voteMsg")) {
 
-        $("cargoMsg").textContent =
+        $("voteMsg").textContent =
           "Confira o candidato e pressione CONFIRMA.";
 
       }
@@ -1110,11 +1053,9 @@
 
       limparCandidato();
 
-      if (
-        $("cargoMsg")
-      ) {
+      if ($("voteMsg")) {
 
-        $("cargoMsg").textContent =
+        $("voteMsg").textContent =
           error.message;
 
       }
@@ -1140,18 +1081,16 @@
 
 
   // ==========================================================
-  // CONFIRMAR ALUNO
+  // CONFIRMAR RA
   // ==========================================================
 
-  async function confirmarAluno() {
+  async function confirmarRA() {
 
     if (
       !state.ra
     ) {
 
-      if (
-        $("raMsg")
-      ) {
+      if ($("raMsg")) {
 
         $("raMsg").textContent =
           "Digite o RA.";
@@ -1166,9 +1105,11 @@
     state.busy =
       true;
 
+
     disableKeys(
       true
     );
+
 
     setStatus(
       "CONSULTANDO..."
@@ -1190,6 +1131,18 @@
 
 
       if (
+        !data ||
+        !data.aluno
+      ) {
+
+        throw new Error(
+          "Não foi possível localizar o eleitor."
+        );
+
+      }
+
+
+      if (
         data.aluno.jaVotou
       ) {
 
@@ -1204,9 +1157,7 @@
         data.aluno;
 
 
-      if (
-        $("nomeAluno")
-      ) {
+      if ($("nomeAluno")) {
 
         $("nomeAluno").textContent =
           data.aluno.nome;
@@ -1214,9 +1165,7 @@
       }
 
 
-      if (
-        $("dataAluno")
-      ) {
+      if ($("dataAluno")) {
 
         $("dataAluno").textContent =
           data.aluno.dataNascimento;
@@ -1224,26 +1173,35 @@
       }
 
 
-      state.cargoIndex =
-        0;
+      // =====================================================
+      // AQUI ESTÁ A CORREÇÃO:
+      // DEPOIS DO RA MOSTRA A CONFIRMAÇÃO
+      // =====================================================
 
-      prepararCargo();
+      const abriu =
+        showStep(
+          "stepAluno"
+        );
 
-      showStep(
-        "stepCargo"
-      );
+
+      if (!abriu) {
+
+        throw new Error(
+          'A tela "stepAluno" não foi encontrada no urna.html.'
+        );
+
+      }
+
 
       setStatus(
-        "DIGITE O CANDIDATO"
+        "CONFIRA SEUS DADOS"
       );
 
     }
 
     catch (error) {
 
-      if (
-        $("raMsg")
-      ) {
+      if ($("raMsg")) {
 
         $("raMsg").textContent =
           error.message;
@@ -1261,15 +1219,10 @@
       state.busy =
         false;
 
-      if (
-        urna
-      ) {
 
-        disableKeys(
-          false
-        );
-
-      }
+      disableKeys(
+        false
+      );
 
     }
 
@@ -1277,10 +1230,10 @@
 
 
   // ==========================================================
-  // SALVAR ESCOLHA DO CARGO
+  // SALVAR VOTO DO CARGO
   // ==========================================================
 
-  function salvarEscolhaCargo(numero) {
+  function salvarVotoCargo(numero) {
 
     state.votos.push({
 
@@ -1298,7 +1251,7 @@
 
 
   // ==========================================================
-  // PRÓXIMO CARGO
+  // PASSAR PARA O PRÓXIMO CARGO
   // ==========================================================
 
   function proximoCargo() {
@@ -1320,7 +1273,7 @@
     prepararCargo();
 
     showStep(
-      "stepCargo"
+      "stepChapa"
     );
 
     setStatus(
@@ -1331,7 +1284,7 @@
 
 
   // ==========================================================
-  // REGISTRAR TODOS OS VOTOS
+  // REGISTRAR TODOS OS 8 VOTOS
   // ==========================================================
 
   async function registrarVotos() {
@@ -1348,23 +1301,25 @@
     state.busy =
       true;
 
+
     disableKeys(
       true
     );
 
+
     setStatus(
-      "REGISTRANDO VOTO..."
+      "REGISTRANDO..."
     );
 
 
-    let registroConfirmado =
+    let confirmado =
       false;
 
 
     try {
 
       // ------------------------------------------------------
-      // ENVIA O VOTO
+      // ENVIA OS 8 CARGOS
       // ------------------------------------------------------
 
       try {
@@ -1397,7 +1352,7 @@
           resposta.ok === true
         ) {
 
-          registroConfirmado =
+          confirmado =
             true;
 
 
@@ -1418,7 +1373,7 @@
                   "0"
                 );
 
-            atualizarUrnaNaTela();
+            atualizarUrnaTela();
 
           }
 
@@ -1428,19 +1383,18 @@
 
       catch (erroApi) {
 
-        registroConfirmado =
+        confirmado =
           false;
 
       }
 
 
       // ------------------------------------------------------
-      // SE A RESPOSTA FALHAR,
-      // VERIFICA SE O RA JÁ FOI MARCADO COMO VOTANTE
+      // CASO A API REGISTRE MAS A RESPOSTA FALHE
       // ------------------------------------------------------
 
       if (
-        !registroConfirmado
+        !confirmado
       ) {
 
         try {
@@ -1464,7 +1418,7 @@
             true
           ) {
 
-            registroConfirmado =
+            confirmado =
               true;
 
           }
@@ -1473,7 +1427,7 @@
 
         catch (erroVerificacao) {
 
-          registroConfirmado =
+          confirmado =
             false;
 
         }
@@ -1482,11 +1436,11 @@
 
 
       // ------------------------------------------------------
-      // MOSTRA FIM
+      // VOTO CONFIRMADO
       // ------------------------------------------------------
 
       if (
-        registroConfirmado
+        confirmado
       ) {
 
         mostrarFim();
@@ -1504,11 +1458,9 @@
 
     catch (error) {
 
-      if (
-        $("cargoMsg")
-      ) {
+      if ($("voteMsg")) {
 
-        $("cargoMsg").textContent =
+        $("voteMsg").textContent =
           error.message;
 
       }
@@ -1517,8 +1469,10 @@
         "NÃO REGISTRADO"
       );
 
+
       state.busy =
         false;
+
 
       disableKeys(
         false
@@ -1530,18 +1484,16 @@
 
 
   // ==========================================================
-  // MOSTRAR FIM
+  // TELA FINAL
   // ==========================================================
 
   function mostrarFim() {
 
-    const telaFim =
+    const fim =
       $("stepFim");
 
 
-    if (
-      !telaFim
-    ) {
+    if (!fim) {
 
       return;
 
@@ -1563,7 +1515,7 @@
       );
 
 
-    telaFim.classList.add(
+    fim.classList.add(
       "active"
     );
 
@@ -1577,17 +1529,12 @@
     );
 
 
-    if (
-      $("sync")
-    ) {
+    if ($("sync")) {
 
       $("sync").textContent =
-        urna
-          ? "Urna " +
-            urna +
-            ": voto registrado"
-
-          : "Voto registrado";
+        "Urna " +
+        urna +
+        ": VOTO REGISTRADO";
 
     }
 
@@ -1597,7 +1544,7 @@
     );
 
 
-    // Som final da urna
+    // SOM FINAL
 
     try {
 
@@ -1619,9 +1566,7 @@
     catch (error) {}
 
 
-    // --------------------------------------------------------
-    // DEPOIS DE 5 SEGUNDOS
-    // --------------------------------------------------------
+    // Volta automaticamente
 
     setTimeout(
       function() {
@@ -1666,23 +1611,22 @@
       state.ra =
         "";
 
-      if (
-        $("raView")
-      ) {
+
+      if ($("raView")) {
 
         $("raView").textContent =
           "—";
 
       }
 
-      if (
-        $("raMsg")
-      ) {
+
+      if ($("raMsg")) {
 
         $("raMsg").textContent =
           "Número apagado.";
 
       }
+
 
       return;
 
@@ -1690,7 +1634,7 @@
 
 
     // --------------------------------------------------------
-    // ALUNO
+    // CONFIRMAÇÃO DO ALUNO
     // --------------------------------------------------------
 
     if (
@@ -1711,7 +1655,7 @@
 
     if (
       state.step ===
-      "stepCargo"
+      "stepChapa"
     ) {
 
       state.numero =
@@ -1719,23 +1663,22 @@
 
       limparCandidato();
 
-      if (
-        $("candidatoNumero")
-      ) {
 
-        $("candidatoNumero").textContent =
+      if ($("chapaNumero")) {
+
+        $("chapaNumero").textContent =
           "—";
 
       }
 
-      if (
-        $("cargoMsg")
-      ) {
 
-        $("cargoMsg").textContent =
+      if ($("voteMsg")) {
+
+        $("voteMsg").textContent =
           "Número apagado.";
 
       }
+
 
       setStatus(
         "DIGITE O CANDIDATO"
@@ -1747,14 +1690,14 @@
 
 
   // ==========================================================
-  // BRANCO
+  // VOTO EM BRANCO
   // ==========================================================
 
   async function voteWhite() {
 
     if (
       state.step !==
-      "stepCargo"
+      "stepChapa"
     ) {
 
       return;
@@ -1771,16 +1714,14 @@
     }
 
 
-    salvarEscolhaCargo(
+    salvarVotoCargo(
       "BRANCO"
     );
 
 
-    if (
-      $("cargoMsg")
-    ) {
+    if ($("voteMsg")) {
 
-      $("cargoMsg").textContent =
+      $("voteMsg").textContent =
         "VOTO EM BRANCO REGISTRADO.";
 
     }
@@ -1819,7 +1760,7 @@
 
 
     // --------------------------------------------------------
-    // RA
+    // PRIMEIRA TELA: RA
     // --------------------------------------------------------
 
     if (
@@ -1827,7 +1768,7 @@
       "stepRA"
     ) {
 
-      await confirmarAluno();
+      await confirmarRA();
 
       return;
 
@@ -1835,7 +1776,7 @@
 
 
     // --------------------------------------------------------
-    // ALUNO
+    // SEGUNDA TELA: DADOS DO ALUNO
     // --------------------------------------------------------
 
     if (
@@ -1846,15 +1787,26 @@
       state.cargoIndex =
         0;
 
+
+      state.numero =
+        "";
+
+      state.candidato =
+        null;
+
+
       prepararCargo();
 
+
       showStep(
-        "stepCargo"
+        "stepChapa"
       );
+
 
       setStatus(
         "DIGITE O CANDIDATO"
       );
+
 
       return;
 
@@ -1862,23 +1814,21 @@
 
 
     // --------------------------------------------------------
-    // CARGO
+    // TELA DO CARGO
     // --------------------------------------------------------
 
     if (
       state.step ===
-      "stepCargo"
+      "stepChapa"
     ) {
 
       if (
         !state.numero
       ) {
 
-        if (
-          $("cargoMsg")
-        ) {
+        if ($("voteMsg")) {
 
-          $("cargoMsg").textContent =
+          $("voteMsg").textContent =
             "Digite o número do candidato.";
 
         }
@@ -1888,8 +1838,9 @@
       }
 
 
-      // Se ainda não carregou o candidato,
-      // consulta agora.
+      // ------------------------------------------------------
+      // SE O CANDIDATO AINDA NÃO FOI ENCONTRADO
+      // ------------------------------------------------------
 
       if (
         !state.candidato
@@ -1929,11 +1880,9 @@
 
         catch (error) {
 
-          if (
-            $("cargoMsg")
-          ) {
+          if ($("voteMsg")) {
 
-            $("cargoMsg").textContent =
+            $("voteMsg").textContent =
               error.message;
 
           }
@@ -1941,6 +1890,7 @@
           setStatus(
             "NÚMERO INVÁLIDO"
           );
+
 
           state.busy =
             false;
@@ -1953,6 +1903,7 @@
 
         }
 
+
         state.busy =
           false;
 
@@ -1963,7 +1914,7 @@
       }
 
 
-      salvarEscolhaCargo(
+      salvarVotoCargo(
         state.numero
       );
 
@@ -2006,9 +1957,7 @@
     );
 
 
-  if (
-    $("confirma")
-  ) {
+  if ($("confirma")) {
 
     $("confirma")
       .addEventListener(
@@ -2019,9 +1968,7 @@
   }
 
 
-  if (
-    $("corrige")
-  ) {
+  if ($("corrige")) {
 
     $("corrige")
       .addEventListener(
@@ -2032,9 +1979,7 @@
   }
 
 
-  if (
-    $("branco")
-  ) {
+  if ($("branco")) {
 
     $("branco")
       .addEventListener(
@@ -2045,9 +1990,7 @@
   }
 
 
-  if (
-    $("restart")
-  ) {
+  if ($("restart")) {
 
     $("restart")
       .addEventListener(
@@ -2121,7 +2064,7 @@
   checkElection();
 
 
-  // Atualiza eleição
+  // Verifica eleição
 
   setInterval(
     checkElection,
@@ -2129,7 +2072,7 @@
   );
 
 
-  // Mantém a urna online
+  // Mantém urna online
 
   setInterval(
     heartbeat,
